@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -26,5 +27,8 @@ public class Project implements Serializable {
     /** 比如 比赛项目 */
     private String type;
     private Integer deleted;
+
+    /** 非数据库属性 */
+    private List<Student> members;
 
 }

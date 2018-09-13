@@ -3,31 +3,181 @@
 
 <mapper namespace="src.dao.ProjectDAO">
 
-    <select id="getActiveProjectIdByLeaderId" parameterType="string"
-            resultType="java.lang.Long">
-        select id from project p1
-        where p1.leader_id = #{sid}
-        and p1.submit_time >= (
-          select max(submit_time) from project where leader_id = #{sid}
-        )
-
-    </select>
 
 
     <insert id="insertProject" parameterType="src.model.Project">
         insert into project(name, description, duration, submit_time, coach_id,
-        lab_name, leader_id, aim, type) values (
-        #{name}, #{description}, #{duration}, #{submit_time}, #{coach_id}, #{lab_name} ,
-        #{leader_id}, #{aim}, #{type} );
+                            lab_name, leader_id, aim, type) values (
+           #{name}, #{description}, #{duration}, #{submit_time}, #{coach_id}, #{lab_name} ,
+           #{leader_id}, #{aim}, #{type} );
     </insert>
-    
+
+    <update id="updateProject" parameterType="src.model.Project">
+        update project
+        set name = #{name}, description = #{description}, start_time = #{start_time}, end_time
+                = #{end_time}, duration = #{duration}, submit_time = #{submit_time}, coach_id
+                = #{coach_id}, opt_status = #{opt_status}, lab_name = #{lab_name}, leader_id
+                = #{leader_id}, aim = #{aim}, type = #{type}, deleted = #{deleted}
+        where id = #{id};
+    </update>
+
+    <update id="updateDeleted">
+        update project set deleted = #{newValue}
+        where id = #{id};
+    </update>
+
+    <delete id="deleteProjectById" parameterType="java.lang.Long">
+        delete from project
+        where id = #{id};
+    </delete>
 
     <insert id="addMember">
         insert into participate(sid, pid)
         values ( #{sid}, #{pid} );
     </insert>
 
-    
+    <!-- 查询 /////////////-->
 
+    <select id="getCount" resultType="java.lang.Integer">
+        select count(1) from project
+        where #{property} like #{like};
+    </select>
+
+    <select id="getCount_Fake" resultType="java.lang.Integer">
+        select count(1) from project
+        where #{property} like #{like} and deleted=0;
+    </select>
+
+    <select id="getActiveProjectIdByLeaderId" parameterType="string"
+            resultType="java.lang.Long">
+        select id from project p1
+        where p1.leader_id = #{sid}
+          and p1.submit_time >= (
+                                select max(submit_time) from project where leader_id = #{sid} )
+    </select>
+
+    <select id="getProjectById" resultType="src.model.Project" parameterType="java.lang.Long">
+        select * from project where id = #{id};
+    </select>
+
+    <select id="getAllSplit_Fake" resultType="src.model.Project"
+            parameterType="src.model.assistance.PageRowsMap">
+        select id, `name`, coach_id, lab_name,
+         opt_status, start_time, end_time, duration, submit_time
+        from project where #{property} like #{like} and deleted=0
+        limit #{num} offset #{offset};
+    </select>
+    <select id="getAllSplit" resultType="src.model.Project"
+            parameterType="src.model.assistance.PageRowsMap">
+       select id, `name`, coach_id, lab_name,
+         opt_status, start_time, end_time, duration, submit_time
+        from project where #{property} like #{like}
+        limit #{num} offset #{offset};
+    </select>
+
+    <select id="getProcessing_Fake" parameterType="src.model.assistance.PageRowsMap"
+            resultType="src.model.Project">
+        select id, `name`, coach_id, lab_name,
+               opt_status, start_time, end_time, duration, submit_time
+        from project where #{property} like #{like}
+        and start_time is not null and end_time is null and deleted=0
+        and to_seconds(start_time) + duration > to_seconds(now())
+        limit #{num} offset #{offset};
+    </select>
+    <select id="getProcessing" parameterType="src.model.assistance.PageRowsMap"
+            resultType="src.model.Project">
+        select id, `name`, coach_id, lab_name,
+               opt_status, start_time, end_time, duration, submit_time
+        from project where #{property} like #{like} and opt_status != 4
+                       and start_time is not null and end_time is null
+                       and to_seconds(start_time) + duration > to_seconds(now())
+        limit #{num} offset #{offset};
+    </select>
+
+    <select id="getChecking" resultType="src.model.Project"
+            parameterType="src.model.assistance.PageRowsMap">
+        select id, `name`, coach_id, lab_name,
+               opt_status, start_time, end_time, duration, submit_time
+        from project where #{property} like #{like} and start_time is null
+        limit #{num} offset #{offset};
+    </select>
+
+    <select id="getChecking_Fake" resultType="src.model.Project"
+            parameterType="src.model.assistance.PageRowsMap">
+        select id, `name`, coach_id, lab_name,
+               opt_status, start_time, end_time, duration, submit_time
+        from project where #{property} like #{like} and start_time is null and deleted=0
+        limit #{num} offset #{offset};
+    </select>
+
+<!--///////-->
+
+    <select id="getRejected" resultType="src.model.Project"
+            parameterType="src.model.assistance.PageRowsMap">
+        select id, `name`, coach_id, lab_name,
+               opt_status, start_time, end_time, duration, submit_time
+        from project where #{property} like #{like} and opt_status=2
+        limit #{num} offset #{offset};
+    </select>
+
+    <select id="getRejected_Fake" resultType="src.model.Project"
+            parameterType="src.model.assistance.PageRowsMap">
+        select id, `name`, coach_id, lab_name,
+               opt_status, start_time, end_time, duration, submit_time
+        from project where #{property} like #{like} and opt_status=2 and deleted=0
+        limit #{num} offset #{offset};
+    </select>
+
+    <select id="getCanceled" resultType="src.model.Project"
+            parameterType="src.model.assistance.PageRowsMap">
+        select id, `name`, coach_id, lab_name,
+               opt_status, start_time, end_time, duration, submit_time
+        from project where #{property} like #{like} and opt_status=4
+        limit #{num} offset #{offset};
+    </select>
+
+    <select id="getCanceled_Fake" resultType="src.model.Project"
+            parameterType="src.model.assistance.PageRowsMap">
+        select id, `name`, coach_id, lab_name,
+               opt_status, start_time, end_time, duration, submit_time
+        from project where #{property} like #{like} and opt_status=4 and deleted=0
+        limit #{num} offset #{offset};
+    </select>
+
+    <select id="getComplete" resultType="src.model.Project"
+            parameterType="src.model.assistance.PageRowsMap">
+        select id, `name`, coach_id, lab_name,
+               opt_status, start_time, end_time, duration, submit_time
+        from project where #{property} like #{like} and end_time is not null
+        limit #{num} offset #{offset};
+    </select>
+
+    <select id="getComplete_Fake" resultType="src.model.Project"
+            parameterType="src.model.assistance.PageRowsMap">
+        select id, `name`, coach_id, lab_name,
+               opt_status, start_time, end_time, duration, submit_time
+        from project where #{property} like #{like} and end_time is not null and deleted=0
+        limit #{num} offset #{offset};
+    </select>
+
+    <select id="getOvertime" resultType="src.model.Project"
+            parameterType="src.model.assistance.PageRowsMap">
+        select id, `name`, coach_id, lab_name,
+               opt_status, start_time, end_time, duration, submit_time
+        from project where #{property} like #{like}
+        and start_time is not null and end_time is null and opt_status != 4
+        and to_seconds(now()) >= to_seconds(start_time) + duration
+        limit #{num} offset #{offset};
+    </select>
+
+    <select id="getOvertime_Fake" resultType="src.model.Project"
+            parameterType="src.model.assistance.PageRowsMap">
+        select id, `name`, coach_id, lab_name,
+               opt_status, start_time, end_time, duration, submit_time
+        from project where #{property} like #{like} and deleted=0
+                       and start_time is not null and end_time is null and opt_status != 4
+                       and to_seconds(now()) >= to_seconds(start_time) + duration
+        limit #{num} offset #{offset};
+    </select>
 
 </mapper>
