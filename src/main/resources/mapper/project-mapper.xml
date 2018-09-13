@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="src.dao.ProjectDAO">
+
+    <select id="getActiveProjectIdByLeaderId" parameterType="string"
+            resultType="java.lang.Long">
+        select id from project p1
+        where p1.leader_id = #{sid}
+        and p1.submit_time >= (
+          select max(submit_time) from project where leader_id = #{sid}
+        )
+
+    </select>
+
+
+    <insert id="insertProject" parameterType="src.model.Project">
+        insert into project(name, description, duration, submit_time, coach_id,
+        lab_name, leader_id, aim, type) values (
+        #{name}, #{description}, #{duration}, #{submit_time}, #{coach_id}, #{lab_name} ,
+        #{leader_id}, #{aim}, #{type} );
+    </insert>
+    
+
+    <insert id="addMember">
+        insert into participate(sid, pid)
+        values ( #{sid}, #{pid} );
+    </insert>
+
+    
+
+
+</mapper>
