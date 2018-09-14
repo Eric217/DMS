@@ -4,7 +4,9 @@ import org.apache.ibatis.annotations.Param;
 import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 import src.model.Project;
+import src.model.Student;
 import src.model.assistance.PageRowsMap;
+import src.model.assistance.StuProMap;
 
 import java.util.Iterator;
 import java.util.List;
@@ -27,6 +29,10 @@ public interface ProjectDAO {
 
     void addMember(@Param("sid") String sid, @Param("pid") Long pid);
 
+
+    /** Simplified Student Object */
+    List<Student> getMembersByProjectId(Long id);
+
     Integer getCount(@Param("property") String property, @Param("like") String like);
 
     List<Project> getAllSplit (PageRowsMap map);
@@ -47,5 +53,13 @@ public interface ProjectDAO {
     List<Project> getCanceled_Fake(PageRowsMap map);
     List<Project> getComplete_Fake(PageRowsMap map);
     List<Project> getOvertime_Fake(PageRowsMap map);
+
+    List<Project> getAllSplitForStu(StuProMap map);
+    List<Project> getProcessingForStu(StuProMap map);
+    List<Project> getCheckingForStu(StuProMap map);
+    List<Project> getRejectedForStu(StuProMap map);
+    List<Project> getCanceledForStu(StuProMap map);
+    List<Project> getCompleteForStu(StuProMap map);
+    List<Project> getOvertimeForStu(StuProMap map);
 
 }

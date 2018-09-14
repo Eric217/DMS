@@ -28,7 +28,7 @@ public class Project implements Serializable {
     private String type;
     private Integer deleted;
 
-    /** 非数据库属性 */
+    /** 非数据库属性 联表查询*/
     private List<Student> members;
 
 }

@@ -9,11 +9,10 @@ import src.base.ResultCache;
 import src.dao.ProjectDAO;
 import src.model.Project;
 import src.model.assistance.PageRowsMap;
+import src.model.assistance.StuProMap;
 
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import static src.model.assistance.ProjectStatusValue.*;
@@ -21,8 +20,14 @@ import static src.model.assistance.ProjectStatusValue.*;
 @Service
 public class ProjectService {
 
-    @Autowired
+    private final
     ProjectDAO projectDAO;
+
+    @Autowired
+    public ProjectService(ProjectDAO projectDAO) {
+        this.projectDAO = projectDAO;
+    }
+
 
     public Result getCount(String prop, String like, Boolean viewDeleted) {
         Integer count = viewDeleted
@@ -31,13 +36,11 @@ public class ProjectService {
         return ResultCache.getDataOk(count);
     }
 
+    ///
     @Transactional
     public Result getProjectById(Long id) {
         Project p = projectDAO.getProjectById(id);
-
-        // TODO: - 加入所有参与的 成员
-
-        return null;
+        return ResultCache.getDataOk(p);
     }
 
 
@@ -57,10 +60,36 @@ public class ProjectService {
         return ResultCache.OK;
     }
 
-    @Transactional
+    /** 对于普通学生  */
+    public Result getParticipatedProjects(Integer page, Integer rows, Integer status,
+                                          String sid) {
+        List<Project> list = null;
+        int s = status;
+
+        StuProMap map = new StuProMap(rows, rows*(page-1), sid);
+
+        if (s == S_ALL) {
+            list = projectDAO.getAllSplitForStu(map);
+        } else if (s == S_CHECKING) {
+            list = projectDAO.getCheckingForStu(map);
+        } else if (s == S_REJECTED) {
+            list = projectDAO.getRejectedForStu(map);
+        } else if (s == S_PROCESSING) {
+            list = projectDAO.getProcessingForStu(map);
+        } else if (s == S_CANCELED) {
+            list = projectDAO.getCanceledForStu(map);
+        } else if (s == S_COMPLETE) {
+            list = projectDAO.getCompleteForStu(map);
+        } else if (s == S_OVERTIME) {
+            list = projectDAO.getOvertimeForStu(map);
+        }
+        return ResultCache.getDataOk(list);
+    }
+
+    /** 对于管理人员： */
     public Result getProjects(Integer page, Integer rows, Integer status,
                               Boolean viewDelete, String property, String like) {
-        int s = status.intValue();
+        int s = status;
         List<Project> list = null;
 
         if (property == null || property.trim().isEmpty() || like == null || like.trim().isEmpty()) {
@@ -94,14 +123,15 @@ public class ProjectService {
         return ResultCache.getDataOk(list);
     }
 
+
     public Result updateProject(Project vo) {
         projectDAO.updateProject(vo);
         return ResultCache.OK;
     }
 
     public Result updateDeleted(Long id, Integer newValue) {
-        if (newValue.intValue() > 1) newValue = 1;
-        if (newValue.intValue() < 0) newValue = 0;
+        if (newValue > 1) newValue = 1;
+        if (newValue < 0) newValue = 0;
         projectDAO.updateDeleted(id, newValue);
         return ResultCache.OK;
     }

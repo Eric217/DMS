@@ -3,21 +3,10 @@
 
 <mapper namespace="src.dao.StudentDAO">
 
-    <select id="getStudentById" parameterType="string" resultType="src.model.Student"> <!--resultMap="studentMap"-->
+    <select id="getStudentById" parameterType="string" resultType="src.model.Student">
         select id, name, password, email, phone from student where id=#{id};
     </select>
 
 
-    <!--<resultMap id="studentMap" type="src.model.Student">-->
-        <!--<id column="id" property="id"/>-->
-        <!--<result column="name" property="name"/>-->
-        <!--<result column="password" property="email"/>-->
-        <!--<result column="phone" property="phone"/>-->
-        <!--<result column="grade" property="grade"/>-->
-        <!--<result column="college" property="college"/>-->
-        <!--<result column="major" property="major"/>-->
-        <!--<result column="introduce" property="introduce"/>-->
-        <!--<result column="punish_end" property="punish_end"/>-->
-    <!--</resultMap>-->
 
 </mapper>
