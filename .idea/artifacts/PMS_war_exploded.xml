@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="PMS:war exploded">
-    <output-path>$PROJECT_DIR$/out/artifacts/PMS_war_exploded</output-path>
+    <output-path>$PROJECT_DIR$/target/artifacts/PMS-war exploded</output-path>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
