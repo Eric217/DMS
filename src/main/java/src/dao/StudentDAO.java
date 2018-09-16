@@ -26,5 +26,6 @@ public interface StudentDAO {
 
     public void participateProject(Long pid);
 
+    public Integer checkMailExisted(String mail);
 
 }

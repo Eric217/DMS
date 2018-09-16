@@ -22,25 +22,17 @@ public class StudentService {
         return ResultCache.getDataOk(s);
     }
 
-
-    public boolean insert(Student vo)   {
-//        Connection c = null;
-//        try {
-//            c = ConnectionFactory.shared().makeConnection();
-//            StudentDAO user_dao = DAOFactory.getStudentDAO(c);
-//
-//            if (user_dao.findById(vo.getId()) == null) {
-//                return user_dao.doCreate(vo); // 这里只要没抛出异常，就一定返回 true 了（我感觉是）
-//            }
-//            return false;
-//        } catch (SQLException e) {
-//            throw e;
-//        } finally {
-//            if (c != null) c.close();
-//        }
-        return false;
+    public Result insertStudent(Student vo)   {
+        studentDAO.insertStudent(vo);
+        return ResultCache.OK;
     }
 
+    public Boolean emailExist(String email) {
+        Integer i = studentDAO.checkMailExisted(email);
+        if (i != 0)
+            return true;
+        return false;
+    }
      
     public boolean update(Student vo)   {
 //        Connection c = null;
