@@ -1,16 +1,13 @@
 package src.dao;
 
 import org.apache.ibatis.annotations.Param;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Repository;
 import src.model.Project;
 import src.model.Student;
 import src.model.assistance.PageRowsMap;
 import src.model.assistance.StuProMap;
 
-import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 @Repository
 public interface ProjectDAO {
@@ -30,7 +27,7 @@ public interface ProjectDAO {
     void addMember(@Param("sid") String sid, @Param("pid") Long pid);
 
 
-    /** Simplified Student Object */
+    /** Simplified Student Object. For mapper to create collection type */
     List<Student> getMembersByProjectId(Long id);
 
     Integer getCount(@Param("property") String property, @Param("like") String like);

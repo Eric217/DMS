@@ -28,4 +28,6 @@ public interface StudentDAO {
 
     public Integer checkMailExisted(String mail);
 
+    public String getEncodedPassword(String id);
+
 }

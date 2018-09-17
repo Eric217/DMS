@@ -20,14 +20,8 @@ import static src.model.assistance.ProjectStatusValue.*;
 @Service
 public class ProjectService {
 
-    private final
-    ProjectDAO projectDAO;
-
     @Autowired
-    public ProjectService(ProjectDAO projectDAO) {
-        this.projectDAO = projectDAO;
-    }
-
+    ProjectDAO projectDAO;
 
     public Result getCount(String prop, String like, Boolean viewDeleted) {
         Integer count = viewDeleted

@@ -11,6 +11,11 @@
         select count(1) from student where email = #{mail};
     </select>
 
+    <!-- public Integer checkAccount(String id, String encoded_pass);-->
+    <select id="getEncodedPassword" resultType="java.lang.String" parameterType="string">
+        select password from student where id = #{id};
+    </select>
+
     <insert id="insertStudent" parameterType="src.model.Student">
         insert into student(id, name, password, email) values (#{id}, #{name}, #{password},
                                                               #{email});
