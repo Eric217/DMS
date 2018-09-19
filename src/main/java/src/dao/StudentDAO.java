@@ -10,24 +10,23 @@ import java.util.Set;
 @Repository
 public interface StudentDAO {
 
-    public Integer getCount(String property, String like);
+//    Integer getCount(String property, String like);
 
-    public Student getStudentById(String id);
+    Student getStudentById(String id);
 
-    public List<Student> getAllStudents();
+//    List<Student> getAllStudents();
 
-    public List<Student> getAllSplit(Integer page, Integer rows, String property, String like);
+//    List<Student> getAllSplit(Integer page, Integer rows, String property, String like);
 
-    public void insertStudent(Student vo);
+    void insertStudent(Student vo);
 
-    public void updateStudent(Student vo);
+    void updateStudent(Student vo);
 
-    public void deleteStudents(List<String> ids);
+    void deleteStudent(String id);
 
-    public void participateProject(Long pid);
+    Integer checkMailExisted(String mail);
 
-    public Integer checkMailExisted(String mail);
+    String getEncodedPassword(String id);
 
-    public String getEncodedPassword(String id);
 
 }

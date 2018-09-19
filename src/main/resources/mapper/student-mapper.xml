@@ -11,7 +11,6 @@
         select count(1) from student where email = #{mail};
     </select>
 
-    <!-- public Integer checkAccount(String id, String encoded_pass);-->
     <select id="getEncodedPassword" resultType="java.lang.String" parameterType="string">
         select password from student where id = #{id};
     </select>
@@ -20,5 +19,12 @@
         insert into student(id, name, password, email) values (#{id}, #{name}, #{password},
                                                               #{email});
     </insert>
+
+    <update id="updateStudent" parameterType="src.model.Student">
+        update student set name = #{name}, password = #{password}, email = #{email}, phone =
+        #{phone}, grade = #{grade}, college = #{college}, major = #{major}, introduce =
+        #{introduce}, punish_end = #{punish_end} where id = #{id};
+    </update>
+
 
 </mapper>

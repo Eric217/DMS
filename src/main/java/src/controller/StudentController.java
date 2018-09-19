@@ -9,6 +9,7 @@ import src.base.ResultCache;
 import src.model.Student;
 import src.service.StudentService;
 
+/** 部分控制位于 UserController */
 @RestController
 @RequestMapping("/student")
 public class StudentController {
@@ -23,9 +24,10 @@ public class StudentController {
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public Result updateStudent(Student s) {
-
+        studentService.updateStudent(s);
         return ResultCache.OK;
     }
 
+//    @RequestMapping(value = )
 
 }

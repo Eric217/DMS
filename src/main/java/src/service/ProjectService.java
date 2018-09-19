@@ -80,6 +80,12 @@ public class ProjectService {
         return ResultCache.getDataOk(list);
     }
 
+    public Result getProjectsManagedBySid(Integer page, Integer rows, String sid,
+                                          Boolean viewDelete) {
+        return getProjects(page, rows, S_ALL, viewDelete, "leader_id", sid);
+
+    }
+
     /** 对于管理人员： */
     public Result getProjects(Integer page, Integer rows, Integer status,
                               Boolean viewDelete, String property, String like) {
@@ -123,10 +129,13 @@ public class ProjectService {
         return ResultCache.OK;
     }
 
-    public Result updateDeleted(Long id, Integer newValue) {
+    @Transactional
+    public Result updateDeleted(Set<Long> ids, Integer newValue) {
         if (newValue > 1) newValue = 1;
         if (newValue < 0) newValue = 0;
-        projectDAO.updateDeleted(id, newValue);
+        for (Long id: ids) {
+            projectDAO.updateDeleted(id, newValue);
+        }
         return ResultCache.OK;
     }
 

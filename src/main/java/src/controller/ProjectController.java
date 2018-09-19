@@ -12,6 +12,8 @@ import javax.servlet.http.HttpSession;
 import java.util.HashSet;
 import java.util.Set;
 
+import static src.base.SessionNames.S_USERNAME;
+
 @RestController
 public class ProjectController {
 
@@ -47,10 +49,27 @@ public class ProjectController {
     @RequestMapping(value = "/student/project/all", method = RequestMethod.GET)
     public Result getProject_s(Integer page, Integer rows, Integer status, HttpSession session) {
 
-        String uid = (String)session.getAttribute("username");
+        String uid = (String)session.getAttribute(S_USERNAME);
         // TODO: - check permission
         return projectService.getParticipatedProjects(page, rows, status, uid);
     }
+
+    @RequestMapping(value = "/student/project/managed", method = RequestMethod.GET)
+    public Result getProject_m(Integer page, Integer rows, HttpSession session) {
+
+        String uid = (String)session.getAttribute(S_USERNAME);
+        // TODO: - check permission
+        return projectService.getProjectsManagedBySid(page, rows, uid, false);
+    }
+
+    @RequestMapping(value = "/admin/project/managed", method = RequestMethod.GET)
+    public Result getProject_m(Integer page, Integer rows, String sid, HttpSession session) {
+
+        String uid = (String)session.getAttribute(S_USERNAME);
+        // TODO: - check permission
+        return projectService.getProjectsManagedBySid(page, rows, sid, true);
+    }
+
 
     /** 有管理职能的 查看一种状态的 项目列表
      *  有了 property 和 like，可以支持检索功能，按照 name，coach_id，lab_name，leader_id，type 之一进行 */
@@ -75,7 +94,20 @@ public class ProjectController {
     /** 普通用户删除，实际没有删除，而是更新了一个属性 */
     @RequestMapping(value = "/student/project/delete", method = RequestMethod.POST)
     public Result updateDeleted(Long id, Integer newValue) {
-        return projectService.updateDeleted(id, newValue);
+        Set<Long> s = new HashSet<>();
+        s.add(id);
+        return projectService.updateDeleted(s, newValue);
+    }
+    /** 删除多个，参数样式：233|445|663 的字符串 */
+    @RequestMapping(value = "/student/project/multi_delete", method = RequestMethod.POST)
+    public Result updateDeleted_m(String ids, Integer newValue) {
+        Set<Long> s; s = new HashSet<>();
+        String[] arr = ids.split("|");
+        for (String id: arr) {
+            if (!id.isEmpty())
+                s.add(Long.parseLong(id));
+        }
+        return projectService.updateDeleted(s, newValue);
     }
 
     /** 按照 id 删除一个项目 */
@@ -88,7 +120,7 @@ public class ProjectController {
 
     /** 删除多个，参数样式：233|445|663 的字符串 */
     @RequestMapping(value = "/admin/project/multi_delete", method = RequestMethod.POST)
-    public Result delete(String ids) {
+    public Result delete_m(String ids) {
         Set<Long> s; s = new HashSet<>();
         String[] arr = ids.split("|");
         for (String id: arr) {

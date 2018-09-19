@@ -1,0 +1,50 @@
+.pic {
+    height: 82px;
+    width: 263px;
+    margin: auto;
+    cursor: pointer;
+    background-image: url(/assets/images/sdu/sdu_text_red.png);
+}
+
+#verify_input {
+    position: absolute;
+    left: 0;
+    width: 140px;
+}
+
+#verify_input2 {
+    width: 155px;
+    display: inline;
+}
+
+#verify_input3 {
+    width: 155px;
+    display: inline;
+}
+
+#code_refresh {
+    position: absolute;
+    right: 5px;
+    top: 6px;
+    cursor: pointer;
+}
+
+#code_image {
+    top: 0;
+    position: absolute;
+    right: 44px;
+    cursor: pointer;
+}
+
+#send_code {
+    position: absolute;
+    right: 8px;
+}
+#send_code2 {
+    position: absolute;
+    right: 8px;
+}
+
+#reset_password {
+    left: 69px;
+}

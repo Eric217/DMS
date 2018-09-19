@@ -8,10 +8,9 @@ import src.base.Result;
 import src.base.ResultCache;
 import src.eric.Tools;
 import src.model.Admin;
+import src.model.Laboratory;
 import src.model.Student;
-import src.service.AdminService;
-import src.service.MailService;
-import src.service.StudentService;
+import src.service.*;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.Cookie;
@@ -24,7 +23,6 @@ import java.util.Date;
 import java.util.Random;
 
 import static src.base.SessionNames.*;
-import static src.eric.Tools.createRandomNum;
 
 /** 不需要登陆状态就可以做的请求 */
 @RestController
@@ -37,6 +35,9 @@ public class UserController {
     @Autowired
     AdminService adminService;
 
+    @Autowired
+    LabService labService;
+
     @RequestMapping(value = "/logout", method = RequestMethod.POST)
     public Result logout(HttpSession session) {
         session.invalidate();
@@ -47,17 +48,22 @@ public class UserController {
     public Result getCode(String email, HttpSession session) {
 
         Date last_req = (Date)session.getAttribute(S_VERI_LAST), now = new Date();
-        if (last_req != null && last_req.getTime() + 1000*60 >= now.getTime()) {
-            return ResultCache.getFailureDetail("操作频繁，请稍后再试");
+        long rest = now.getTime() - 60 * 1000;
+        if (last_req != null && last_req.getTime() >= rest) {
+            long last_t = last_req.getTime();
+            rest = (long) ((last_t - rest)/1000.0);
+            return ResultCache.getFailureDetail("操作频繁，请 " + rest + " 秒后再试");
         }
         if (studentService.emailExist(email)) {
             return ResultCache.getFailureDetail("该邮箱已被注册");
         }
-        String random = createRandomNum(6);
+        String random = Tools.createRandomNum(6);
         MailService.sendMail(email, random);
         session.setAttribute(S_VERI_CODE, random);
         session.setAttribute(S_VERI_LAST, now);
         session.setAttribute(S_VERI_MAIL, email);
+        session.setMaxInactiveInterval(Integer.parseInt(
+                Tools.loadResource("mail.properties").getProperty("expires")));
         return ResultCache.OK;
     }
 
@@ -89,8 +95,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public Result login(String sid, String password, String code, HttpSession session,
-                        HttpServletResponse resp) {
+    public Result login(String sid, String password, String code,
+                        Boolean remember, HttpSession session, HttpServletResponse resp) {
 
         if (!code.equalsIgnoreCase((String)session.getAttribute(S_VERI_IMG))) {
             return ResultCache.getFailureDetail("验证码输入错误");
@@ -98,51 +104,71 @@ public class UserController {
 
         if (sid.startsWith("1000")) { // 管理员登陆
             if (adminService.passwordRight(Long.parseLong(sid), password)) {
-                session.setAttribute(S_ROLE_ADMIN, true);
+                PermissionService.GRANT_ADMIN(session);
             } else
                 return ResultCache.getFailureDetail("用户名或密码错误");
 
         } else { // 学号登陆
-            if (studentService.passwordRight(sid, password)) {
-                session.setAttribute(S_ROLE_ADMIN, false);
-            } else
+            if (!studentService.passwordRight(sid, password)) {
                 return ResultCache.getFailureDetail("用户名或密码错误");
+            }
         }
 
-        Cookie c = new Cookie("username", sid);
-        resp.addCookie(c);
+        PermissionService.GRANT_USER(session, sid);
         session.removeAttribute(S_VERI_IMG);
-        session.setAttribute(S_USERNAME, sid);
-        return ResultCache.OK;
+
+        Cookie c = Tools.makeCookie(S_USERNAME, sid);
+        resp.addCookie(c);
+
+        // TODO：- 加密 cookie，对称加密或者走 https. 配合前端加载时自动填充上 Cookie 的账号密码
+        Cookie c1 = Tools.makeCookie(S_PASSWORD, remember ? password : "");
+        resp.addCookie(c1);
+
+        return userType(session);
+    }
+
+    /** 1 normal, 2 lab , 3 admin, 0 no user */
+    @RequestMapping(value = "/type", method = RequestMethod.GET)
+    public Result userType(HttpSession session) {
+        int role = 0;
+        if (PermissionService.IS_LOGIN(session)) {
+            if (PermissionService.IS_ADMIN(session)) {
+                role = 3;
+            } else {
+                Laboratory l = PermissionService.getManagedLab(session, labService);
+                role = l == null ? 1 : 2;
+            }
+        }
+        return ResultCache.getDataOk(role);
     }
 
     @RequestMapping("/login/code")
     public void getImageCode(HttpServletResponse response, HttpSession session) {
         int len = 5, single_w = 16;
-        int width = len * (single_w + 2), height = 37;
+        int width = len * (single_w + 2), height = 34;
         Random random = new Random();
         BufferedImage image = new BufferedImage(width, height, 1);
 
         Graphics2D g = image.createGraphics();
-        g.setColor(Tools.getRandColor(200, 250));
-        g.setFont(new Font("Times New Roman",Font.ITALIC,28));
+        g.setColor(Tools.getRandColor(170, 250));
         g.fillRect(0, 0, width, height);
-        g.setStroke(new BasicStroke(3));
+        g.setStroke(new BasicStroke(3.5f));
 
         for(int i = 0; i < 40; i++){ // 绘制干扰线
-            g.setColor(Tools.getRandColor(130, 200));
             int x = random.nextInt(width);
             int y = random.nextInt(height);
             int x1 = random.nextInt(12);
             int y1 = random.nextInt(12);
+            g.setColor(Tools.getRandColor(110, 190));
             g.drawLine(x, y, x + x1, y + y1);
         }
 
         //绘制字符
         String strCode = Tools.createRandomNumWithLetters(len);
+        Font[] fs = Tools.getRandFonts(21, 16, len);
         for(int i = 0; i < len; i++){
-            g.setColor(new Color(20+random.nextInt(110),
-                    20+ random.nextInt(110),20+random.nextInt(110)));
+            g.setFont(fs[i]);
+            g.setColor(Tools.getRandColor(0, 140));
             g.drawString(String.valueOf(strCode.charAt(i)), single_w*i+len, 28);
         }
         g.dispose();
@@ -157,7 +183,7 @@ public class UserController {
             ImageIO.write(image, "JPEG", response.getOutputStream());
             response.getOutputStream().flush();
         } catch (Exception e) {
-            System.out.println(new Date() + " write verify img failed");
+            System.err.println(new Date() + " write verify img failed");
         }
     }
 

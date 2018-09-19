@@ -89,4 +89,31 @@ create index sid
   on participate (sid);
 
 
-
+create table modification
+(
+  id          int(11) unsigned auto_increment
+    primary key,
+  sid         char(12)                         not null,
+  pid         int(11) unsigned                 not null,
+  name        varchar(20)                      not null,
+  description varchar(255) default ''          null,
+  start_time  timestamp                        null,
+  end_time    timestamp                        null,
+  duration    int unsigned default '2592000'   not null,
+  submit_time timestamp                        not null,
+  coach_id    varchar(20) default ''           null,
+  opt_status  smallint(5) unsigned default '0' not null,
+  lab_name    varchar(20)                      not null,
+  leader_id   char(12)                         not null,
+  aim         varchar(1000)                    not null,
+  type        varchar(20) default ''           null,
+  deleted     int(1) default '0'               not null,
+  constraint modification_project_id_fk
+  foreign key (pid) references project (id)
+    on update cascade
+    on delete cascade,
+  constraint modification_student_id_fk
+  foreign key (sid) references student (id)
+    on update cascade
+    on delete cascade
+) engine=InnoDB DEFAULT CHARSET=utf8;
