@@ -41,22 +41,19 @@
 		<script src="assets/js/html5shiv.min.js"></script>
 		<script src="assets/js/respond.min.js"></script>
 		<![endif]-->
+		<!--[if !IE]> -->
+		<script src="assets/js/jquery-2.1.4.min.js"></script>
+		<!-- <![endif]-->
+		<!--[if IE]>
+		<script src="assets/js/jquery-1.11.3.min.js"></script>
+		<![endif]-->
 
 		<script src="js/API.js"></script>
 		<script src="js/common.js"></script>
-		<script> check_login(true); </script>
 
-		<script>
-            window.onpageshow = function test1(event) {
-                if (event.persisted)
-                    window.location.reload();
-            }
-		</script>
 	</head>
 <!-- 142 37 30 -->
-	<body class="no-skin">
-
-
+	<body class="no-skin" onpageshow="check_index()">
 
 		<div id="navbar" class="navbar navbar-default ace-save-state">
 			<div class="navbar-container ace-save-state" id="navbar-container">
@@ -97,7 +94,7 @@
 									 src="assets/images/avatars/user2.png"/>
 								<span class="user-info">
 									<small>Welcome,</small>
-									刘兆刚
+									<span class="bigger-110" id="user_name_label">未登陆</span>
 								</span>
 								<i class="ace-icon fa fa-caret-down"></i>
 							</a>
@@ -348,16 +345,6 @@
 
 		<!-- basic scripts -->
 
-		<!--[if !IE]> -->
-		<script src="assets/js/jquery-2.1.4.min.js"></script>
-
-		<!-- <![endif]-->
-
-		<!--[if IE]>
-
-		<script src="assets/js/jquery-1.11.3.min.js"></script>
-
-		<![endif]-->
 		<script type="text/javascript">
 			if('ontouchstart' in document.documentElement) document.write("<script src='assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
 		</script>
@@ -368,6 +355,7 @@
 		<!-- ace scripts -->
 		<script src="assets/js/ace-elements.min.js"></script>
 		<script src="assets/js/ace.min.js"></script>
+		<script src="js/index_all.js"></script>
 
         <script>
 

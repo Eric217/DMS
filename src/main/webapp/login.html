@@ -45,18 +45,10 @@
 
         <script src="js/API.js"></script>
         <script src="js/common.js"></script>
-        <script> check_login(false); </script>
-
-        <script>
-           window.onpageshow = function test1(event) {
-               if (event.persisted)
-                    window.location.reload();
-            }
-        </script>
 
 	</head>
 
-    <body class="login-layout">
+    <body class="login-layout" onpageshow="check_login()">
 
 		<div class="main-container">
 			<div class="main-content">
@@ -194,9 +186,9 @@
 												<fieldset>
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="email"
+															<input type="email" id="email_input2"
 																   class="form-control"
-																   placeholder="邮箱" />
+																   placeholder="邮箱"/>
 															<i class="ace-icon fa fa-envelope"></i>
 														</span>
 													</label>
@@ -215,7 +207,7 @@
 													</label>
 													<label class="block clearfix">
 														<span class="block input-icon input-icon-right">
-															<input type="password"
+															<input type="password" id="pass_in3"
 																   class="form-control"
 																   placeholder="8 ~ 16 位新密码" />
 															<i class="ace-icon fa fa-lock"></i>
@@ -227,7 +219,8 @@
 													<div class="clearfix" >
 														<div style="margin: auto">
 														<button type="button"
-																class="width-55 btn btn-sm btn-danger" id="reset_password">
+																class="width-55 btn btn-sm btn-danger"
+                                                                id="reset_password">
 															<span class="bigger-110">重置密码</span>
 															<i class="ace-icon fa fa-arrow-right icon-on-right"></i>
 														</button></div>

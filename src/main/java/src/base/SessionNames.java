@@ -10,4 +10,5 @@ public interface SessionNames {
     String S_VERI_CODE = "verify_code";
     String S_VERI_MAIL = "verify_mail";
     String S_VERI_IMG  = "verify_img";
+    String S_VERI_TYPE = "verify_type"; // register: 0, reset pass: 1
 }

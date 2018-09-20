@@ -36,7 +36,7 @@ jQuery(function($) {
         }
         $.post(API.login, loginModel, function (data) {
             if (data.status === 200) {
-                jump(data.data);
+                jump(data.data.role);
             } else {
                 alert(data.message);
                 refreshCode();
@@ -67,7 +67,7 @@ jQuery(function($) {
             return;
         }
         if (regModel.name.length < 1) {
-            alert("邮箱不能为空");
+            alert("姓名不能为空");
             return;
         }
         if (regModel.password.length < 8 || regModel.password.length > 16) {
@@ -85,7 +85,7 @@ jQuery(function($) {
         $.post(API.register, regModel, function (data) {
             alert(data.message);
             if (data.status === 200) {
-                location.href = "http://sdu.edu.cn";
+                location.href = "login.html";
             }
         });
         e.preventDefault();
@@ -95,7 +95,7 @@ jQuery(function($) {
         if (model.email.length < 1) {
             alert("邮箱不能为空"); return;
         }
-        if (model.email.length < 3) { // TODO: - Regex
+        if (model.email.length < 3) { // TODO: - Regex: is a sdu email ?
             alert("只允许用山东大学邮箱注册"); return;
         }
         $.post(API.register_code, model, function (data) {
@@ -104,7 +104,43 @@ jQuery(function($) {
         e.preventDefault();
     });
     $("#send_code2").on('click', function (e) {
-        refreshCode();
+        var model = {email: $('#email_input2').val()};
+        if (model.email.length < 1) {
+            alert("邮箱不能为空"); return;
+        }
+        if (model.email.length < 3) { // TODO: - Regex: is a sdu email ?
+            alert("该邮箱尚未注册"); return;
+        }
+        $.post(API.resetPass_code, model, function (data) {
+            alert(data.message);
+        });
+        e.preventDefault();
+    });
+    $("#reset_password").on('click', function (e) {
+
+        var resModel = {
+            email: $('#email_input2').val(),
+            password: $("#pass_in3").val(),
+            code: $("#verify_input3").val(),
+        };
+        if (resModel.email.length < 1) {
+            alert("邮箱不能为空");
+            return;
+        }
+        if (resModel.password.length < 8 || resModel.password.length > 16) {
+            alert("密码长度不符合条件");
+            return;
+        }
+        if (resModel.code.length < 1) {
+            alert("请输入验证码");
+            return;
+        }
+        $.post(API.resetPassword, resModel, function (data) {
+            alert(data.message);
+            if (data.status === 200) {
+                location.href = "login.html";
+            }
+        });
         e.preventDefault();
     });
 

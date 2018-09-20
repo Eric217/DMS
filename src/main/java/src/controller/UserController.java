@@ -10,6 +10,7 @@ import src.eric.Tools;
 import src.model.Admin;
 import src.model.Laboratory;
 import src.model.Student;
+import src.model.assistance.UserTypeModel;
 import src.service.*;
 
 import javax.imageio.ImageIO;
@@ -20,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Date;
+import java.util.Properties;
 import java.util.Random;
 
 import static src.base.SessionNames.*;
@@ -62,8 +64,54 @@ public class UserController {
         session.setAttribute(S_VERI_CODE, random);
         session.setAttribute(S_VERI_LAST, now);
         session.setAttribute(S_VERI_MAIL, email);
+        session.setAttribute(S_VERI_TYPE, "register");
         session.setMaxInactiveInterval(Integer.parseInt(
                 Tools.loadResource("mail.properties").getProperty("expires")));
+        return ResultCache.OK;
+    }
+
+    @RequestMapping(value = "/resetPassword/mail", method = RequestMethod.POST)
+    public Result getCode_2(String email, HttpSession session) {
+
+        Date last_req = (Date)session.getAttribute(S_VERI_LAST), now = new Date();
+        long rest = now.getTime() - 60 * 1000;
+        if (last_req != null && last_req.getTime() >= rest) {
+            long last_t = last_req.getTime();
+            rest = (long) ((last_t - rest)/1000.0);
+            return ResultCache.getFailureDetail("操作频繁，请 " + rest + " 秒后再试");
+        }
+        if (!studentService.emailExist(email)) {
+            return ResultCache.getFailureDetail("该邮箱尚未注册");
+        }
+        String random = Tools.createRandomNum(6);
+        MailService.sendMail(email, random);
+        session.setAttribute(S_VERI_CODE, random);
+        session.setAttribute(S_VERI_LAST, now);
+        session.setAttribute(S_VERI_MAIL, email);
+        session.setAttribute(S_VERI_TYPE, "resetPassword");
+        session.setMaxInactiveInterval(Integer.parseInt(
+                Tools.loadResource("mail.properties").getProperty("expires")));
+        return ResultCache.OK;
+    }
+
+    @RequestMapping(value = "/resetPassword/code", method = RequestMethod.POST)
+    public Result verifyCode_2(String email, String code, String password, HttpSession session) {
+        if (email == null || code == null || password == null) {
+            return ResultCache.FAILURE;
+        }
+        boolean b1 = email.equals(session.getAttribute(S_VERI_MAIL));
+        Date last_req = (Date)session.getAttribute(S_VERI_LAST), now = new Date();
+        boolean b2 = last_req != null &&
+                last_req.getTime()+1000*MailService.expires_seconds >= now.getTime();
+        boolean b3 = code.equals(session.getAttribute(S_VERI_CODE));
+        boolean b4 = session.getAttribute(S_VERI_TYPE).equals("resetPassword");
+        if (!(b1 && b2 && b3 && b4)) {
+            return ResultCache.getFailureDetail("验证码已过期，请重新发送");
+        }
+        studentService.updatePassword(email, password);
+        session.removeAttribute(S_VERI_CODE);
+        session.removeAttribute(S_VERI_MAIL);
+        session.removeAttribute(S_VERI_TYPE);
         return ResultCache.OK;
     }
 
@@ -76,7 +124,8 @@ public class UserController {
         boolean b2 = last_req != null &&
                         last_req.getTime()+1000*MailService.expires_seconds >= now.getTime();
         boolean b3 = code.equals(session.getAttribute(S_VERI_CODE));
-        if (!(b1 && b2 && b3)) {
+        boolean b4 = session.getAttribute(S_VERI_TYPE).equals("register");
+        if (!(b1 && b2 && b3 && b4)) {
             return ResultCache.getFailureDetail("验证码已过期，请重新发送");
         }
         if (studentService.emailExist(email)) {
@@ -91,6 +140,7 @@ public class UserController {
         studentService.insertStudent(student);
         session.removeAttribute(S_VERI_CODE);
         session.removeAttribute(S_VERI_MAIL);
+        session.removeAttribute(S_VERI_TYPE);
         return ResultCache.OK;
     }
 
@@ -123,23 +173,32 @@ public class UserController {
         // TODO：- 加密 cookie，对称加密或者走 https. 配合前端加载时自动填充上 Cookie 的账号密码
         Cookie c1 = Tools.makeCookie(S_PASSWORD, remember ? password : "");
         resp.addCookie(c1);
-
+        session.setMaxInactiveInterval(40 * 60);
         return userType(session);
     }
 
-    /** 1 normal, 2 lab , 3 admin, 0 no user */
+    /** role: 1 normal, 2 lab , 3 admin, 0 no user,
+     *  data: */
     @RequestMapping(value = "/type", method = RequestMethod.GET)
     public Result userType(HttpSession session) {
         int role = 0;
+        UserTypeModel model = new UserTypeModel();
+        String uid = (String)session.getAttribute(S_USERNAME);
         if (PermissionService.IS_LOGIN(session)) {
             if (PermissionService.IS_ADMIN(session)) {
+                Admin admin = new Admin();
+                admin.setId(Long.parseLong(uid));
+                model.setAdmin(admin);
                 role = 3;
             } else {
                 Laboratory l = PermissionService.getManagedLab(session, labService);
                 role = l == null ? 1 : 2;
+                Student s = (Student)(studentService.getStudentById(uid).getData());
+                model.setStudent(s);
             }
         }
-        return ResultCache.getDataOk(role);
+        model.setRole(role);
+        return ResultCache.getDataOk(model);
     }
 
     @RequestMapping("/login/code")

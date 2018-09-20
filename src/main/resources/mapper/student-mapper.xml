@@ -26,5 +26,9 @@
         #{introduce}, punish_end = #{punish_end} where id = #{id};
     </update>
 
+    <update id="updatePassword">
+        update student set password = #{pass}
+        where email = #{email};
+    </update>
 
 </mapper>

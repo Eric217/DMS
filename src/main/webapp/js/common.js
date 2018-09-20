@@ -1,19 +1,53 @@
+
+
 function gotoSDU() {
     location.href = "http://www.sdu.edu.cn";
 }
 
-function check_login(to_login) {
+
+function check_login() {
     $.get(API.login_type, function (data) {
-        var u_t = data.data;
-        if (u_t === 0) {
-            if (to_login)
-                location.href = "login.html";
-            else
-                return;
-        }
+        var u_t = data.data.role;
+        if (u_t === ROLE.no_user)
+            return;
         jump(u_t);
     });
 }
+
+function check_index() {
+
+    function forwardIfNot(url) {
+        if (location.pathname !== ('/' + url))
+            location.href = url;
+    }
+
+    $.get(API.login_type, function (data) {
+        var userInfo = {
+            role: 0,
+            user: null
+        };
+
+        var u_t = data.data.role;
+        if (u_t === ROLE.no_user)
+            location.href = "login.html";
+
+        userInfo.role = u_t;
+        userInfo.user = data.data.student;
+
+        if (u_t === ROLE.normal) { // normal
+            forwardIfNot("index.html");
+        } else if (u_t === ROLE.lab) { // lab
+            forwardIfNot("index_l.html");
+        } else if (u_t === ROLE.admin) { // admin
+            forwardIfNot("index_a.html");
+            userInfo.user = data.data.admin;
+        }
+        fillNameLabel(userInfo);
+    });
+
+}
+
+
 
 function jump(user_type) {
 

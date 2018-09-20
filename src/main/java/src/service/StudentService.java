@@ -55,6 +55,11 @@ public class StudentService {
         return ResultCache.OK;
     }
 
+    public Result updatePassword(String email, String newPass) {
+        studentDAO.updatePassword(email, encodePassword(newPass));
+        return ResultCache.OK;
+    }
+
     @Transactional
     public Result deleteStudents(Set<String> ids)   {
         for (String id: ids) {

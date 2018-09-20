@@ -22,11 +22,14 @@ public interface StudentDAO {
 
     void updateStudent(Student vo);
 
+    void updatePassword(@Param("email") String email, @Param("pass") String pass);
+
     void deleteStudent(String id);
 
     Integer checkMailExisted(String mail);
 
     String getEncodedPassword(String id);
+
 
 
 }
