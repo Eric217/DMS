@@ -85,7 +85,7 @@ jQuery(function($) {
         $.post(API.register, regModel, function (data) {
             alert(data.message);
             if (data.status === 200) {
-                location.href = "login.html";
+                location.href = "/login.html";
             }
         });
         e.preventDefault();
@@ -138,7 +138,7 @@ jQuery(function($) {
         $.post(API.resetPassword, resModel, function (data) {
             alert(data.message);
             if (data.status === 200) {
-                location.href = "login.html";
+                location.href = "/login.html";
             }
         });
         e.preventDefault();

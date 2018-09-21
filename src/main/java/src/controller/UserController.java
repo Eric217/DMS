@@ -192,6 +192,7 @@ public class UserController {
                 role = 3;
             } else {
                 Laboratory l = PermissionService.getManagedLab(session, labService);
+                model.setLab(l);
                 role = l == null ? 1 : 2;
                 Student s = (Student)(studentService.getStudentById(uid).getData());
                 model.setStudent(s);

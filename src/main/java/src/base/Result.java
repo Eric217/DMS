@@ -1,8 +1,10 @@
 package src.base;
 
 import lombok.Data;
+import lombok.ToString;
 
 @Data
+@ToString
 public class Result {
 
     public Result(int status,String message){

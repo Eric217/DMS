@@ -51,6 +51,17 @@ public interface ProjectDAO {
     List<Project> getComplete_Fake(PageRowsMap map);
     List<Project> getOvertime_Fake(PageRowsMap map);
 
+    List<Project> getManagedSplit_Fake(PageRowsMap map);
+    List<Project> getManagedSplit(PageRowsMap map);
+
+//    List<Project> getProcessing_Fake(PageRowsMap map);
+//    List<Project> getChecking_Fake(PageRowsMap map);
+//    List<Project> getRejected_Fake(PageRowsMap map);
+//    List<Project> getCanceled_Fake(PageRowsMap map);
+//    List<Project> getComplete_Fake(PageRowsMap map);
+//    List<Project> getOvertime_Fake(PageRowsMap map);
+
+
     List<Project> getAllSplitForStu(StuProMap map);
     List<Project> getProcessingForStu(StuProMap map);
     List<Project> getCheckingForStu(StuProMap map);

@@ -2,15 +2,12 @@
 <html lang="en">
 	<head>
 		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-        <!--<meta http-equiv="Cache-control" content="no-cache">-->
-        <!--<meta http-equiv="Cache" content="no-cache">-->
 
         <meta charset="utf-8" />
 		<title>Login Page - SDU LAB</title>
 
 		<meta name="description" content="User login page" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-
 
 		<!-- bootstrap & fontawesome -->
 		<link rel="stylesheet" href="assets/css/bootstrap.min.css" />
@@ -45,6 +42,19 @@
 
         <script src="js/API.js"></script>
         <script src="js/common.js"></script>
+		<script>
+            function check_login() {
+                $.get(API.login_type, function (data) {
+                    var u_t = data.data.role;
+                    if (u_t === ROLE.no_user)
+                        return;
+                    userInfo.role = u_t;
+                    userInfo.user = data.data.student;
+                    userInfo.lab = data.data.lab;
+                    jump(u_t);
+                });
+            }
+		</script>
 
 	</head>
 
@@ -375,6 +385,8 @@
         <script src="js/login_register.js"></script>
 
         <script>
+
+
             $('body').attr('class', 'login-layout light-login');
             $('#id-company-text').attr('class', 'blue');
             refreshCode();

@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import src.base.Result;
 import org.springframework.web.bind.annotation.RestController;
+import src.base.ResultCache;
 import src.model.Project;
 import src.service.ProjectService;
 
@@ -31,13 +32,19 @@ public class ProjectController {
     @RequestMapping(value = "/student/project/create", method = RequestMethod.POST)
     public Result createProject(Project vo, String id1, String id2, String id3,
                                 String id4, String id5, String id6) {
-        return projectService.insert(vo, id1, id2, id3, id4, id5, id6);
+        try {
+            return projectService.insert(vo, id1, id2, id3, id4, id5, id6);
+        } catch (Exception e) {
+            return ResultCache.FAILURE;
+        }
     }
 
     @RequestMapping(value = "/student/project/count", method = RequestMethod.GET)
     public Result getCount_s(String property, String like) {
         return projectService.getCount(property, like, false);
     }
+
+
 
     @RequestMapping(value = "/admin/project/count", method = RequestMethod.GET)
     public Result getCount_a(String property, String like) {
@@ -48,7 +55,9 @@ public class ProjectController {
     /** 普通学生 查看一种状态的 项目列表, 我们对 学生（普通+实验室负责人）不开放检索功能 */
     @RequestMapping(value = "/student/project/all", method = RequestMethod.GET)
     public Result getProject_s(Integer page, Integer rows, Integer status, HttpSession session) {
-
+        if (page == null || rows == null) {
+            page = 1; rows = 10;
+        }
         String uid = (String)session.getAttribute(S_USERNAME);
         // TODO: - check permission
         return projectService.getParticipatedProjects(page, rows, status, uid);
@@ -56,15 +65,19 @@ public class ProjectController {
 
     @RequestMapping(value = "/student/project/managed", method = RequestMethod.GET)
     public Result getProject_m(Integer page, Integer rows, HttpSession session) {
-
+        if (page == null || rows == null) {
+            page = 1; rows = 10;
+        }
         String uid = (String)session.getAttribute(S_USERNAME);
-        // TODO: - check permission
+        System.out.println("uid = " + uid);
         return projectService.getProjectsManagedBySid(page, rows, uid, false);
     }
 
     @RequestMapping(value = "/admin/project/managed", method = RequestMethod.GET)
     public Result getProject_m(Integer page, Integer rows, String sid, HttpSession session) {
-
+        if (page == null || rows == null) {
+            page = 1; rows = 10;
+        }
         String uid = (String)session.getAttribute(S_USERNAME);
         // TODO: - check permission
         return projectService.getProjectsManagedBySid(page, rows, sid, true);
@@ -76,6 +89,9 @@ public class ProjectController {
     @RequestMapping(value = "/admin/project/all", method = RequestMethod.GET)
     public Result getProject_a(Integer page, Integer rows, Integer status, String property,
                                String like) {
+        if (page == null || rows == null) {
+            page = 1; rows = 10;
+        }
         return projectService.getProjects(page, rows, status, true, property, like);
     }
 

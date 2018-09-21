@@ -60,10 +60,20 @@
         select * from project where id = #{id};
     </select>
 
+    <select id="getManagedSplit_Fake" resultMap="projectMap"
+            parameterType="src.model.assistance.PageRowsMap">
+        select id, `name`, coach_id, lab_name,
+               opt_status, start_time, end_time, duration, submit_time, leader_id
+        from project where leader_id like #{like} and deleted=0
+        order by submit_time desc
+        limit #{num} offset #{offset};
+    </select>
+
+
     <select id="getAllSplit_Fake" resultMap="projectMap"
             parameterType="src.model.assistance.PageRowsMap">
         select id, `name`, coach_id, lab_name,
-         opt_status, start_time, end_time, duration, submit_time
+         opt_status, start_time, end_time, duration, submit_time, leader_id
         from project where #{property} like #{like} and deleted=0
         order by submit_time desc
         limit #{num} offset #{offset};
@@ -71,7 +81,7 @@
     <select id="getAllSplit" resultMap="projectMap"
             parameterType="src.model.assistance.PageRowsMap">
        select id, `name`, coach_id, lab_name,
-         opt_status, start_time, end_time, duration, submit_time
+         opt_status, start_time, end_time, duration, submit_time, leader_id
         from project where #{property} like #{like}
        order by submit_time desc
        limit #{num} offset #{offset};
@@ -80,7 +90,7 @@
     <select id="getProcessing_Fake" parameterType="src.model.assistance.PageRowsMap"
             resultMap="projectMap">
         select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time
+               opt_status, start_time, end_time, duration, submit_time, leader_id
         from project where #{property} like #{like}
         and start_time is not null and end_time is null and deleted=0
         and to_seconds(start_time) + duration > to_seconds(now())
@@ -90,7 +100,7 @@
     <select id="getProcessing" parameterType="src.model.assistance.PageRowsMap"
             resultMap="projectMap">
         select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time
+               opt_status, start_time, end_time, duration, submit_time, leader_id
         from project where #{property} like #{like} and opt_status != 4
                        and start_time is not null and end_time is null
                        and to_seconds(start_time) + duration > to_seconds(now())
@@ -101,8 +111,8 @@
     <select id="getChecking" resultMap="projectMap"
             parameterType="src.model.assistance.PageRowsMap">
         select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time
-        from project where #{property} like #{like} and start_time is null
+               opt_status, start_time, end_time, duration, submit_time, leader_id
+        from project where #{property} like #{like} and start_time is null and opt_status != 2
         order by submit_time desc
         limit #{num} offset #{offset};
     </select>
@@ -110,8 +120,8 @@
     <select id="getChecking_Fake" resultMap="projectMap"
             parameterType="src.model.assistance.PageRowsMap">
         select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time
-        from project where #{property} like #{like} and start_time is null and deleted=0
+               opt_status, start_time, end_time, duration, submit_time, leader_id
+        from project where #{property} like #{like} and start_time is null and deleted=0 and opt_status != 2
         order by submit_time desc
         limit #{num} offset #{offset};
     </select>
@@ -119,7 +129,7 @@
     <select id="getRejected" resultMap="projectMap"
             parameterType="src.model.assistance.PageRowsMap">
         select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time
+               opt_status, start_time, end_time, duration, submit_time, leader_id
         from project where #{property} like #{like} and opt_status=2
         order by submit_time desc
         limit #{num} offset #{offset};
@@ -128,7 +138,7 @@
     <select id="getRejected_Fake" resultMap="projectMap"
             parameterType="src.model.assistance.PageRowsMap">
         select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time
+               opt_status, start_time, end_time, duration, submit_time, leader_id
         from project where #{property} like #{like} and opt_status=2 and deleted=0
         order by submit_time desc
         limit #{num} offset #{offset};
@@ -137,7 +147,7 @@
     <select id="getCanceled" resultMap="projectMap"
             parameterType="src.model.assistance.PageRowsMap">
         select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time
+               opt_status, start_time, end_time, duration, submit_time, leader_id
         from project where #{property} like #{like} and opt_status=4
         order by submit_time desc
         limit #{num} offset #{offset};
@@ -146,7 +156,7 @@
     <select id="getCanceled_Fake" resultMap="projectMap"
             parameterType="src.model.assistance.PageRowsMap">
         select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time
+               opt_status, start_time, end_time, duration, submit_time, leader_id
         from project where #{property} like #{like} and opt_status=4 and deleted=0
         order by submit_time desc
         limit #{num} offset #{offset};
@@ -155,7 +165,7 @@
     <select id="getComplete" resultMap="projectMap"
             parameterType="src.model.assistance.PageRowsMap">
         select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time
+               opt_status, start_time, end_time, duration, submit_time, leader_id
         from project where #{property} like #{like} and end_time is not null
         order by submit_time desc
         limit #{num} offset #{offset};
@@ -164,7 +174,7 @@
     <select id="getComplete_Fake" resultMap="projectMap"
             parameterType="src.model.assistance.PageRowsMap">
         select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time
+               opt_status, start_time, end_time, duration, submit_time, leader_id
         from project where #{property} like #{like} and end_time is not null and deleted=0
         order by submit_time desc
         limit #{num} offset #{offset};
@@ -173,7 +183,7 @@
     <select id="getOvertime" resultMap="projectMap"
             parameterType="src.model.assistance.PageRowsMap">
         select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time
+               opt_status, start_time, end_time, duration, submit_time, leader_id
         from project where #{property} like #{like}
         and start_time is not null and end_time is null and opt_status != 4
         and to_seconds(now()) >= to_seconds(start_time) + duration
@@ -184,7 +194,7 @@
     <select id="getOvertime_Fake" resultMap="projectMap"
             parameterType="src.model.assistance.PageRowsMap">
         select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time
+               opt_status, start_time, end_time, duration, submit_time, leader_id
         from project where #{property} like #{like} and deleted=0
                        and start_time is not null and end_time is null and opt_status != 4
                        and to_seconds(now()) >= to_seconds(start_time) + duration
@@ -196,7 +206,7 @@
     <select id="getAllSplitForStu" resultMap="projectMap"
             parameterType="src.model.assistance.StuProMap">
         select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time
+               opt_status, start_time, end_time, duration, submit_time, leader_id
         from project where id in (select pid from participate where sid = #{sid})
         and deleted=0 order by submit_time desc
         limit #{num} offset #{offset};
@@ -206,7 +216,7 @@
     <select id="getProcessingForStu" parameterType="src.model.assistance.StuProMap"
             resultMap="projectMap">
         select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time
+               opt_status, start_time, end_time, duration, submit_time, leader_id
         from project where id in (select pid from participate where sid = #{sid})
                        and start_time is not null and end_time is null and deleted=0
                        and to_seconds(start_time) + duration > to_seconds(now())
@@ -217,9 +227,9 @@
     <select id="getCheckingForStu" resultMap="projectMap"
             parameterType="src.model.assistance.StuProMap">
         select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time
+               opt_status, start_time, end_time, duration, submit_time, leader_id
         from project where id in (select pid from participate where sid = #{sid})
-        and start_time is null and deleted=0
+        and start_time is null and deleted=0 and opt_status != 2
         order by submit_time desc
         limit #{num} offset #{offset};
     </select>
@@ -227,7 +237,7 @@
     <select id="getRejectedForStu" resultMap="projectMap"
             parameterType="src.model.assistance.StuProMap">
         select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time
+               opt_status, start_time, end_time, duration, submit_time, leader_id
         from project where id in (select pid from participate where sid = #{sid})
                        and opt_status=2 and deleted=0
         order by submit_time desc
@@ -237,7 +247,7 @@
     <select id="getCanceledForStu" resultMap="projectMap"
             parameterType="src.model.assistance.StuProMap">
         select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time
+               opt_status, start_time, end_time, duration, submit_time, leader_id
         from project where id in (select pid from participate where sid = #{sid})
                        and opt_status=4 and deleted=0
         order by submit_time desc
@@ -248,7 +258,7 @@
     <select id="getCompleteForStu" resultMap="projectMap"
             parameterType="src.model.assistance.StuProMap">
         select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time
+               opt_status, start_time, end_time, duration, submit_time, leader_id
         from project where id in (select pid from participate where sid = #{sid})
                        and end_time is not null and deleted=0
         order by submit_time desc
@@ -257,7 +267,7 @@
     <select id="getOvertimeForStu" resultMap="projectMap"
             parameterType="src.model.assistance.StuProMap">
         select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time
+               opt_status, start_time, end_time, duration, submit_time, leader_id
         from project where id in (select pid from participate where sid = #{sid}) and deleted=0
                        and start_time is not null and end_time is null and opt_status != 4
                        and to_seconds(now()) >= to_seconds(start_time) + duration

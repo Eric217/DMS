@@ -82,7 +82,7 @@ public class ProjectService {
 
     public Result getProjectsManagedBySid(Integer page, Integer rows, String sid,
                                           Boolean viewDelete) {
-        return getProjects(page, rows, S_ALL, viewDelete, "leader_id", sid);
+        return getProjectsManaged(page, rows, S_ALL, viewDelete, sid);
 
     }
 
@@ -97,6 +97,7 @@ public class ProjectService {
         }
 
         PageRowsMap map = new PageRowsMap(rows, rows*(page-1), property, like);
+
 
         if (s == S_ALL) {
             list = viewDelete ? projectDAO.getAllSplit(map)
@@ -123,6 +124,43 @@ public class ProjectService {
         return ResultCache.getDataOk(list);
     }
 
+    public Result getProjectsManaged(Integer page, Integer rows, Integer status,
+                              Boolean viewDelete, String like) {
+        int s = status;
+        List<Project> list = null;
+
+        if (like == null) {
+            like = "";
+        }
+
+        PageRowsMap map = new PageRowsMap(rows, rows*(page-1), "", like);
+
+
+        if (s == S_ALL) {
+            list = viewDelete ? projectDAO.getManagedSplit(map)
+                    :projectDAO.getManagedSplit_Fake(map);
+        }
+//        else if (s == S_CHECKING) {
+//            list = viewDelete ? projectDAO.getChecking(map)
+//                    :projectDAO.getChecking_Fake(map);
+//        } else if (s == S_REJECTED) {
+//            list = viewDelete ? projectDAO.getRejected(map)
+//                    :projectDAO.getRejected_Fake(map);
+//        } else if (s == S_PROCESSING) {
+//            list = viewDelete ? projectDAO.getProcessing(map)
+//                    :projectDAO.getProcessing_Fake(map);
+//        } else if (s == S_CANCELED) {
+//            list = viewDelete ? projectDAO.getCanceled(map)
+//                    :projectDAO.getCanceled_Fake(map);
+//        } else if (s == S_COMPLETE) {
+//            list = viewDelete ? projectDAO.getComplete(map)
+//                    :projectDAO.getComplete_Fake(map);
+//        } else if (s == S_OVERTIME) {
+//            list = viewDelete ? projectDAO.getOvertime(map)
+//                    :projectDAO.getOvertime_Fake(map);
+//        }
+        return ResultCache.getDataOk(list);
+    }
 
     public Result updateProject(Project vo) {
         projectDAO.updateProject(vo);

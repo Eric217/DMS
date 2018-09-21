@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+		<meta charset="utf-8" />
+
+        <!-- TODO: -  head 是变化的-->
+        <title>Home - SDU LAB</title>
+		<meta name="description" content="" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+
+		<!-- bootstrap & fontawesome -->
+		<link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
+		<link rel="stylesheet" href="../assets/font-awesome/4.5.0/css/font-awesome.min.css" />
+		<!-- page specific plugin styles -->
+		<!-- text fonts -->
+		<link rel="stylesheet" href="../assets/css/fonts.googleapis.com.css" />
+		<!-- ace styles -->
+		<link rel="stylesheet" href="../assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
+		<!--[if lte IE 9]>
+        <link rel="stylesheet" href="../assets/css/ace-part2.min.css"
+              class="ace-main-stylesheet"/>
+        <![endif]-->
+		<link rel="stylesheet" href="../assets/css/ace-skins.min.css" />
+		<link rel="stylesheet" href="../assets/css/ace-rtl.min.css" />
+		<!--[if lte IE 9]>
+        <link rel="stylesheet" href="../assets/css/ace-ie.min.css"/>
+        <![endif]-->
+
+		<!-- inline styles related to this page -->
+		<!-- ace settings handler -->
+		<script src="../assets/js/ace-extra.min.js"></script>
+		<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+		<!--[if lte IE 8]>
+        <script src="../assets/js/html5shiv.min.js"></script>
+        <script src="../assets/js/respond.min.js"></script>
+        <![endif]-->
+		<!--[if !IE]> -->
+		<script src="../assets/js/jquery-2.1.4.min.js"></script>
+		<!-- <![endif]-->
+		<!--[if IE]>
+        <script src="../assets/js/jquery-1.11.3.min.js"></script>
+        <![endif]-->
+		<script src="/assets/js/angular.min.js"></script>
+
+		<script src="/js/API.js"></script>
+		<script src="/js/common.js"></script>
+
+        <!-- TODO: - on page show 是变化的-->
+        <script>
+            function check_in_lab() {
+                // $.get(API.login_type, function (data) {
+                //     var u_t = data.data.role;
+				//
+                //     if (u_t === ROLE.no_user)
+                //         location.href = "/login.html";
+                //     else if (u_t === ROLE.normal) { // normal
+                //         location.href = "/normal/index.html";
+                //     } else if (u_t === ROLE.admin) { // admin
+                //         location.href = "/admin/index_a.html";
+                //     }
+                //     userInfo.role = u_t;
+                //     userInfo.user = data.data.student;
+                //     userInfo.lab = data.data.lab;
+                //     fillNameLabel();
+                // });
+            }
+        </script>
+
+	</head>
+
+    <!-- sdu color 142 37 30 -->
+    <!-- TODO: - on page show 是变化的-->
+    <body class="no-skin" onpageshow="check_in_lab()">
+
+		<div id="navbar" class="navbar navbar-default ace-save-state">
+			<div class="navbar-container ace-save-state" id="navbar-container">
+				<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
+					<span class="sr-only">Toggle sidebar</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+                <!-- 在所有情况下，我都让他指向 login，由 login 统一负责跳转-->
+				<a href="/lab/index_l.html" class="navbar-brand pull-left">
+					<img src="/assets/images/sdu/soft_white.png" style="display: inline"/>
+					<span>实验室项目管理系统</span>
+				</a>
+
+				<div class="navbar-buttons navbar-header pull-right" role="navigation">
+					<ul class="nav ace-nav">
+
+                        <li id="right_top_lab" class="light-blue dropdown-modal" style="margin-top: 8px;
+						border-radius: 5px;">
+                            <a href="#">
+                                <span>&nbsp;&nbsp;实验室&nbsp;&nbsp;</span>
+                            </a>
+                        </li>
+
+                        <li id="right_top_profile" class="light-blue dropdown-modal" style="margin-top: 8px;
+						border-radius: 5px;">
+                            <a href="/student/profile.html">
+                                <span> 个人中心 </span>
+                            </a>
+                        </li>
+
+						<li class="light-blue dropdown-modal" style="margin-top: 8px; border-radius: 5px;">
+							<a data-toggle="dropdown" href="#" class="dropdown-toggle">
+								<img class="nav-user-photo"
+									 src="../assets/images/avatars/user2.png"/>
+								<span class="user-info">
+									<small>Welcome,</small>
+									<span class="bigger-110" id="user_name_label">未登陆</span>
+								</span>
+								<i class="ace-icon fa fa-caret-down"></i>
+							</a>
+
+							<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+
+								<li id="right_drag_profile">
+									<a href="/student/profile.html">
+										<i class="ace-icon fa fa-user"></i>
+										Profile
+									</a>
+								</li>
+
+								<li class="divider"></li>
+
+								<li>
+									<a href="" onclick="logout()">
+										<i class="ace-icon fa fa-power-off"></i>
+										Logout
+									</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+			</div><!-- /.navbar-container -->
+		</div>
+
+		<div class="main-container ace-save-state" id="main-container">
+			<script type="text/javascript">
+				try{ace.settings.loadState('main-container')}catch(e){}
+			</script>
+
+			<div id="sidebar" class="sidebar                  responsive                    ace-save-state">
+				<script type="text/javascript">
+					try{ace.settings.loadState('sidebar')}catch(e){}
+				</script>
+				<div class="sidebar-shortcuts" id="sidebar-shortcuts">
+				</div><!-- /.sidebar-shortcuts -->
+
+				<ul class="nav nav-list">
+					<li class="">
+                        <!-- TODO: - 某些情况下，点击主页 是变化的-->
+                        <a href="/lab/index_l.html">
+							<i class="menu-icon fa fa-home home-icon"></i>
+							<span class="menu-text"> 主页 </span>
+                        </a>
+						<b class="arrow"></b>
+					</li>
+
+
+					<li class="">
+                        <!-- TODO: - 列表 默认展开 是变化的-->
+                        <a href="#" class="dropdown-toggle">
+							<i class="menu-icon fa fa-list"></i>
+							<span class="menu-text"> 我的项目 </span>
+							<b class="arrow fa fa-angle-down"></b>
+						</a>
+
+						<b class="arrow"></b>
+
+						<ul class="submenu">
+                            <li class="">
+                                <a href="/student/create.html" >
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    新建项目
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+							<li class="">
+								<a href="#" onclick="goURI(0, 0)">
+									<i class="menu-icon fa fa-caret-right"></i>
+									全部项目
+								</a>
+								<b class="arrow"></b>
+							</li>
+							<li class="">
+                                <a href="#" onclick="goURI(0, 1)">
+									<i class="menu-icon fa fa-caret-right"></i>
+									我管理的项目
+								</a>
+								<b class="arrow"></b>
+							</li>
+
+                            <li class="">
+                                <a href="#" onclick="goURI(1, 0)">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    待审核项目
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+
+                            <li class="">
+                                <a href="#" onclick="goURI(3, 0)">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    进行中的项目
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+
+
+							<li class="">
+                                <a href="#" onclick="goURI(5, 0)">
+									<i class="menu-icon fa fa-caret-right"></i>
+									已完成项目
+								</a>
+								<b class="arrow"></b>
+							</li>
+                            <li class="">
+                                <a href="#" onclick="goURI(2, 0)">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    被拒绝的项目
+                                </a>
+                            <b class="arrow"></b>
+                            </li>
+							<li class="">
+                                <a href="#" onclick="goURI(4, 0)">
+									<i class="menu-icon fa fa-caret-right"></i>
+                                    已取消项目
+								</a>
+								<b class="arrow"></b>
+							</li>
+							<li class="">
+                                <a href="#" onclick="goURI(6, 0)">
+									<i class="menu-icon fa fa-caret-right"></i>
+									已超时项目
+								</a>
+								<b class="arrow"></b>
+							</li>
+						</ul>
+					</li>
+
+					<li class="">
+						<a href="/student/viewlab.html" class="dropdown-toggle">
+                            <i class="menu-icon fa fa-list-alt"></i>
+							<span class="menu-text"> 我的实验室 </span>
+
+							<b class="arrow fa fa-angle-down"></b>
+						</a>
+
+						<b class="arrow"></b>
+
+						<ul class="submenu">
+							<li class="">
+								<a href="#">
+									<i class="menu-icon fa fa-caret-right"></i>
+									实验室管理
+								</a>
+								<b class="arrow"></b>
+							</li>
+                            <li class="">
+                                <a href="#" onclick="goURI(0, 0, 1)">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    实验室所有项目
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                            <li class="">
+                                <a href="#" onclick="goURI(1, 0, 1)">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    待审核项目
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                            <li class="">
+                                <a href="#" >
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    待处理请求
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                            <li class="">
+                                <a href="#" onclick="goURI(3, 0, 1)">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    进行中的项目
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+                            <li class="">
+                                <a href="#" onclick="goURI(6, 0, 1)">
+                                    <i class="menu-icon fa fa-caret-right"></i>
+                                    超时项目处理
+                                </a>
+                                <b class="arrow"></b>
+                            </li>
+						</ul>
+					</li>
+
+
+
+				</ul><!-- /.nav-list -->
+
+				<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+					<i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state"
+                       data-icon1="ace-icon fa fa-angle-double-left"
+                       data-icon2="ace-icon fa fa-angle-double-right">
+                    </i>
+				</div>
+			</div>
+
+			<div class="main-content">
+				<div class="main-content-inner">
+					<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+						<ul class="breadcrumb">
+							<li>
+								<i class="ace-icon fa fa-home home-icon"></i>
+								<a href="/lab/index_l.html">主页</a>
+							</li>
+
+							<div class="nav-search" id="nav-search">
+								<form class="form-search">
+								<span class="input-icon">
+									<input type="text" placeholder="搜索本实验室成员"
+										   class="nav-search-input" id="nav-search-input" autocomplete="off" />
+									<i class="ace-icon fa fa-search nav-search-icon"></i>
+								</span>
+								</form>
+							</div>
+
+						</ul><!-- /.breadcrumb -->
+					</div>
+					<div class="page-content">
+
+						<div class="space-2"></div>
+
+						<div class="page-header">
+							<h1>
+								<span>我的通知</span>
+								<i class="ace-icon fa fa-angle-double-right"></i>
+							</h1>
+						</div><!-- /.page-header -->
+
+
+						<div ng-app="PMS" ng-controller="noti_control">
+
+							<table class="table table-bordered table-hover">
+								<thead>
+								<tr>
+									<th>类型</th>
+									<th>内容</th>
+									<th>时间</th>
+									<th class="hidden-480">来自</th>
+									<th class="hidden-480">操作</th>
+								</tr>
+								</thead>
+
+								<tr ng-repeat="x in names">
+									<td>
+										<span class="bigger-115"> {{ x.type }}</span>
+									</td>
+									<td>
+										<span class="bigger-115"> {{ x.content }}</span>
+									</td>
+									<td>
+										<span class="bigger-115"> {{ x.time }}</span>
+									</td>
+									<td>
+										<span class="bigger-115"> {{ x.from }}</span>
+									</td>
+									<td>
+										<a href="#" onclick="">知道了</a>
+									</td>
+								</tr>
+
+							</table>
+						</div>
+
+
+
+						<div class="page-header">
+							<h1>
+								<span>公告</span>
+								<i class="ace-icon fa fa-angle-double-right"></i>
+							</h1>
+						</div><!-- /.page-header -->
+
+						<table id="bull_table" class="table table-bordered table-hover"></table>
+
+
+						<script>
+
+                            $.get(API.get_bull, function (data) {
+
+                                var arr = data.data;
+                                var tableStr = "<table class=\"table table-bordered table-hover\">\n" +
+                                    "\t\t\t\t\t\t\t\t<thead>\n" +
+                                    "\t\t\t\t\t\t\t\t<tr>\n" +
+                                    "\t\t\t\t\t\t\t\t\t<th>标题</th>\n" +
+                                    "\t\t\t\t\t\t\t\t\t<th>时间</th>\n" +
+                                    "\t\t\t\t\t\t\t\t\t<th>内容</th>\n" +
+                                    "\t\t\t\t\t\t\t\t\t<th>操作</th>\n" +
+                                    "\t\t\t\t\t\t\t\t</tr>\n" +
+                                    "\t\t\t\t\t\t\t\t</thead>";
+                                for (var i = 0; i < arr.length; i++) {
+                                    if (arr[i].time !== undefined) {
+                                        arr[i].time = getServerTime(arr[i].time).format('yyyy-MM-dd hh:mm');
+                                    }
+                                    var x = arr[i];
+
+                                    tableStr += "<tr><td><span class=\"bigger-115\"> "+ x.title 
+										+"</span></td><td><span class=\"bigger-115\">" + x.time
+                                        +"</span></td><td><span class=\"bigger-115\">" +
+										x.content +
+										"</span></td><td><a href=\"#\" onclick=\"\">查看全文</a></td></tr>" ;
+
+
+
+                                    tableStr = tableStr + "</table>";
+
+
+                                    $("#bull_table").html(tableStr);
+                                }
+
+                            });
+
+
+						</script>
+
+
+					</div><!-- /.page-content -->
+
+				</div>
+
+
+			</div><!-- /.main-content -->
+
+			<div class="footer">
+				<div class="footer-inner">
+					<div class="footer-content">
+						<span class="bigger-120">
+
+							SDU LAB &copy; 2018
+						</span>
+
+					</div>
+				</div>
+			</div>
+
+			<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+				<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
+			</a>
+		</div><!-- /.main-container -->
+
+		<!-- basic scripts -->
+
+		<script type="text/javascript">
+			if('ontouchstart' in document.documentElement) document.write("<script src='../assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+		</script>
+		<script src="../assets/js/bootstrap.min.js"></script>
+
+		<!-- page specific plugin scripts -->
+
+		<!-- ace scripts -->
+		<script src="../assets/js/ace-elements.min.js"></script>
+		<script src="../assets/js/ace.min.js"></script>
+		<script src="../js/index_all.js"></script>
+
+
+		<script>
+
+
+            var app = angular.module('PMS', []);
+            app.controller('noti_control', function ($scope, $http) {
+
+                $http({method: "get", params: {}, url: API.login_type}).then(function success(response) {
+                    var u_t = response.data.data.role;
+
+                    if (u_t === ROLE.no_user)
+                        location.href = "/login.html";
+                    else if (u_t === ROLE.normal) { // normal
+                        location.href = "/normal/index.html";
+                    } else if (u_t === ROLE.admin) { // admin
+                        location.href = "/admin/index_a.html";
+                    }
+                    userInfo.role = u_t;
+                    userInfo.user = response.data.data.student;
+                    userInfo.lab = response.data.data.lab;
+
+
+
+                    $http({ method: "get", params: {sid: userInfo.user.id}, url: API.get_noti }).then(function
+                        success(response) {
+                        var arr = response.data.data;
+                        for (var i = 0; i < arr.length; i++) {
+                            if (arr[i].time !== undefined) {
+                                arr[i].time = getServerTime(arr[i].time).format('yyyy-MM-dd hh:mm');
+                            }
+                        }
+                        $scope.names = arr;
+                    });
+                    fillNameLabel();
+                });
+            });
+
+
+
+		</script>
+        <script>
+            function goURI(status, manage, lab) {
+                var u = "/student/project_s.html?";
+                if (lab === 1) {
+                    u += "lab=1";
+                    u += "&status=" + status;
+                } else if (manage === 1) {
+                    u += "manage=1";
+                } else {
+                    u += "status=" + status;
+                }
+                location.href = u;
+            }
+        </script>
+        
+        
+		<!-- inline scripts related to this page -->
+	</body>
+</html>
