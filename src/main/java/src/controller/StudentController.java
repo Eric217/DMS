@@ -28,6 +28,16 @@ public class StudentController {
         return ResultCache.OK;
     }
 
-//    @RequestMapping(value = )
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    public Result getAllSplit(Integer page, Integer rows) {
+        return studentService.getStudentSplit(page, rows);
+    }
+
+    @RequestMapping(value = "/count", method = RequestMethod.GET)
+    public Result getCount() {
+        return studentService.getAllCount();
+    }
+
+
 
 }

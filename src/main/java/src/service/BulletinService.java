@@ -21,4 +21,24 @@ public class BulletinService {
         return ResultCache.getDataOk(list);
     }
 
+    public Result getBulletinById(Long id) {
+        return ResultCache.getDataOk(bulletinDAO.getBulletinById(id));
+    }
+
+    public Result insertBulletin(Bulletin vo) {
+        bulletinDAO.insert(vo);
+        return ResultCache.OK;
+    }
+
+    public Result update(Bulletin vo) {
+        bulletinDAO.update(vo);
+        return ResultCache.OK;
+    }
+
+    public Result delete(Long id) {
+        bulletinDAO.deleteById(id);
+        return ResultCache.OK;
+    }
+
+
 }

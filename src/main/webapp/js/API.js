@@ -18,14 +18,11 @@ var API = {
     create_proj:    BASE_URL + "/student/project/create",
     get_my_managed: BASE_URL + "/student/project/managed",
     get_noti:       BASE_URL + "/noti/get",
-    get_bull:       BASE_URL + "/bull/get",
+    get_bull:       BASE_URL + "/bulletin/all",
 
 
     // admin
     get_pro_admin:  BASE_URL + "/admin/project/all"
-
-
-
 
 };
 
@@ -34,7 +31,7 @@ var ROLE = {
     normal:     1,
     lab:        2,
     admin:      3
-}
+};
 
 var ProjectStatus = {
     checking: "审核中",
@@ -46,21 +43,4 @@ var ProjectStatus = {
 
     request_modi: "请求修改中",
     request_chck: "请求检查中"
-}
-
-
-/** 简单的 param， k = p，否则  */
-// var parseParam = function(param) {
-//     var params = [];
-//     $.each(param, function(i) {
-//         var value = param[i];
-//         if (typeof value === 'undefined')
-//             value = '';
-//         params.push([i, encodeURIComponent(value)].join('='));
-//     });
-//     return params.join('&');
-// };
-//
-// var getURL = function (param) {
-//     return BASE_URL + '?' + parseParam(param);
-// }
+};

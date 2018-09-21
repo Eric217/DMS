@@ -21,7 +21,6 @@ import javax.servlet.http.HttpSession;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.util.Date;
-import java.util.Properties;
 import java.util.Random;
 
 import static src.base.SessionNames.*;

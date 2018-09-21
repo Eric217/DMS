@@ -10,7 +10,13 @@ public interface BulletinDAO {
 
     List<Bulletin> getBulletins();
 
+    Bulletin getBulletinById(Long id);
 
+    void insert(Bulletin vo);
+
+    void update(Bulletin vo);
+
+    void deleteById(Long id);
 
 
 }

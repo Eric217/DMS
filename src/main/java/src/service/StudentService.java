@@ -68,4 +68,12 @@ public class StudentService {
         return ResultCache.OK;
     }
 
+    public Result getStudentSplit(Integer page, Integer rows) {
+        return ResultCache.getDataOk(studentDAO.getAllSplit(page, rows));
+    }
+
+    public Result getAllCount() {
+        return ResultCache.getDataOk(studentDAO.getCount());
+    }
+
 }

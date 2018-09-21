@@ -10,13 +10,12 @@ import java.util.Set;
 @Repository
 public interface StudentDAO {
 
-//    Integer getCount(String property, String like);
+    Integer getCount();
 
     Student getStudentById(String id);
 
-//    List<Student> getAllStudents();
 
-//    List<Student> getAllSplit(Integer page, Integer rows, String property, String like);
+    List<Student> getAllSplit(Integer page, Integer rows);
 
     void insertStudent(Student vo);
 
