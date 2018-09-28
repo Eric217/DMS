@@ -1,4 +1,5 @@
 .DS_Store
+*/.DS_Store 
 target/
 out/
 pom.xml.tag
@@ -9,9 +10,17 @@ release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
-workspace.xml
-Web Projects.iml
-misc.xml
-compiler.xml
+
+# .idea/
+# !.idea/sqldialects.xml
+# !.idea/encodings.xml
+# !.idea/inspectionProfiles/
+# !.idea/dataSources
+
+
+.idea/workspace.xml 
+.idea/misc.xml
+# compiler.xml
+
 # Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
 !/.mvn/wrapper/maven-wrapper.jar
