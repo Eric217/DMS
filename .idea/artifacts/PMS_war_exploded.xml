@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="exploded-war" name="PMS:war exploded">
-    <output-path>$PROJECT_DIR$/target/artifacts/PMS-war exploded</output-path>
+    <output-path>$PROJECT_DIR$/target/TrainTicketingSystem</output-path>
     <root id="root">
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
@@ -9,6 +9,7 @@
         <element id="directory" name="lib">
           <element id="library" level="project" name="Maven: javax.mail:mail:1.4.4" />
           <element id="library" level="project" name="Maven: javax.activation:activation:1.1" />
+          <element id="library" level="project" name="Maven: javax.servlet:javax.servlet-api:3.1.0" />
           <element id="library" level="project" name="Maven: org.springframework:spring-webmvc:4.3.7.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-aop:4.3.7.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework:spring-beans:4.3.7.RELEASE" />
@@ -37,6 +38,9 @@
           <element id="library" level="project" name="Maven: com.alibaba:fastjson:1.1.41" />
           <element id="library" level="project" name="Maven: org.jsoup:jsoup:1.11.3" />
         </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/target/TrainTicketingSystem/META-INF/MANIFEST.MF" />
       </element>
       <element id="javaee-facet-resources" facet="PMS/web/Web" />
     </root>

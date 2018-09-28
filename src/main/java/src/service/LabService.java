@@ -14,9 +14,11 @@ public class LabService {
     LabDAO labDAO;
 
     public Result getLabByLeaderId(String sid) {
-        if (sid == null)
-            return ResultCache.OK;
-        return ResultCache.getDataOk(labDAO.getLabByLeaderId(sid));
+        try {
+            return ResultCache.getDataOk(labDAO.getLabByLeaderId(sid));
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
+        }
     }
 
     public Result getLabById(Long id) {

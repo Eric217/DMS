@@ -12,6 +12,26 @@ public class Tools {
 
     private static Random random = new Random();
 
+    public static boolean isRightMail(String email) {
+        return true;
+    }
+
+    public static boolean isRightPass(String pass) {
+        if (pass == null)
+            return false;
+        if (pass.length() > 16 || pass.length() < 8)
+            return false;
+        return true;
+    }
+
+    public static boolean isNullOrEmp(String... strings) {
+        for (String str: strings) {
+            if (str == null || str.isEmpty())
+                return true;
+        }
+        return false;
+    }
+
     public static String createRandomNum(int bits){
         String randomNumStr = "";
         for(int i = 0; i < bits; i++){
@@ -88,7 +108,6 @@ public class Tools {
 //        HttpCookie
         c.setMaxAge(2 * 24 * 60 * 60);
 //        c.setDomain("如.baidu.com");
-
         c.setPath("/");
         return c;
     }

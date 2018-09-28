@@ -1,6 +1,5 @@
 package src.service;
 
-import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -9,7 +8,6 @@ import src.base.ResultCache;
 import src.dao.ProjectDAO;
 import src.model.Project;
 import src.model.assistance.PageRowsMap;
-import src.model.assistance.StuProMap;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -23,144 +21,114 @@ public class ProjectService {
     @Autowired
     ProjectDAO projectDAO;
 
-    public Result getCount(String prop, String like, Boolean viewDeleted) {
-        Integer count = viewDeleted
-                ? projectDAO.getCount(prop, like)
-                : projectDAO.getCount_Fake(prop, like);
-        return ResultCache.getDataOk(count);
+    @Transactional
+    public Result insert(Project vo, String[] sids) {
+        try {
+            // 确保sid没有其他活跃的项目
+            Long pid = projectDAO.getActiveProjectIdByLeaderId(vo.getLeader_id());
+            if (pid != null)
+                return ResultCache.failWithMessage("同一时间只能管理一个进行中的项目");
+            pid = projectDAO.getMaxProjectId();
+            if (pid == null) pid = 0L;
+            pid ++;
+            vo.setId(pid);
+            vo.setSubmit_time(new Timestamp(System.currentTimeMillis()));
+            projectDAO.insertProject(vo);
+
+            for (String sid : sids)
+                projectDAO.addMember(sid, pid);
+            projectDAO.addMember(vo.getLeader_id(), pid);
+            return ResultCache.OK;
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
+        }
     }
 
-    ///
-    @Transactional
     public Result getProjectById(Long id) {
-        Project p = projectDAO.getProjectById(id);
-        return ResultCache.getDataOk(p);
+        try {
+            Project p = projectDAO.getProjectById(id);
+            if (p == null)
+                return ResultCache.failWithMessage("项目不存在");
+            return ResultCache.getDataOk(p);
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
+        }
+    }
+
+    public Result getProjectsByStudentId(String sid, Boolean viewDelete) {
+        try {
+            List<Project> list = viewDelete
+                    ? projectDAO.getProjectsAllByStudentId(sid)
+                    : projectDAO.getProjectsDelByStudentId(sid);
+            return ResultCache.getDataOk(list);
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
+        }
+    }
+
+    public Result getAllProjectsByLabId(Integer page, Integer rows, Long lab_id) {
+        try {
+            return ResultCache.getDataOk(projectDAO.getAllSplitOfLabId(rows,
+                    rows*(page-1), lab_id));
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
+        }
+    }
+
+    public Result getProjectsWithStatusByLabId(Integer status, Long lab_id) {
+        try {
+            List<Project> list;
+            if (status == S_REQUESTING)
+                list = projectDAO.getRequestingOfLabId(lab_id);
+            else if (status == S_PROCESSING)
+                list = projectDAO.getProcessingOfLabId(lab_id);
+            else if (status == S_CREATING)
+                list = projectDAO.getCreatingOfLabId(lab_id);
+            else
+                list = null;
+            return ResultCache.getDataOk(list);
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
+        }
+    }
+
+    public Result getProjectsAdmin(Integer page, Integer rows, Integer status) {
+        try {
+            List<Project> list = null; int s = status;
+
+            PageRowsMap map = new PageRowsMap(rows, rows * (page - 1));
+
+            if (s == S_ALL) {
+                list = projectDAO.getAllSplit(map);
+            } else if (s == S_CREATING || s == S_REQUESTING) {
+                list = projectDAO.getCreating(map);
+            } else if (s == S_REJECTED) {
+                list = projectDAO.getRejected(map);
+            } else if (s == S_PROCESSING) {
+                list = projectDAO.getProcessing(map);
+            } else if (s == S_CANCELED) {
+                list = projectDAO.getCanceled(map);
+            } else if (s == S_COMPLETE) {
+                list = projectDAO.getComplete(map);
+            } else if (s == S_OVERTIME) {
+                list = projectDAO.getOvertime(map);
+            }
+
+            return ResultCache.getDataOk(list);
+
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
+        }
     }
 
 
-    @Transactional
-    public Result insert(Project vo, String... ids) {
+//    public Result getCount(String prop, String like, Boolean viewDeleted) {
+//        Integer count = viewDeleted
+//                ? projectDAO.getCount(prop, like)
+//                : projectDAO.getCount_Fake(prop, like);
+//        return ResultCache.getDataOk(count);
+//    }
 
-        vo.setSubmit_time(new Timestamp(System.currentTimeMillis()));
-        projectDAO.insertProject(vo);
-        Long p_id = projectDAO.getActiveProjectIdByLeaderId(vo.getLeader_id());
-
-        System.out.println("ids: " + ids.length);
-        for (String id: ids) {
-            if (!StringUtils.isNullOrEmpty(id) && !id.equals(vo.getLeader_id()))
-                projectDAO.addMember(id, p_id);
-        }
-        projectDAO.addMember(vo.getLeader_id(), p_id);
-        return ResultCache.OK;
-    }
-
-    /** 对于普通学生  */
-    public Result getParticipatedProjects(Integer page, Integer rows, Integer status,
-                                          String sid) {
-        List<Project> list = null;
-        int s = status;
-
-        StuProMap map = new StuProMap(rows, rows*(page-1), sid);
-
-        if (s == S_ALL) {
-            list = projectDAO.getAllSplitForStu(map);
-        } else if (s == S_CHECKING) {
-            list = projectDAO.getCheckingForStu(map);
-        } else if (s == S_REJECTED) {
-            list = projectDAO.getRejectedForStu(map);
-        } else if (s == S_PROCESSING) {
-            list = projectDAO.getProcessingForStu(map);
-        } else if (s == S_CANCELED) {
-            list = projectDAO.getCanceledForStu(map);
-        } else if (s == S_COMPLETE) {
-            list = projectDAO.getCompleteForStu(map);
-        } else if (s == S_OVERTIME) {
-            list = projectDAO.getOvertimeForStu(map);
-        }
-        return ResultCache.getDataOk(list);
-    }
-
-    public Result getProjectsManagedBySid(Integer page, Integer rows, String sid,
-                                          Boolean viewDelete) {
-        return getProjectsManaged(page, rows, S_ALL, viewDelete, sid);
-
-    }
-
-    /** 对于管理人员： */
-    public Result getProjects(Integer page, Integer rows, Integer status,
-                              Boolean viewDelete, String property, String like) {
-        int s = status;
-        List<Project> list = null;
-
-        if (property == null || property.trim().isEmpty() || like == null || like.trim().isEmpty()) {
-            property = ""; like = "";
-        }
-
-        PageRowsMap map = new PageRowsMap(rows, rows*(page-1), property, like);
-
-
-        if (s == S_ALL) {
-            list = viewDelete ? projectDAO.getAllSplit(map)
-                    :projectDAO.getAllSplit_Fake(map);
-        } else if (s == S_CHECKING) {
-            list = viewDelete ? projectDAO.getChecking(map)
-                    :projectDAO.getChecking_Fake(map);
-        } else if (s == S_REJECTED) {
-            list = viewDelete ? projectDAO.getRejected(map)
-                    :projectDAO.getRejected_Fake(map);
-        } else if (s == S_PROCESSING) {
-            list = viewDelete ? projectDAO.getProcessing(map)
-                    :projectDAO.getProcessing_Fake(map);
-        } else if (s == S_CANCELED) {
-            list = viewDelete ? projectDAO.getCanceled(map)
-                    :projectDAO.getCanceled_Fake(map);
-        } else if (s == S_COMPLETE) {
-            list = viewDelete ? projectDAO.getComplete(map)
-                    :projectDAO.getComplete_Fake(map);
-        } else if (s == S_OVERTIME) {
-            list = viewDelete ? projectDAO.getOvertime(map)
-                    :projectDAO.getOvertime_Fake(map);
-        }
-        return ResultCache.getDataOk(list);
-    }
-
-    public Result getProjectsManaged(Integer page, Integer rows, Integer status,
-                              Boolean viewDelete, String like) {
-        int s = status;
-        List<Project> list = null;
-
-        if (like == null) {
-            like = "";
-        }
-
-        PageRowsMap map = new PageRowsMap(rows, rows*(page-1), "", like);
-
-
-        if (s == S_ALL) {
-            list = viewDelete ? projectDAO.getManagedSplit(map)
-                    :projectDAO.getManagedSplit_Fake(map);
-        }
-//        else if (s == S_CHECKING) {
-//            list = viewDelete ? projectDAO.getChecking(map)
-//                    :projectDAO.getChecking_Fake(map);
-//        } else if (s == S_REJECTED) {
-//            list = viewDelete ? projectDAO.getRejected(map)
-//                    :projectDAO.getRejected_Fake(map);
-//        } else if (s == S_PROCESSING) {
-//            list = viewDelete ? projectDAO.getProcessing(map)
-//                    :projectDAO.getProcessing_Fake(map);
-//        } else if (s == S_CANCELED) {
-//            list = viewDelete ? projectDAO.getCanceled(map)
-//                    :projectDAO.getCanceled_Fake(map);
-//        } else if (s == S_COMPLETE) {
-//            list = viewDelete ? projectDAO.getComplete(map)
-//                    :projectDAO.getComplete_Fake(map);
-//        } else if (s == S_OVERTIME) {
-//            list = viewDelete ? projectDAO.getOvertime(map)
-//                    :projectDAO.getOvertime_Fake(map);
-//        }
-        return ResultCache.getDataOk(list);
-    }
 
     public Result updateProject(Project vo) {
         projectDAO.updateProject(vo);

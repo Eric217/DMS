@@ -5,12 +5,6 @@
 
 
 
-    <insert id="insertProject" parameterType="src.model.Project">
-        insert into project(name, description, duration, submit_time, coach_id,
-                            lab_name, leader_id, aim, type) values (
-           #{name}, #{description}, #{duration}, #{submit_time}, #{coach_id}, #{lab_name} ,
-           #{leader_id}, #{aim}, #{type} );
-    </insert>
 
     <update id="updateProject" parameterType="src.model.Project">
         update project
@@ -31,10 +25,7 @@
         where id = #{id};
     </delete>
 
-    <insert id="addMember">
-        insert into participate(sid, pid)
-        values ( #{sid}, #{pid} );
-    </insert>
+
 
     <!-- 查询 /////////////-->
 
@@ -48,17 +39,9 @@
         where #{property} like #{like} and deleted=0;
     </select>
 
-    <select id="getActiveProjectIdByLeaderId" parameterType="string"
-            resultType="java.lang.Long">
-        select id from project p1
-        where p1.leader_id = #{sid}
-          and p1.submit_time >= (
-                                select max(submit_time) from project where leader_id = #{sid} )
-    </select>
 
-    <select id="getProjectById" resultMap="projectMap" parameterType="java.lang.Long">
-        select * from project where id = #{id};
-    </select>
+
+
 
     <select id="getManagedSplit_Fake" resultMap="projectMap"
             parameterType="src.model.assistance.PageRowsMap">
@@ -203,26 +186,10 @@
     </select>
 
 
-    <select id="getAllSplitForStu" resultMap="projectMap"
-            parameterType="src.model.assistance.StuProMap">
-        select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time, leader_id
-        from project where id in (select pid from participate where sid = #{sid})
-        and deleted=0 order by submit_time desc
-        limit #{num} offset #{offset};
-    </select>
 
 
-    <select id="getProcessingForStu" parameterType="src.model.assistance.StuProMap"
-            resultMap="projectMap">
-        select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time, leader_id
-        from project where id in (select pid from participate where sid = #{sid})
-                       and start_time is not null and end_time is null and deleted=0
-                       and to_seconds(start_time) + duration > to_seconds(now())
-        order by submit_time desc
-        limit #{num} offset #{offset};
-    </select>
+
+
 
     <select id="getCheckingForStu" resultMap="projectMap"
             parameterType="src.model.assistance.StuProMap">
@@ -275,14 +242,80 @@
         limit #{num} offset #{offset};
     </select>
 
-    <!-- ////////// -->
+    <select id="getProcessingForStu" parameterType="src.model.assistance.StuProMap"
+            resultMap="projectMap">
+        select id, `name`, coach_id, lab_name,
+               opt_status, start_time, end_time, duration, submit_time, leader_id
+        from project where id in (select pid from participate where sid = #{sid})
+                       and start_time is not null and end_time is null and deleted=0
+                       and to_seconds(start_time) + duration > to_seconds(now())
+        order by submit_time desc
+        limit #{num} offset #{offset};
+    </select>
 
+
+    <!-- 根据 pid 查询 -->
+    <select id="getProjectById" resultMap="projectMap" parameterType="java.lang.Long">
+        select id, name, description, start_time, end_time, duration, submit_time, coach_id,
+               opt_status, lab_name, leader_id, aim, type
+        from project where id = #{id};
+    </select>
+
+    <!-- 插入项目 -->
+    <insert id="insertProject" parameterType="src.model.Project">
+        insert into project(name, description, duration, submit_time, coach_id,
+                            lab_name, leader_id, aim, type)
+        values (#{name}, #{description}, #{duration}, #{submit_time}, #{coach_id},
+                #{lab_name}, #{leader_id}, #{aim}, #{type} );
+    </insert>
+
+    <!-- 向参与表中插入数据 -->
+    <insert id="addMember">
+        insert into participate(sid, pid)
+        values ( #{sid}, #{pid} );
+    </insert>
+
+    <!-- 一个学生只允许管理一个进行中的项目（队长），参与多个项目（组员）-->
+    <select id="getActiveProjectIdByLeaderId" parameterType="string"
+            resultType="java.lang.Long">
+        select id from project
+        where leader_id = #{sid}
+        and start_time is not null and end_time is null and opt_status != 4
+        and to_seconds(start_time) + duration > to_seconds(now()) and deleted = 0;
+    </select>
+
+    <!-- 获取最大 pid -->
+    <select id="getMaxProjectId" resultType="java.lang.Long">
+        select max(id) from project;
+    </select>
+
+    <!-- 获取某个学生的所有项目,  -->
+    <select id="getProjectsAllByStudentId" resultMap="projectMap" parameterType="string">
+        select id, name, coach_id, lab_name, opt_status, start_time, end_time, duration, 
+            submit_time, leader_id, type from project 
+        where id in (
+                    select pid from participate
+                    where sid = #{sid} )
+        order by submit_time desc;
+    </select>
+
+    <!-- 获取某个学生未被删除的所有项目,  -->
+    <select id="getProjectsDelByStudentId" resultMap="projectMap" parameterType="string">
+        select id, name, coach_id, lab_name, opt_status, start_time, end_time, duration,
+               submit_time, leader_id, type from project
+        where id in (
+                    select pid from participate
+                    where sid = #{sid} )
+          and deleted = 0
+        order by submit_time desc;
+    </select>
+
+    <!-- resultMap 依赖 -->
     <select id="getMembersByProjectId" resultType="src.model.Student">
         select s.id, s.name, s.email, s.phone, s.college, s.grade, s.major
         from student s inner join participate p on s.id = p.sid
         where  p.pid= #{id};
     </select>
-
 
     <resultMap id="projectMap" type="src.model.Project">
         <id property="id" column="id"/>
@@ -300,7 +333,8 @@
         <result property="type" column="type"/>
         <result property="deleted" column="deleted"/>
         <collection property="members" column="id" select="getMembersByProjectId"/>
-
     </resultMap>
+
+
 
 </mapper>

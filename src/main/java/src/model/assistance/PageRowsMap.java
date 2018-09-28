@@ -11,8 +11,5 @@ public class PageRowsMap {
 
     private Integer num;
     private Integer offset;
-    private String property;
-    private String like;
-
 
 }

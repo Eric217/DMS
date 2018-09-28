@@ -22,24 +22,14 @@ public class StudentService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    public Result getStudentById(String id) {
-        Student s = studentDAO.getStudentById(id);
-        return ResultCache.getDataOk(s);
-    }
-
-    public Result insertStudent(Student vo)   {
-        studentDAO.insertStudent(vo);
-        return ResultCache.OK;
-    }
-
-    public Boolean emailExist(String email) {
-        if (studentDAO.checkMailExisted(email) != 0)
-            return true;
-        return false;
-    }
-
+    // encode
     public String encodePassword(String origin_password) {
         return passwordEncoder.encode(origin_password);
+    }
+
+    // Boolean
+    public Boolean emailExist(String email) {
+        return studentDAO.checkMailExisted(email) != 0;
     }
 
     public Boolean passwordRight(String sid, String input_password) {
@@ -49,14 +39,40 @@ public class StudentService {
         }
         return passwordEncoder.matches(input_password, encoded);
     }
-     
-    public Result updateStudent(Student vo)   {
-        studentDAO.updateStudent(vo);
-        return ResultCache.OK;
+
+    // -------------------
+    public Result updatePassword(String email, String newPass) {
+        try {
+            studentDAO.updatePassword(email, encodePassword(newPass));
+            return ResultCache.OK;
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
+        }
     }
 
-    public Result updatePassword(String email, String newPass) {
-        studentDAO.updatePassword(email, encodePassword(newPass));
+    public Result getStudentById(String id) {
+        try {
+            return ResultCache.getDataOk(studentDAO.getStudentById(id));
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
+        }
+    }
+
+    public Result insertStudent(Student vo)   {
+        try {
+            studentDAO.insertStudent(vo);
+            return ResultCache.OK;
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
+        }
+    }
+
+
+
+
+
+    public Result updateStudent(Student vo)   {
+        studentDAO.updateStudent(vo);
         return ResultCache.OK;
     }
 

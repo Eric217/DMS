@@ -5,69 +5,64 @@ import org.springframework.stereotype.Repository;
 import src.model.Project;
 import src.model.Student;
 import src.model.assistance.PageRowsMap;
-import src.model.assistance.StuProMap;
 
 import java.util.List;
 
 @Repository
 public interface ProjectDAO {
 
-    Project getProjectById(Long id);
-
-    Long getActiveProjectIdByLeaderId(String sid);
-
     void insertProject(Project vo);
 
     void updateProject(Project vo);
 
-    void updateDeleted(@Param("id") Long id, @Param("newValue") Integer newValue);
-
     void deleteProjectById(Long id);
 
-    void addMember(@Param("sid") String sid, @Param("pid") Long pid);
+    void updateDeleted(@Param("id") Long id, @Param("newValue") Integer newValue);
 
 
-    /** Simplified Student Object. For mapper to create collection type */
-    List<Student> getMembersByProjectId(Long id);
+//    // 凡是带 fake 后缀的，返回的 project deleted 属性为 0；上面的 皆为获取所有 project
+//    Integer getCount_Fake(@Param("property") String property, @Param("like") String like);
+//
+//    Integer getCount(@Param("property") String property, @Param("like") String like);
 
-    Integer getCount(@Param("property") String property, @Param("like") String like);
 
-    List<Project> getAllSplit (PageRowsMap map);
-    List<Project> getChecking(PageRowsMap map);
+    // 管理员权限：获取某种类型的项目
+    List<Project> getAllSplit(PageRowsMap map);
+    List<Project> getCreating(PageRowsMap map);
     List<Project> getProcessing(PageRowsMap map);
     List<Project> getRejected(PageRowsMap map);
     List<Project> getCanceled(PageRowsMap map);
     List<Project> getComplete(PageRowsMap map);
     List<Project> getOvertime(PageRowsMap map);
 
-    // 凡是带 fake 后缀的，返回的 project deleted 属性为 0；上面的 皆为获取所有 project
-    Integer getCount_Fake(@Param("property") String property, @Param("like") String like);
+    // 实验室负责人权限：获取 进行中的项目，待审核的新项目，待处理的请求，实验室所有项目
+    List<Project> getProcessingOfLabId(Long lab_id);
+    List<Project> getCreatingOfLabId  (Long lab_id);
+    List<Project> getRequestingOfLabId(Long lab_id);
+    List<Project> getAllSplitOfLabId(@Param("num") Integer num, @Param("offset") Integer ofs,
+                                     @Param("lid") Long lab_id);
 
-    List<Project> getAllSplit_Fake(PageRowsMap map);
-    List<Project> getProcessing_Fake(PageRowsMap map);
-    List<Project> getChecking_Fake(PageRowsMap map);
-    List<Project> getRejected_Fake(PageRowsMap map);
-    List<Project> getCanceled_Fake(PageRowsMap map);
-    List<Project> getComplete_Fake(PageRowsMap map);
-    List<Project> getOvertime_Fake(PageRowsMap map);
+    /** 获取项目的详细信息 */
+    Project getProjectById(Long id);
 
-    List<Project> getManagedSplit_Fake(PageRowsMap map);
-    List<Project> getManagedSplit(PageRowsMap map);
+    /** For mapper to create collection type.
+     *  @return Simplified Student Object. */
+    @SuppressWarnings("unused")
+    List<Student> getMembersByProjectId(Long id);
 
-//    List<Project> getProcessing_Fake(PageRowsMap map);
-//    List<Project> getChecking_Fake(PageRowsMap map);
-//    List<Project> getRejected_Fake(PageRowsMap map);
-//    List<Project> getCanceled_Fake(PageRowsMap map);
-//    List<Project> getComplete_Fake(PageRowsMap map);
-//    List<Project> getOvertime_Fake(PageRowsMap map);
+    /** 获取一个学生管理的活跃状态的项目 id（一个学生只允许管理一个活跃的项目） */
+    Long getActiveProjectIdByLeaderId(String sid);
 
+    /** 获取最大 pid */
+    Long getMaxProjectId();
 
-    List<Project> getAllSplitForStu(StuProMap map);
-    List<Project> getProcessingForStu(StuProMap map);
-    List<Project> getCheckingForStu(StuProMap map);
-    List<Project> getRejectedForStu(StuProMap map);
-    List<Project> getCanceledForStu(StuProMap map);
-    List<Project> getCompleteForStu(StuProMap map);
-    List<Project> getOvertimeForStu(StuProMap map);
+    /** 插入一条 participation, sid 参与 pid */
+    void addMember(@Param("sid") String sid, @Param("pid") Long pid);
+
+    /** 仅查看一个学生未被删除的项目 */
+    List<Project> getProjectsDelByStudentId(String sid);
+    /** 查看一个学生的所有项目 */
+    List<Project> getProjectsAllByStudentId(String sid);
+
 
 }

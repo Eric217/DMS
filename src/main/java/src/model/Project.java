@@ -31,4 +31,16 @@ public class Project implements Serializable {
     /** 非数据库属性 联表查询*/
     private List<Student> members;
 
+    /** 防恶意插入 */
+    public boolean check() {
+
+//        if (type != null) {
+            // TODO: - type 得设置仅限几种选择
+//        }
+
+        return duration >= 15 * 24 * 3600 && duration <= 120 * 24 * 3600;
+    }
+
+
+
 }
