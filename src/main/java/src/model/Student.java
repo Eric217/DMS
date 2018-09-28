@@ -1,6 +1,5 @@
 package src.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.io.Serializable;
@@ -12,7 +11,6 @@ public class Student implements Serializable {
 
     private String id;
     private String name;
-    @JsonIgnore
     private String password;
     private String email;
     private String phone;
