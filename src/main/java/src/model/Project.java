@@ -2,6 +2,7 @@ package src.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import src.eric.Tools;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
@@ -38,6 +39,8 @@ public class Project implements Serializable {
             // TODO: - type 得设置仅限几种选择
 //        }
 
+        if (Tools.isNullOrEmp(name, aim, lab_name))
+            return false;
         return duration >= 15 * 24 * 3600 && duration <= 120 * 24 * 3600;
     }
 

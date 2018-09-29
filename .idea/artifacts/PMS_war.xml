@@ -1,6 +1,6 @@
 <component name="ArtifactManager">
   <artifact type="war" name="PMS:war">
-    <output-path>$PROJECT_DIR$/target</output-path>
+    <output-path>$PROJECT_DIR$/target/PMS_war</output-path>
     <root id="archive" name="TrainTicketingSystem.war">
       <element id="artifact" artifact-name="PMS:war exploded" />
     </root>

@@ -20,15 +20,18 @@ public class AdminService {
     public Boolean passwordRight(Long id, String input_password) {
 
         String encoded = adminDAO.getEncodedPassword(id);
-        if (encoded == null || encoded.isEmpty()) {
+        if (encoded == null || encoded.isEmpty())
             return false;
-        }
         return passwordEncoder.matches(input_password, encoded);
     }
 
     public Result addAdmin(Admin admin) {
         admin.setPassword(passwordEncoder.encode(admin.getPassword()));
-        adminDAO.addAdministrator(admin);
+        try {
+            adminDAO.addAdministrator(admin);
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
+        }
         return ResultCache.OK;
     }
 

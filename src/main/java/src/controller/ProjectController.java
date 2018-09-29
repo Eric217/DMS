@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import src.base.ResultCache;
 import src.eric.Tools;
 import src.model.Laboratory;
+import src.model.Modification;
 import src.model.Project;
 import src.model.Student;
 import src.service.LabService;
@@ -31,6 +32,16 @@ public class ProjectController {
     @Autowired
     LabService labService;
 
+//    @RequestMapping(value = "/student/project/count", method = RequestMethod.GET)
+//    public Result getCount_s(String property, String like) {
+//        return projectService.getCount(property, like, false);
+//    }
+//
+//    @RequestMapping(value = "/admin/project/count", method = RequestMethod.GET)
+//    public Result getCount_a(String property, String like) {
+//        return projectService.getCount(property, like, true);
+//    }
+
     /** @param vo 具体需要一些 not null 的参数
      *  @param memberIds 以 @ 分割，除 leader 外至少一个人 */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -40,11 +51,11 @@ public class ProjectController {
             return ResultCache.PERMISSION_DENIED;
         if (PermissionService.IS_ADMIN(session))
             return ResultCache.failWithMessage("管理员不参与项目");
+        if (vo == null)
+            return ResultCache.ARG_ERROR;
         vo.setLeader_id(sid);
-        if (!vo.check()) // 防止恶意插入
-            return ResultCache.FAILURE;
-        if (Tools.isNullOrEmp(vo.getName(), vo.getAim(), vo.getLab_name(), memberIds))
-            return ResultCache.failWithMessage("必要信息不能为空");
+        if (!vo.check() || StringUtils.isNullOrEmpty(memberIds))
+            return ResultCache.failWithMessage("必要信息不能为空或格式错误");
 
         String[] sids = memberIds.split("@");
         HashSet<String> set = new HashSet<>();
@@ -124,30 +135,34 @@ public class ProjectController {
         return projectService.getProjectsAdmin(page==null ?1:page, rows==null ?10:rows, status);
     }
 
-//    @RequestMapping(value = "/student/project/count", method = RequestMethod.GET)
-//    public Result getCount_s(String property, String like) {
-//        return projectService.getCount(property, like, false);
-//    }
-//
-//
-//
-//    @RequestMapping(value = "/admin/project/count", method = RequestMethod.GET)
-//    public Result getCount_a(String property, String like) {
-//        return projectService.getCount(property, like, true);
-//    }
-
-
     // TODO: - 权限
     // TODO: - 所有的参数的 null 判断
 
-    /** 普通用户删除，实际没有删除，而是更新了一个属性 */
-    @RequestMapping(value = "/student/delete", method = RequestMethod.POST)
-    public Result updateProject(Project vo) {
+    /* 更新分两种，一种是主动更新，一种是从 modification 中同意
+     * 权限：管理员、该项目所在实验室负责人 */
+    /** 主动更新 */
+    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    public Result updateProject(Project vo, HttpSession session) {
+        if (vo == null || vo.getId() == null || Tools.isNullOrEmp(vo.getName(), vo.getAim(),
+                vo.getLab_name()))
+            return ResultCache.ARG_ERROR;
+
         return projectService.updateProject(vo);
     }
 
+    /** 同意修改 */
+    @RequestMapping(value = "/modify", method = RequestMethod.POST)
+    public Result updateProject(Modification modification) {
+//        if (vo == null || vo.getId() == null || Tools.isNullOrEmp(vo.getName(), vo.getAim(),
+//                vo.getLab_name()))
+//            return ResultCache.ARG_ERROR;
+//
+//        return projectService.updateProject(vo);
+        return null;
+    }
+
     /** 普通用户删除，实际没有删除，而是更新了一个属性 */
-    @RequestMapping(value = "/student/project/delete", method = RequestMethod.POST)
+    @RequestMapping(value = "/delete/student", method = RequestMethod.POST)
     public Result updateDeleted(Long id, Integer newValue) {
         Set<Long> s = new HashSet<>();
         s.add(id);

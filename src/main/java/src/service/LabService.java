@@ -21,27 +21,48 @@ public class LabService {
         }
     }
 
-    public Result getLabById(Long id) {
-        return ResultCache.getDataOk(labDAO.getLabById(id));
+    public Result getLabByLabId(Long id) {
+        try {
+            return ResultCache.getDataOk(labDAO.getLabById(id));
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
+        }
     }
 
     public Result getAllLabs() {
-        return ResultCache.getDataOk(labDAO.getAllLabs());
+        try {
+            return ResultCache.getDataOk(labDAO.getAllLabs());
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
+        }
     }
 
-
     public Result insertLab(Laboratory vo) {
-        labDAO.insertLab(vo);
+        try {
+            labDAO.insertLab(vo);
+        } catch (Exception e) {
+            return ResultCache.failWithMessage("操作失败，可能的原因是：负责人学号不存在或" +
+                    "已负责其他实验室；实验室名称已被占用；数据库异常");
+        }
         return ResultCache.OK;
     }
 
     public Result updateLab(Laboratory vo) {
-        labDAO.updateLab(vo);
+        try {
+            labDAO.updateLab(vo);
+        } catch (Exception e) {
+            return ResultCache.failWithMessage("操作失败，可能的原因是：负责人学号不存在或" +
+                    "已负责其他实验室；实验室名称已被占用；数据库异常");
+        }
         return ResultCache.OK;
     }
 
     public Result deleteLabById(Long id) {
-        labDAO.deleteLabById(id);
+        try {
+            labDAO.deleteLabById(id);
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
+        }
         return ResultCache.OK;
     }
 

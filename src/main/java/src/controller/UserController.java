@@ -182,7 +182,6 @@ public class UserController {
                     PermissionService.GRANT_ADMIN(session);
                 } else
                     return ResultCache.failWithMessage("用户名或密码错误");
-
             } else { // 学号登陆
                 if (!studentService.passwordRight(sid, password)) {
                     return ResultCache.failWithMessage("用户名或密码错误");

@@ -57,60 +57,6 @@ public class PermissionService {
         return result == null ? null : (Laboratory)result;
     }
 
-    /** @return sid */
-    public static String RequireStudentOnly(HttpSession session) {
-        if (IS_ADMIN(session))
-            return null;
-        return (String) session.getAttribute(S_USERNAME);
-    }
-
-
-
-
-
-
-
-
-
-    /** 该学生当前正在进行的项目ID */
-    public static Long S_WORKING_P() {
-        return 0l;
-    }
-
-
-    /** 烦啊！ 直接返回 true 了！！！ */
-    public static boolean hasPermission(Long pid, String sid) {
-        return true;
-    }
-
-    public static boolean RequireAdmin(HttpSession session) {
-
-
-        return false;
-    }
-
-    public static boolean RequireNone() {
-
-
-        return true;
-    }
-
-    public static boolean RequireProjectLeader(HttpSession session) {
-
-
-        return false;
-    }
-
-    public static boolean RequireParticipation(HttpSession session) {
-
-
-        return false;
-    }
-
-    public static Result RequireLabLeader(HttpSession session) {
-
-        return ResultCache.PERMISSION_DENIED;
-    }
 
 
 }

@@ -11,12 +11,6 @@ dependency-reduced-pom.xml
 buildNumber.properties
 .mvn/timing.properties
 
-# .idea/
-# !.idea/sqldialects.xml
-# !.idea/encodings.xml
-# !.idea/inspectionProfiles/
-# !.idea/dataSources
-
 
 .idea/workspace.xml 
 .idea/misc.xml
