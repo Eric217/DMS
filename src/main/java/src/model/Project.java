@@ -2,13 +2,13 @@ package src.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import src.eric.Enums;
 import src.eric.Tools;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.List;
+
+import static src.eric.Constant.ProjectType;
 
 @Data
 @NoArgsConstructor
@@ -35,10 +35,15 @@ public class Project implements Serializable {
     private List<Student> members;
 
     public boolean check() {
-
-        if (Tools.isNullOrEmp(name, aim, lab_name) || !Enums.checkProjectType(type))
+        if (Tools.isNullOrEmp(name, aim, lab_name, type))
             return false;
-        return duration >= 15 * 24 * 3600 && duration <= 120 * 24 * 3600;
+
+        boolean b = false;
+        for (String i: ProjectType)
+            if (type.equals(i)) {
+                b = true; break;}
+
+        return b && duration >= 15 * 24 * 3600 && duration <= 120 * 24 * 3600;
     }
 
 }

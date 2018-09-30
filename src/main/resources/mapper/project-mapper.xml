@@ -38,9 +38,9 @@
     <!-- 一个 insert 服务需要四个 DAO 接口 -->
     <!-- insert marco -->
     <insert id="insertProject" parameterType="src.model.Project">
-        insert into project(name, description, duration, submit_time, coach_id,
+        insert into project(name, description, duration, coach_id,
                             lab_name, leader_id, aim, type)
-        values (#{name}, #{description}, #{duration}, #{submit_time}, #{coach_id},
+        values (#{name}, #{description}, #{duration}, #{coach_id},
                 #{lab_name}, #{leader_id}, #{aim}, #{type} );
     </insert>
 

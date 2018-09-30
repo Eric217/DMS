@@ -9,7 +9,6 @@ import src.dao.ProjectDAO;
 import src.model.Project;
 import src.model.assistance.PageRowsMap;
 
-import java.sql.Timestamp;
 import java.util.List;
 import java.util.Set;
 
@@ -32,7 +31,6 @@ public class ProjectService {
             if (pid == null) pid = 0L;
             pid ++;
             vo.setId(pid);
-            vo.setSubmit_time(new Timestamp(System.currentTimeMillis()));
             projectDAO.insertProject(vo);
 
             for (String sid : sids)

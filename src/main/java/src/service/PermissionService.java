@@ -48,7 +48,7 @@ public class PermissionService {
         return lab != null && lab.getId().equals(lab_id);
     }
 
-    /** 已登陆用户当前管理的实验室(min) */
+    /** @return 已登陆用户当前管理的实验室, nullable */
     public static Laboratory getManagedLab(HttpSession session, LabService labService) {
         var sid = SID(session);
         if (StringUtils.isNullOrEmpty(sid))

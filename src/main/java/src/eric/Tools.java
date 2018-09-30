@@ -8,6 +8,7 @@ import java.net.HttpCookie;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Random;
+import java.util.Set;
 
 public class Tools {
 
@@ -56,6 +57,31 @@ public class Tools {
         }
         return set;
     }
+
+    public static HashSet<Long> split_to_long(String src, String regex, Long exclude) {
+        HashSet<Long> set = new HashSet<>();
+        if (src == null || src.isEmpty())
+            return set;
+        var arr = src.split(regex);
+        for (String element: arr)
+            if (!element.isEmpty()) {
+                try {
+                    Long l = Long.parseLong(element);
+                    if (!l.equals(exclude))
+                        set.add(l);
+                } catch (Exception e) {
+                    continue;
+                }
+            }
+        return set;
+    }
+
+    public static <T> T anyObject(Set<T> set) {
+        if (set == null || set.size() == 0)
+            return null;
+        return set.stream().findFirst().orElse(null);
+    }
+
 
     public static String createRandomNum(int bits){
         String randomNumStr = "";

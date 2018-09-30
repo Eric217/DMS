@@ -4,11 +4,43 @@
 
 <mapper namespace="src.dao.BulletinDAO">
 
-    <select id="getBulletins" resultType="src.model.Bulletin">
-        select * from bulletin;
-
+    <select id="getBulletins" resultType="src.model.Bulletin"
+            parameterType="src.model.assistance.PageRowsMap">
+        select id, time, title, `from` from bulletin
+        order by time desc
+        limit #{num} offset #{offset};
     </select>
 
+    <select id="getBulletinById" parameterType="java.lang.Long"
+            resultType="src.model.Bulletin">
+        select * from bulletin
+        where id = #{id};
+    </select>
 
+    <select id="getBulletinMinById" parameterType="java.lang.Long"
+            resultType="src.model.Bulletin">
+        select id, title, time, `from` from bulletin
+        where id = #{id};
+    </select>
+
+    <select id="getAllCount" resultType="java.lang.Integer">
+        select count(1) from bulletin;
+    </select>
+
+    <insert id="insert" parameterType="src.model.Bulletin">
+        insert into bulletin(title, content, `from`)
+        values (#{title}, #{content}, #{from});
+    </insert>
+
+    <update id="update" parameterType="src.model.Bulletin">
+        update bulletin
+        set time = now(), title = #{title}, content = #{content}
+        where id = #{id};
+    </update>
+
+    <delete id="deleteById" parameterType="java.lang.Long">
+        delete from bulletin
+        where id = #{id};
+    </delete>
 
 </mapper>
