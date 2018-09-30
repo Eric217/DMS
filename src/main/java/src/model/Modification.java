@@ -7,7 +7,7 @@ public class Modification {
 
     private Long id;
 
-    private Long pid;
+    private Long pid; // unchangeable
     private String name;
     private String description;
     private Integer duration;

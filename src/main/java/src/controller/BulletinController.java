@@ -27,6 +27,22 @@ public class BulletinController {
     @Autowired
     LabService labService;
 
+    @RequestMapping(value = "/one", method = RequestMethod.GET)
+    public Result getOneById(Long id, HttpSession session) {
+        if (!PermissionService.IS_LOGIN(session))
+            return ResultCache.PERMISSION_DENIED;
+        if (id == null || id < 0)
+            return ResultCache.ARG_ERROR;
+        return bulletinService.getBulletinById(id, false);
+    }
+
+    @RequestMapping(value = "/count", method = RequestMethod.GET)
+    public Result getAllCount(HttpSession session) {
+        if (!PermissionService.IS_LOGIN(session))
+            return ResultCache.PERMISSION_DENIED;
+        return bulletinService.getAllCount();
+    }
+
     @RequestMapping(value = "/get", method = RequestMethod.GET)
     public Result getAllBulletins(Integer page, Integer rows, HttpSession session) {
         if (!PermissionService.IS_LOGIN(session))
@@ -36,15 +52,6 @@ public class BulletinController {
         if (rows == null)
             rows = 10;
         return bulletinService.getAllBulletins(page, rows);
-    }
-
-    @RequestMapping(value = "/one", method = RequestMethod.GET)
-    public Result getOneById(Long id, HttpSession session) {
-        if (!PermissionService.IS_LOGIN(session))
-            return ResultCache.PERMISSION_DENIED;
-        if (id == null || id < 0)
-            return ResultCache.ARG_ERROR;
-        return bulletinService.getBulletinById(id);
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
@@ -71,44 +78,34 @@ public class BulletinController {
         var size = set.size();
         if (size == 0)
             return ResultCache.ARG_ERROR;
+        boolean admin = PermissionService.IS_ADMIN(session);
+        if (admin)
+            return bulletinService.delete(set);
         if (size > 1)
-            if (!PermissionService.IS_ADMIN(session))
-                return ResultCache.PERMISSION_DENIED;
-        else {
-                if (!PermissionService.IS_ADMIN(session)) { // size == 1
-                    Laboratory lab = PermissionService.getManagedLab(session, labService);
-
-                    bulletinService.getBulletinById(set.stream().findAny().orElseThrow(),
-                            true).getData()
-
-
-                    if (lab == null || !lab.getName().equals(bulletinService.getBulletinById(set.stream().findAny().orElseThrow()).get))
-
-                }
-            }
-
-
+            return ResultCache.PERMISSION_DENIED;
+        // size == 1
+        Laboratory lab = PermissionService.getManagedLab(session, labService);
+        if (lab == null)
+            return ResultCache.PERMISSION_DENIED;
+        Bulletin b = (Bulletin) bulletinService.getBulletinById(
+                set.stream().findAny().orElseThrow(),true).getData();
+        if (b == null)
+            return ResultCache.failWithMessage("id 对应的公告不存在，或数据库读写失败");
+        if (!lab.getName().equals(b.getFrom()))
+            return ResultCache.PERMISSION_DENIED;
         return bulletinService.delete(set);
-
-    }
-
-    /** @param ids 以 @ 分隔 */
-    @RequestMapping(value = "/delete/multi", method = RequestMethod.POST)
-    public Result deleteBulletinById(String ids, HttpSession session) {
-        if (!PermissionService.IS_ADMIN(session)) {
-            Laboratory lab = PermissionService.getManagedLab(session, labService);
-            if (lab == null || !lab.getName().equals())
-
-        }
-
-
-        HashSet<Long> set = Tools.split_to_long(ids, "@", null);
-        return bulletinService.delete(set);
-
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public Result updateBulletin(Bulletin vo) {
+    public Result updateBulletin(Bulletin vo, HttpSession session) {
+
+        if (vo == null || vo.getId() == null || Tools.isNullOrEmp(vo.getTitle(), vo.getContent()))
+            return ResultCache.ARG_ERROR;
+        if (!PermissionService.IS_ADMIN(session)) {
+            Laboratory lab = PermissionService.getManagedLab(session, labService);
+            if (lab == null || !lab.getName().equals(vo.getFrom()))
+                return ResultCache.PERMISSION_DENIED;
+        }
         return bulletinService.update(vo);
     }
 

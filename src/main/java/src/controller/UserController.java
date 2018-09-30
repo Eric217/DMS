@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import src.base.Result;
 import src.base.ResultCache;
+import src.eric.Constant;
 import src.eric.Tools;
 import src.model.Admin;
 import src.model.Laboratory;
@@ -69,7 +70,7 @@ public class UserController {
             session.setAttribute(S_VERI_CODE, random);
             session.setAttribute(S_VERI_LAST, now);
             session.setAttribute(S_VERI_MAIL, email);
-            session.setAttribute(S_VERI_TYPE, "register");
+            session.setAttribute(S_VERI_TYPE, Constant.REGISTER);
             session.setMaxInactiveInterval(Integer.parseInt(
                     Tools.loadResource("mail.properties").getProperty("expires")));
             return ResultCache.OK;
@@ -92,7 +93,7 @@ public class UserController {
             boolean b2 = last_req != null &&
                     last_req.getTime() + 1000 * MailService.expires_seconds >= now.getTime();
             boolean b3 = code.equals(session.getAttribute(S_VERI_CODE));
-            boolean b4 = session.getAttribute(S_VERI_TYPE).equals("register");
+            boolean b4 = session.getAttribute(S_VERI_TYPE).equals(Constant.REGISTER);
             if (!(b1 && b2 && b4))
                 return ResultCache.failWithMessage("验证码已过期，请重新发送");
             if (!b3)
@@ -137,7 +138,7 @@ public class UserController {
             session.setAttribute(S_VERI_CODE, random);
             session.setAttribute(S_VERI_LAST, now);
             session.setAttribute(S_VERI_MAIL, email);
-            session.setAttribute(S_VERI_TYPE, "resetPassword");
+            session.setAttribute(S_VERI_TYPE, Constant.RESET_PASSWORD);
             session.setMaxInactiveInterval(Integer.parseInt(
                     Tools.loadResource("mail.properties").getProperty("expires")));
             return ResultCache.OK;
@@ -160,7 +161,7 @@ public class UserController {
         boolean b2 = last_req != null &&
                 last_req.getTime()+1000*MailService.expires_seconds >= now.getTime();
         boolean b3 = code.equals(session.getAttribute(S_VERI_CODE));
-        boolean b4 = session.getAttribute(S_VERI_TYPE).equals("resetPassword");
+        boolean b4 = session.getAttribute(S_VERI_TYPE).equals(Constant.RESET_PASSWORD);
         if (!(b1 && b2 && b4))
             return ResultCache.failWithMessage("验证码已过期，请重新发送");
         if (!b3)
@@ -245,7 +246,7 @@ public class UserController {
         Graphics2D g = image.createGraphics();
         g.setColor(Tools.getRandColor(170, 250));
         g.fillRect(0, 0, width, height);
-        g.setStroke(new BasicStroke(3.5f));
+        g.setStroke(new BasicStroke(3f));
 
         for(int i = 0; i < 40; i++){ // 绘制干扰线
             int x = random.nextInt(width);

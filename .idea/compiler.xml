@@ -4,10 +4,9 @@
     <annotationProcessing>
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
-        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <sourceTestOutputDir name="target/generated-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="PMS" />
-        <module name="Web Projects" />
       </profile>
     </annotationProcessing>
   </component>
