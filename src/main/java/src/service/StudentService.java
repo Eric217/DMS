@@ -8,6 +8,7 @@ import src.base.Result;
 import src.base.ResultCache;
 import src.dao.StudentDAO;
 import src.model.Student;
+import src.model.assistance.PageRowsMap;
 
 import java.util.List;
 import java.util.Map;
@@ -22,37 +23,28 @@ public class StudentService {
     @Autowired
     PasswordEncoder passwordEncoder;
 
-    // encode
+    // Encode
     public String encodePassword(String origin_password) {
         return passwordEncoder.encode(origin_password);
     }
 
-    // Boolean
+    // Boolean. handle Exception outside
     public Boolean emailExist(String email) {
         return studentDAO.checkMailExisted(email) != 0;
     }
 
     public Boolean passwordRight(String sid, String input_password) {
         String encoded = studentDAO.getEncodedPassword(sid);
-        if (encoded == null || encoded.isEmpty()) {
+        if (encoded == null || encoded.isEmpty())
             return false;
-        }
         return passwordEncoder.matches(input_password, encoded);
     }
 
-    // -------------------
+    // Business
     public Result updatePassword(String email, String newPass) {
         try {
             studentDAO.updatePassword(email, encodePassword(newPass));
             return ResultCache.OK;
-        } catch (Exception e) {
-            return ResultCache.DATABASE_ERROR;
-        }
-    }
-
-    public Result getStudentById(String id) {
-        try {
-            return ResultCache.getDataOk(studentDAO.getStudentById(id));
         } catch (Exception e) {
             return ResultCache.DATABASE_ERROR;
         }
@@ -67,29 +59,51 @@ public class StudentService {
         }
     }
 
-
-
-
-
-    public Result updateStudent(Student vo)   {
-        studentDAO.updateStudent(vo);
-        return ResultCache.OK;
-    }
-
     @Transactional
-    public Result deleteStudents(Set<String> ids)   {
-        for (String id: ids) {
-            studentDAO.deleteStudent(id);
+    public Result deleteStudents(Set<String> ids) {
+        try {
+            for (String id : ids)
+                studentDAO.deleteStudent(id);
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
         }
         return ResultCache.OK;
     }
 
+    public Result updateStudent(Student vo) {
+        try {
+            studentDAO.updateStudent(vo);
+            return ResultCache.OK;
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
+        }
+    }
+
+    public Result getStudentById(String id, Boolean full) {
+        try {
+            Student s = full ? studentDAO.getStudentById(id)
+                             : studentDAO.getMinStudentById(id);
+            return ResultCache.getDataOk(s);
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
+        }
+    }
+
     public Result getStudentSplit(Integer page, Integer rows) {
-        return ResultCache.getDataOk(studentDAO.getAllSplit(page, rows));
+        try {
+            return ResultCache.getDataOk(
+                    studentDAO.getAllSplit(new PageRowsMap(rows, (page-1)*rows)));
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
+        }
     }
 
     public Result getAllCount() {
-        return ResultCache.getDataOk(studentDAO.getCount());
+        try {
+            return ResultCache.getDataOk(studentDAO.getCount());
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
+        }
     }
 
 }

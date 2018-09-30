@@ -1205,7 +1205,7 @@
       <DataType>char(12)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="297" parent="276" name="creat_time">
+    <column id="297" parent="276" name="create_time">
       <Position>6</Position>
       <DataType>timestamp|0s</DataType>
       <NotNull>1</NotNull>

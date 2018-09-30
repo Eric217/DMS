@@ -5,6 +5,7 @@ import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpCookie;
+import java.util.HashSet;
 import java.util.Properties;
 import java.util.Random;
 
@@ -12,15 +13,24 @@ public class Tools {
 
     private static Random random = new Random();
 
-    public static boolean isRightMail(String email) {
+    public static boolean isRightMailFormat(String email) { // TODO: - Regex
+        if (email == null || email.isEmpty())
+            return false;
+
+
+
+        // 要求：只有一个 @ 符号
         return true;
     }
 
-    public static boolean isRightPass(String pass) {
-        if (pass == null)
+    public static boolean isRightPass(String pass) { // TODO: - Regex
+        if (pass == null || pass.isEmpty())
             return false;
+
         if (pass.length() > 16 || pass.length() < 8)
             return false;
+
+
         return true;
     }
 
@@ -30,6 +40,21 @@ public class Tools {
                 return true;
         }
         return false;
+    }
+
+    /** @param exclude 需要删除的元素，nullable */
+    public static HashSet<String> split(String src, String regex, String exclude) {
+        HashSet<String> set = new HashSet<>();
+        if (src == null || src.isEmpty())
+            return set;
+        String[] arr = src.split(regex);
+        if (exclude == null)
+            exclude = "";
+        for (String element: arr) {
+            if (!element.isEmpty() && !element.equals(exclude))
+                set.add(element);
+        }
+        return set;
     }
 
     public static String createRandomNum(int bits){
@@ -70,7 +95,7 @@ public class Tools {
         return p;
     }
 
-    //创建颜色
+    /** 产生随机颜色，其 rgb 每个值在 range_s ~ range_e 之间 */
     public static Color getRandColor(int range_s, int range_e){
         if(range_s>255)
             range_s = 255;
@@ -85,10 +110,6 @@ public class Tools {
         int g = range_s + random.nextInt(range_e - range_s);
         int b = range_s + random.nextInt(range_e - range_s);
         return new Color(r,g,b);
-    }
-
-    public static Font getRandFont(int min_size, int total) {
-        return new Font("Times New Roman", random.nextInt(3), min_size + random.nextInt(total));
     }
 
     public static Font[] getRandFonts(int min_size, int total, int count) {

@@ -13,10 +13,9 @@ public class Laboratory {
     private String classroom;
     private String description;
     private String leader_id;
-
+    private String create_time;
 
     public boolean check() {
-
         return !Tools.isNullOrEmp(name, classroom, description);
     }
 

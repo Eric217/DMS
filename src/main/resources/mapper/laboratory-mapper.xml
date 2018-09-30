@@ -4,10 +4,36 @@
 
 <mapper namespace="src.dao.LabDAO">
 
+    <!-- min -->
     <select id="getLabByLeaderId" parameterType="string"
             resultType="src.model.Laboratory">
-        select * from laboratory where leader_id=#{sid};
+        select id, name, leader_id from laboratory
+        where leader_id = #{sid};
     </select>
 
+    <select id="getLabById" parameterType="java.lang.Long"
+            resultType="src.model.Laboratory">
+        select * from laboratory where id = #{id};
+    </select>
+
+    <select id="getAllLabs" resultType="src.model.Laboratory">
+        select id, name, classroom, leader_id, create_time from laboratory;
+    </select>
+
+    <insert id="insertLab" parameterType="src.model.Laboratory">
+        insert into laboratory(name, classroom, description, leader_id)
+        values (#{name}, #{classroom}, #{description}, #{leader_id});
+    </insert>
+
+    <update id="updateLab" parameterType="src.model.Laboratory">
+        update laboratory set name = #{name}, classroom = #{classroom},
+                              description = #{description}, leader_id = #{leader_id}
+        where id = #{id};
+    </update>
+
+    <delete id="deleteLabById" parameterType="java.lang.Long">
+        delete from laboratory
+        where id = #{id};
+    </delete>
 
 </mapper>

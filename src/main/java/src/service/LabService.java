@@ -13,7 +13,7 @@ public class LabService {
     @Autowired
     LabDAO labDAO;
 
-    public Result getLabByLeaderId(String sid) {
+    Result getLabByLeaderId(String sid) {
         try {
             return ResultCache.getDataOk(labDAO.getLabByLeaderId(sid));
         } catch (Exception e) {

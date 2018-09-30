@@ -32,6 +32,7 @@ public class ProjectController {
     @Autowired
     LabService labService;
 
+// TODO: - count 在所有 page rows 模式中都需要。有时间再加。
 //    @RequestMapping(value = "/student/project/count", method = RequestMethod.GET)
 //    public Result getCount_s(String property, String like) {
 //        return projectService.getCount(property, like, false);
@@ -54,17 +55,10 @@ public class ProjectController {
         if (vo == null)
             return ResultCache.ARG_ERROR;
         vo.setLeader_id(sid);
-        if (!vo.check() || StringUtils.isNullOrEmpty(memberIds))
+        if (!vo.check())
             return ResultCache.failWithMessage("必要信息不能为空或格式错误");
-
-        String[] sids = memberIds.split("@");
-        HashSet<String> set = new HashSet<>();
-        for (String id: sids) {
-            if (!id.isEmpty() && !id.equals(sid))
-                set.add(id);
-        }
-        sids = (String[]) set.toArray();
-        if (sids.length == 0)
+        HashSet<String> sids = Tools.split(memberIds, "@", sid);
+        if (sids.size() == 0)
             return ResultCache.failWithMessage("至少需要一个组员");
         return projectService.insert(vo, sids);
     }
@@ -134,6 +128,8 @@ public class ProjectController {
             return ResultCache.PERMISSION_DENIED;
         return projectService.getProjectsAdmin(page==null ?1:page, rows==null ?10:rows, status);
     }
+
+
 
     // TODO: - 权限
     // TODO: - 所有的参数的 null 判断

@@ -9,6 +9,7 @@ import java.util.List;
 @Repository
 public interface LabDAO {
 
+    /** return min */
     Laboratory getLabByLeaderId(String sid);
 
     Laboratory getLabById(Long id);

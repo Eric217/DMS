@@ -1,8 +1,6 @@
 package src.service;
 
 import com.mysql.cj.util.StringUtils;
-import src.base.Result;
-import src.base.ResultCache;
 import src.model.Laboratory;
 
 import javax.servlet.http.HttpSession;
@@ -37,6 +35,8 @@ public class PermissionService {
     }
 
     public static boolean IS_CURRENT_USER(String id, HttpSession session) {
+        if (id == null || id.isEmpty())
+            return false;
         String s = (String) session.getAttribute(S_USERNAME);
         if (s == null)
             return false;
@@ -48,7 +48,7 @@ public class PermissionService {
         return lab != null && lab.getId().equals(lab_id);
     }
 
-    /** 已登陆用户当前管理的实验室 */
+    /** 已登陆用户当前管理的实验室(min) */
     public static Laboratory getManagedLab(HttpSession session, LabService labService) {
         var sid = SID(session);
         if (StringUtils.isNullOrEmpty(sid))

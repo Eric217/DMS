@@ -3,6 +3,8 @@
 
 <mapper namespace="src.dao.ProjectDAO">
 
+
+    <!-- these three not impl -->
     <update id="updateProject" parameterType="src.model.Project">
         update project
         set name = #{name}, description = #{description}, start_time = #{start_time}, end_time
@@ -22,8 +24,6 @@
         where id = #{id};
     </delete>
 
-
-
     <!--<select id="getCount" resultType="java.lang.Integer">-->
         <!--select count(1) from project-->
         <!--where #{property} like #{like};-->
@@ -31,93 +31,12 @@
 
     <!--<select id="getCount_Fake" resultType="java.lang.Integer">-->
         <!--select count(1) from project-->
-        <!--where #{property} like #{like} and deleted=0;-->
+        <!--where deleted=0;-->
     <!--</select>-->
 
 
-
-    <select id="getAllSplit" resultMap="projectMap"
-            parameterType="src.model.assistance.PageRowsMap">
-       select id, `name`, coach_id, lab_name,
-         opt_status, start_time, end_time, duration, submit_time, leader_id
-        from project where #{property} like #{like}
-       order by submit_time desc
-       limit #{num} offset #{offset};
-    </select>
-
-    <select id="getProcessing" parameterType="src.model.assistance.PageRowsMap"
-            resultMap="projectMap">
-        select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time, leader_id
-        from project where #{property} like #{like} and opt_status != 4
-                       and start_time is not null and end_time is null
-                       and to_seconds(start_time) + duration > to_seconds(now())
-        order by submit_time desc
-        limit #{num} offset #{offset};
-    </select>
-
-    <select id="getCreating" resultMap="projectMap"
-            parameterType="src.model.assistance.PageRowsMap">
-        select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time, leader_id
-        from project where #{property} like #{like} and start_time is null and opt_status != 2
-        order by submit_time desc
-        limit #{num} offset #{offset};
-    </select>
-
-    <select id="getRejected" resultMap="projectMap"
-            parameterType="src.model.assistance.PageRowsMap">
-        select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time, leader_id
-        from project where #{property} like #{like} and opt_status=2
-        order by submit_time desc
-        limit #{num} offset #{offset};
-    </select>
-
-    <select id="getCanceled" resultMap="projectMap"
-            parameterType="src.model.assistance.PageRowsMap">
-        select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time, leader_id
-        from project where #{property} like #{like} and opt_status=4
-        order by submit_time desc
-        limit #{num} offset #{offset};
-    </select>
-
-
-    <select id="getComplete" resultMap="projectMap"
-            parameterType="src.model.assistance.PageRowsMap">
-        select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time, leader_id
-        from project where #{property} like #{like} and end_time is not null
-        order by submit_time desc
-        limit #{num} offset #{offset};
-    </select>
-
-
-    <select id="getOvertime" resultMap="projectMap"
-            parameterType="src.model.assistance.PageRowsMap">
-        select id, `name`, coach_id, lab_name,
-               opt_status, start_time, end_time, duration, submit_time, leader_id
-        from project where #{property} like #{like}
-        and start_time is not null and end_time is null and opt_status != 4
-        and to_seconds(now()) >= to_seconds(start_time) + duration
-        order by submit_time desc
-        limit #{num} offset #{offset};
-    </select>
-
-
-
-
-
-
-    <!-- 根据 pid 查询 -->
-    <select id="getProjectById" resultMap="projectMap" parameterType="java.lang.Long">
-        select id, name, description, start_time, end_time, duration, submit_time, coach_id,
-               opt_status, lab_name, leader_id, aim, type
-        from project where id = #{id};
-    </select>
-
-    <!-- 插入项目 -->
+    <!-- 一个 insert 服务需要四个 DAO 接口 -->
+    <!-- insert marco -->
     <insert id="insertProject" parameterType="src.model.Project">
         insert into project(name, description, duration, submit_time, coach_id,
                             lab_name, leader_id, aim, type)
@@ -144,18 +63,26 @@
     <select id="getMaxProjectId" resultType="java.lang.Long">
         select max(id) from project;
     </select>
+    <!-- /insert -->
 
-    <!-- 获取某个学生的所有项目,  -->
+    <!-- 根据 pid 查询项目 -->
+    <select id="getProjectById" resultMap="projectMap_fullStudent"
+            parameterType="java.lang.Long">
+        select * from project
+        where id = #{id};
+    </select>
+
+    <!-- 获取某个学生的所有项目 -->
     <select id="getProjectsAllByStudentId" resultMap="projectMap" parameterType="string">
         select id, name, coach_id, lab_name, opt_status, start_time, end_time, duration, 
-            submit_time, leader_id, type from project 
+               submit_time, leader_id, type from project
         where id in (
                     select pid from participate
                     where sid = #{sid} )
         order by submit_time desc;
     </select>
 
-    <!-- 获取某个学生未被删除的所有项目,  -->
+    <!-- 获取某个学生未被删除的所有项目 -->
     <select id="getProjectsDelByStudentId" resultMap="projectMap" parameterType="string">
         select id, name, coach_id, lab_name, opt_status, start_time, end_time, duration,
                submit_time, leader_id, type from project
@@ -166,9 +93,137 @@
         order by submit_time desc;
     </select>
 
+    <!-- lab marco -->
+    <!-- 所有项目分页 -->
+    <select id="getAllSplitOfLabId" resultMap="projectMap">
+        select p.id, p.name, coach_id, lab_name, opt_status, start_time, end_time,
+                duration, submit_time, p.leader_id, type
+        from project p inner join laboratory l on p.lab_name = l.name
+        where l.id = #{lid}
+        order by submit_time desc
+        limit #{num} offset #{offset};
+    </select>
+
+    <!-- 正在请求 更新，取消 的项目 -->
+    <select id="getRequestingOfLabId" resultMap="projectMap" parameterType="java.lang.Long">
+        select p.id, p.name, coach_id, lab_name, opt_status, start_time, end_time,
+               duration, submit_time, p.leader_id, type
+        from project p inner join laboratory l on p.lab_name = l.name
+        where l.id = #{lab_id}
+          and start_time is not null and end_time is null
+          and to_seconds(start_time) + duration > to_seconds(now())
+
+          and opt_status != 4
+          and opt_status != 0      # TODO: - opt 是几来着 ？？？忘了
+        order by submit_time desc;
+    </select>
+
+    <!-- 等待审核的项目 -->
+    <select id="getCreatingOfLabId" resultMap="projectMap" parameterType="java.lang.Long">
+        select p.id, p.name, coach_id, lab_name, opt_status, start_time, end_time,
+               duration, submit_time, p.leader_id, type
+        from project p inner join laboratory l on p.lab_name = l.name
+        where l.id = #{lab_id}
+          and start_time is null
+          and opt_status != 2     # TODO: - opt 是几来着 ？？？忘了
+        order by submit_time desc;
+    </select>
+
+    <!-- 进行中的项目一览 -->
+    <select id="getProcessingOfLabId" resultMap="projectMap" parameterType="java.lang.Long">
+        select p.id, p.name, coach_id, lab_name, opt_status, start_time, end_time,
+               duration, submit_time, p.leader_id, type
+        from project p inner join laboratory l on p.lab_name = l.name
+        where l.id = #{lab_id}
+          and start_time is not null and end_time is null
+          and to_seconds(start_time) + duration > to_seconds(now())
+
+          and opt_status != 4     # TODO: - opt 是几来着 ？？？忘了
+        order by submit_time desc;
+    </select>
+    <!-- /lab -->
+
+    <!-- admin marco-->
+    <select id="getAllSplit" resultMap="projectMap"
+            parameterType="src.model.assistance.PageRowsMap">
+        select id, name, coach_id, lab_name,
+               opt_status, start_time, end_time, duration, submit_time, leader_id, type
+        from project  
+        order by submit_time desc
+        limit #{num} offset #{offset};
+    </select>
+
+    <select id="getProcessing" parameterType="src.model.assistance.PageRowsMap"
+            resultMap="projectMap">
+        select id, name, coach_id, lab_name,
+               opt_status, start_time, end_time, duration, submit_time, leader_id, type
+        from project where opt_status != 4
+                       and start_time is not null and end_time is null
+                       and to_seconds(start_time) + duration > to_seconds(now())
+        order by submit_time desc
+        limit #{num} offset #{offset};
+    </select>
+
+    <select id="getCreating" resultMap="projectMap"
+            parameterType="src.model.assistance.PageRowsMap">
+        select id, name, coach_id, lab_name,
+               opt_status, start_time, end_time, duration, submit_time, leader_id, type
+        from project where start_time is null 
+                       and opt_status != 2
+        order by submit_time desc
+        limit #{num} offset #{offset};
+    </select>
+
+    <select id="getRejected" resultMap="projectMap"
+            parameterType="src.model.assistance.PageRowsMap">
+        select id, name, coach_id, lab_name,
+               opt_status, start_time, end_time, duration, submit_time, leader_id, type
+        from project where opt_status = 2
+        order by submit_time desc
+        limit #{num} offset #{offset};
+    </select>
+
+    <select id="getCanceled" resultMap="projectMap"
+            parameterType="src.model.assistance.PageRowsMap">
+        select id, name, coach_id, lab_name,
+               opt_status, start_time, end_time, duration, submit_time, leader_id, type
+        from project where opt_status = 4
+        order by submit_time desc
+        limit #{num} offset #{offset};
+    </select>
+
+    <select id="getComplete" resultMap="projectMap"
+            parameterType="src.model.assistance.PageRowsMap">
+        select id, name, coach_id, lab_name,
+               opt_status, start_time, end_time, duration, submit_time, leader_id, type
+        from project where end_time is not null
+        order by submit_time desc
+        limit #{num} offset #{offset};
+    </select>
+
+    <select id="getOvertime" resultMap="projectMap"
+            parameterType="src.model.assistance.PageRowsMap">
+        select id, name, coach_id, lab_name,
+               opt_status, start_time, end_time, duration, submit_time, leader_id, type
+        from project where start_time is not null and end_time is null
+                       and opt_status != 4
+                       and to_seconds(now()) >= to_seconds(start_time) + duration
+        order by submit_time desc
+        limit #{num} offset #{offset};
+    </select>
+    <!-- /admin -->
+
+
+
     <!-- resultMap 依赖 -->
     <select id="getMembersByProjectId" resultType="src.model.Student">
-        select s.id, s.name, s.email, s.phone, s.college, s.grade, s.major
+        select s.id, s.name
+        from student s inner join participate p on s.id = p.sid
+        where p.pid= #{id};
+    </select>
+
+    <select id="getMembersFullByProjectId" resultType="src.model.Student">
+        select s.id, s.name, s.email, s.phone, s.college, s.grade, s.major, s.introduce
         from student s inner join participate p on s.id = p.sid
         where  p.pid= #{id};
     </select>
@@ -183,14 +238,30 @@
         <result property="end_time" column="end_time"/>
         <result property="duration" column="duration"/>
         <result property="submit_time" column="submit_time"/>
+        <result property="leader_id" column="leader_id"/>
+        <result property="type" column="type"/>
+        <!--<result property="description" column="description"/>-->
+        <!--<result property="aim" column="aim"/>-->
+        <!--<result property="deleted" column="deleted"/>-->
+        <collection property="members" column="id" select="getMembersByProjectId"/>
+    </resultMap>
+
+    <resultMap id="projectMap_fullStudent" type="src.model.Project">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="coach_id" column="coach_id"/>
+        <result property="lab_name" column="lab_name"/>
+        <result property="opt_status" column="opt_status"/>
+        <result property="start_time" column="start_time"/>
+        <result property="end_time" column="end_time"/>
+        <result property="duration" column="duration"/>
+        <result property="submit_time" column="submit_time"/>
         <result property="description" column="description"/>
         <result property="leader_id" column="leader_id"/>
         <result property="aim" column="aim"/>
         <result property="type" column="type"/>
         <result property="deleted" column="deleted"/>
-        <collection property="members" column="id" select="getMembersByProjectId"/>
+        <collection property="members" column="id" select="getMembersFullByProjectId"/>
     </resultMap>
-
-
 
 </mapper>

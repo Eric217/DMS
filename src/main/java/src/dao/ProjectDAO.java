@@ -13,18 +13,41 @@ public interface ProjectDAO {
 
     void insertProject(Project vo);
 
+    /** For mapper to create collection type.
+     *  @return Simplified Student Object. */
+    // TODO: - 测试 不写这个可以吗 ？？？
+//    @SuppressWarnings("unused")
+//    List<Student> getMembersByProjectId(Long id);
+
+    /** 获取一个学生管理的活跃状态的项目 id（一个学生只允许管理一个活跃的项目） */
+    Long getActiveProjectIdByLeaderId(String sid);
+
+    /** 获取最大 pid */
+    Long getMaxProjectId();
+
+    /** 插入一条 participation, sid 参与 pid */
+    void addMember(@Param("sid") String sid, @Param("pid") Long pid);
+
+    // these three not impl
     void updateProject(Project vo);
 
     void deleteProjectById(Long id);
 
     void updateDeleted(@Param("id") Long id, @Param("newValue") Integer newValue);
 
-
 //    // 凡是带 fake 后缀的，返回的 project deleted 属性为 0；上面的 皆为获取所有 project
 //    Integer getCount_Fake(@Param("property") String property, @Param("like") String like);
 //
 //    Integer getCount(@Param("property") String property, @Param("like") String like);
 
+
+    /** 获取项目的详细信息 */
+    Project getProjectById(Long id);
+
+    /** 仅查看一个学生未被删除的项目 */
+    List<Project> getProjectsDelByStudentId(String sid);
+    /** 查看一个学生的所有项目 */
+    List<Project> getProjectsAllByStudentId(String sid);
 
     // 管理员权限：获取某种类型的项目
     List<Project> getAllSplit(PageRowsMap map);
@@ -42,27 +65,8 @@ public interface ProjectDAO {
     List<Project> getAllSplitOfLabId(@Param("num") Integer num, @Param("offset") Integer ofs,
                                      @Param("lid") Long lab_id);
 
-    /** 获取项目的详细信息 */
-    Project getProjectById(Long id);
 
-    /** For mapper to create collection type.
-     *  @return Simplified Student Object. */
-    @SuppressWarnings("unused")
-    List<Student> getMembersByProjectId(Long id);
 
-    /** 获取一个学生管理的活跃状态的项目 id（一个学生只允许管理一个活跃的项目） */
-    Long getActiveProjectIdByLeaderId(String sid);
-
-    /** 获取最大 pid */
-    Long getMaxProjectId();
-
-    /** 插入一条 participation, sid 参与 pid */
-    void addMember(@Param("sid") String sid, @Param("pid") Long pid);
-
-    /** 仅查看一个学生未被删除的项目 */
-    List<Project> getProjectsDelByStudentId(String sid);
-    /** 查看一个学生的所有项目 */
-    List<Project> getProjectsAllByStudentId(String sid);
 
 
 }

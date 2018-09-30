@@ -3,9 +3,43 @@
 
 <mapper namespace="src.dao.StudentDAO">
 
-    <select id="getStudentById" parameterType="string" resultType="src.model.Student">
-        select * from student where id=#{id};
+    <insert id="insertStudent" parameterType="src.model.Student">
+        insert into student(id, name, password, email) values (#{id}, #{name}, #{password},
+                                                               #{email});
+    </insert>
+
+    <update id="updateStudent" parameterType="src.model.Student">
+        update student set name = #{name}, phone = #{phone}, grade = #{grade},
+                           college = #{college}, major = #{major}, introduce = #{introduce}
+        where id = #{id};
+    </update>
+
+    <delete id="deleteStudent" parameterType="string">
+        delete from student
+        where id = #{id};
+    </delete>
+
+    <select id="getCount" resultType="java.lang.Integer">
+        select count(1) from student;
     </select>
+
+    <select id="getStudentById" parameterType="string" resultType="src.model.Student">
+        select id, name, email, phone, grade, college, major, introduce, punish_end
+        from student where id = #{id};
+    </select>
+
+    <select id="getMinStudentById" parameterType="string"
+            resultType="src.model.Student">
+        select id, name from student where id = #{id};
+    </select>
+
+    <select id="getAllSplit" resultType="src.model.Student"
+            parameterType="src.model.assistance.PageRowsMap">
+        select id, name, email, phone, grade, college, major, punish_end
+        from student
+        limit #{num} offset #{offset};
+    </select>
+
 
     <select id="checkMailExisted" parameterType="string" resultType="java.lang.Integer">
         select count(1) from student where email = #{mail};
@@ -14,17 +48,6 @@
     <select id="getEncodedPassword" resultType="java.lang.String" parameterType="string">
         select password from student where id = #{id};
     </select>
-
-    <insert id="insertStudent" parameterType="src.model.Student">
-        insert into student(id, name, password, email) values (#{id}, #{name}, #{password},
-                                                              #{email});
-    </insert>
-
-    <update id="updateStudent" parameterType="src.model.Student">
-        update student set name = #{name}, password = #{password}, email = #{email}, phone =
-        #{phone}, grade = #{grade}, college = #{college}, major = #{major}, introduce =
-        #{introduce}, punish_end = #{punish_end} where id = #{id};
-    </update>
 
     <update id="updatePassword">
         update student set password = #{pass}

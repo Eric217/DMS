@@ -2,10 +2,12 @@ package src.model;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import src.eric.Enums;
 import src.eric.Tools;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -32,18 +34,11 @@ public class Project implements Serializable {
     /** 非数据库属性 联表查询*/
     private List<Student> members;
 
-    /** 防恶意插入 */
     public boolean check() {
 
-//        if (type != null) {
-            // TODO: - type 得设置仅限几种选择
-//        }
-
-        if (Tools.isNullOrEmp(name, aim, lab_name))
+        if (Tools.isNullOrEmp(name, aim, lab_name) || !Enums.checkProjectType(type))
             return false;
         return duration >= 15 * 24 * 3600 && duration <= 120 * 24 * 3600;
     }
-
-
 
 }

@@ -22,7 +22,7 @@ public class ProjectService {
     ProjectDAO projectDAO;
 
     @Transactional
-    public Result insert(Project vo, String[] sids) {
+    public Result insert(Project vo, Set<String> sids) {
         try {
             // 确保sid没有其他活跃的项目
             Long pid = projectDAO.getActiveProjectIdByLeaderId(vo.getLeader_id());

@@ -1,6 +1,5 @@
 package src.controller;
 
-import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,7 +21,7 @@ public class LabController {
     @Autowired
     LabService labService;
 
-    /* 所有 get 权限：登陆 */
+    /** 已登陆权限：查看实验室列表 */
     @RequestMapping(value = "/get/all", method = RequestMethod.GET)
     public Result getAllLabs(HttpSession session) {
         if (!PermissionService.IS_LOGIN(session))
@@ -30,15 +29,7 @@ public class LabController {
         return labService.getAllLabs();
     }
 
-    @RequestMapping(value = "/get/leader", method = RequestMethod.GET)
-    public Result getLabByLeaderId(String sid, HttpSession session) {
-        if (StringUtils.isNullOrEmpty(sid))
-            return ARG_ERROR;
-        if (!PermissionService.IS_LOGIN(session))
-            return ResultCache.PERMISSION_DENIED;
-        return labService.getLabByLeaderId(sid);
-    }
-
+    /** 已登陆权限：查看实验室信息 */
     @RequestMapping(value = "/get", method = RequestMethod.GET)
     public Result getLabById(Long id, HttpSession session) {
         if (id == null)
@@ -48,7 +39,7 @@ public class LabController {
         return labService.getLabByLabId(id);
     }
 
-    /* 增加和删除要求 admin 权限*/
+    /** admin 权限*/
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public Result createLab(Laboratory vo, HttpSession session) {
         if (!PermissionService.IS_ADMIN(session))
@@ -58,6 +49,7 @@ public class LabController {
         return labService.insertLab(vo);
     }
 
+    /** admin 权限*/
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public Result deleteLabById(Long id, HttpSession session) {
         if (id == null)
@@ -70,7 +62,7 @@ public class LabController {
     /** 更新权限：实验室负责人、管理员 */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public Result updateLab(Laboratory vo, HttpSession session) {
-        if (vo == null || !vo.check())
+        if (vo == null || !vo.check() || vo.getId() == null)
             return ARG_ERROR;
         if (!PermissionService.IS_ADMIN(session))
             if (!PermissionService.IS_MY_LAB(vo.getId(), session, labService))

@@ -51,7 +51,7 @@ public class UserController {
     @RequestMapping(value = "/register/mail", method = RequestMethod.POST)
     public Result getCode(String email, HttpSession session) {
         try {
-            if (!Tools.isRightMail(email))
+            if (!Tools.isRightMailFormat(email))
                 return ResultCache.failWithMessage("邮箱格式不符合要求");
 
             Date last_req = (Date) session.getAttribute(S_VERI_LAST), now = new Date();
@@ -61,9 +61,9 @@ public class UserController {
                 rest = (long) ((last_t - rest) / 1000.0);
                 return ResultCache.failWithMessage("操作频繁，请 " + rest + " 秒后再试");
             }
-            if (studentService.emailExist(email)) {
+            if (studentService.emailExist(email))
                 return ResultCache.failWithMessage("该邮箱已被注册");
-            }
+
             String random = Tools.createRandomNum(6);
             MailService.sendMail(email, random);
             session.setAttribute(S_VERI_CODE, random);
@@ -73,8 +73,10 @@ public class UserController {
             session.setMaxInactiveInterval(Integer.parseInt(
                     Tools.loadResource("mail.properties").getProperty("expires")));
             return ResultCache.OK;
-        } catch (Exception e) {
-            return ResultCache.FAILURE;
+        } catch (MailException e) {
+            return ResultCache.failWithMessage("邮件系统异常");
+        } catch (Exception e1) {
+            return ResultCache.DATABASE_ERROR;
         }
     }
 
@@ -83,6 +85,8 @@ public class UserController {
     public Result verifyCode(String email, String code, String password,
                              String name, HttpSession session) {
         try {
+            if (Tools.isNullOrEmp(email, code, name) || !Tools.isRightPass(password))
+                return ResultCache.ARG_ERROR;
             boolean b1 = email.equals(session.getAttribute(S_VERI_MAIL));
             Date last_req = (Date) session.getAttribute(S_VERI_LAST), now = new Date();
             boolean b2 = last_req != null &&
@@ -107,7 +111,7 @@ public class UserController {
             session.removeAttribute(S_VERI_TYPE);
             return studentService.insertStudent(student);
         } catch (Exception e) {
-            return ResultCache.FAILURE;
+            return ResultCache.DATABASE_ERROR;
         }
     }
 
@@ -115,7 +119,7 @@ public class UserController {
     @RequestMapping(value = "/resetPassword/mail", method = RequestMethod.POST)
     public Result getCode_2(String email, HttpSession session) {
         try {
-            if (!Tools.isRightMail(email))
+            if (!Tools.isRightMailFormat(email))
                 return ResultCache.failWithMessage("邮箱格式不符合要求");
 
             Date last_req = (Date) session.getAttribute(S_VERI_LAST), now = new Date();
@@ -125,9 +129,9 @@ public class UserController {
                 rest = (long) ((last_t - rest) / 1000.0);
                 return ResultCache.failWithMessage("操作频繁，请 " + rest + " 秒后再试");
             }
-            if (!studentService.emailExist(email)) {
+            if (!studentService.emailExist(email))
                 return ResultCache.failWithMessage("该邮箱尚未注册");
-            }
+
             String random = Tools.createRandomNum(6);
             MailService.sendMail(email, random);
             session.setAttribute(S_VERI_CODE, random);
@@ -138,16 +142,16 @@ public class UserController {
                     Tools.loadResource("mail.properties").getProperty("expires")));
             return ResultCache.OK;
         } catch (MailException e) {
-            return ResultCache.failWithMessage("发送邮件失败");
+            return ResultCache.failWithMessage("邮件系统异常");
         } catch (Exception e1) {
-            return ResultCache.FAILURE;
+            return ResultCache.DATABASE_ERROR;
         }
     }
 
     /** 提交重置密码 */
     @RequestMapping(value = "/resetPassword/code", method = RequestMethod.POST)
     public Result verifyCode_2(String email, String code, String password, HttpSession session) {
-        if (email == null || code == null)
+        if (Tools.isNullOrEmp(email, code))
             return ResultCache.failWithMessage("不能为空");
         if (!Tools.isRightPass(password))
             return ResultCache.failWithMessage("密码格式错误");
@@ -222,7 +226,7 @@ public class UserController {
                 Laboratory l = PermissionService.getManagedLab(session, labService);
                 model.setLab(l);
                 role = l == null ? 1 : 2;
-                Student s = (Student)(studentService.getStudentById(uid).getData());
+                Student s = (Student)(studentService.getStudentById(uid, false).getData());
                 model.setStudent(s);
             }
         }
