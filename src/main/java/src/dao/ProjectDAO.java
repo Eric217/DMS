@@ -15,9 +15,12 @@ public interface ProjectDAO {
 
     /** For mapper to create collection type.
      *  @return Simplified Student Object. */
-    // TODO: - 测试 不写这个可以吗 ？？？
-//    @SuppressWarnings("unused")
-//    List<Student> getMembersByProjectId(Long id);
+    List<Student> getMembersByProjectId(Long id); // TODO: - 测试删掉可不可以
+
+    /** 为 modification 写的一个接口*/
+    List<Student> getMembersByIds(String[] ids);
+
+    String getLeaderIdByPid(Long id);
 
     /** 获取一个学生管理的活跃状态的项目 id（一个学生只允许管理一个活跃的项目） */
     Long getActiveProjectIdByLeaderId(String sid);
@@ -28,24 +31,25 @@ public interface ProjectDAO {
     /** 插入一条 participation, sid 参与 pid */
     void addMember(@Param("sid") String sid, @Param("pid") Long pid);
 
-    // these three not impl
+    void removeMember(@Param("sid") String sid, @Param("pid") Long pid);
+
+    void updateOptStatus(@Param("id") Long id, @Param("status") Integer status);
+
+    /** 这里更新的是一些普通属性，不包含开始、结束等状态标志，包含 opt-status */
     void updateProject(Project vo);
 
     void deleteProjectById(Long id);
 
     void updateDeleted(@Param("id") Long id, @Param("newValue") Integer newValue);
 
-//    // 凡是带 fake 后缀的，返回的 project deleted 属性为 0；上面的 皆为获取所有 project
-//    Integer getCount_Fake(@Param("property") String property, @Param("like") String like);
-//
-//    Integer getCount(@Param("property") String property, @Param("like") String like);
-
+    Integer getCountOfLab(Long lid);
 
     /** 获取项目的详细信息 */
     Project getProjectById(Long id);
 
     /** 仅查看一个学生未被删除的项目 */
     List<Project> getProjectsDelByStudentId(String sid);
+
     /** 查看一个学生的所有项目 */
     List<Project> getProjectsAllByStudentId(String sid);
 
@@ -57,6 +61,14 @@ public interface ProjectDAO {
     List<Project> getCanceled(PageRowsMap map);
     List<Project> getComplete(PageRowsMap map);
     List<Project> getOvertime(PageRowsMap map);
+
+    Integer getAllCount();
+    Integer getCreatingCount();
+    Integer getProcessingCount();
+    Integer getRejectedCount();
+    Integer getCanceledCount();
+    Integer getCompleteCount();
+    Integer getOvertimeCount();
 
     // 实验室负责人权限：获取 进行中的项目，待审核的新项目，待处理的请求，实验室所有项目
     List<Project> getProcessingOfLabId(Long lab_id);

@@ -1,6 +1,7 @@
 package src.dao;
 
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import src.model.Laboratory;
 
@@ -21,5 +22,7 @@ public interface LabDAO {
     void updateLab(Laboratory vo);
 
     void deleteLabById(Long id);
+
+    Integer containsProject(@Param("lid") Long lid, @Param("pid") Long pid);
 
 }

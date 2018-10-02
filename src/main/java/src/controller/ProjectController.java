@@ -33,15 +33,25 @@ public class ProjectController {
     LabService labService;
 
 // TODO: - count 在所有 page rows 模式中都需要。有时间再加。
-//    @RequestMapping(value = "/student/project/count", method = RequestMethod.GET)
-//    public Result getCount_s(String property, String like) {
-//        return projectService.getCount(property, like, false);
-//    }
-//
-//    @RequestMapping(value = "/admin/project/count", method = RequestMethod.GET)
-//    public Result getCount_a(String property, String like) {
-//        return projectService.getCount(property, like, true);
-//    }
+    @RequestMapping(value = "/count/lab", method = RequestMethod.GET)
+    public Result getCountLab(Long lab_id, HttpSession session) {
+        if (lab_id == null)
+            return ResultCache.ARG_ERROR;
+        if (!PermissionService.IS_ADMIN(session))
+            if (!PermissionService.IS_MY_LAB(lab_id, session, labService))
+                return ResultCache.PERMISSION_DENIED;
+
+        return projectService.getCountOfLab(lab_id);
+    }
+
+    @RequestMapping(value = "/count/status", method = RequestMethod.GET)
+    public Result getCountAdmin(Integer status, HttpSession session) {
+        if (status == null || status < 0 || status > 6)
+            return ResultCache.ARG_ERROR;
+        if (!PermissionService.IS_ADMIN(session))
+            return ResultCache.PERMISSION_DENIED;
+        return projectService.getAllCountOfStatus(status);
+    }
 
     /** @param vo 具体需要一些 not null 的参数
      *  @param memberIds 以 @ 分割，除 leader 外至少一个人 */
@@ -122,7 +132,7 @@ public class ProjectController {
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public Result getProjectsAdmin(Integer page, Integer rows, Integer status,
                                    HttpSession session) {
-        if (status < 0 || status > 7)
+        if (status == null || status < 0 || status > 6)
             return ResultCache.ARG_ERROR;
         if (!PermissionService.IS_ADMIN(session))
             return ResultCache.PERMISSION_DENIED;
@@ -130,69 +140,65 @@ public class ProjectController {
     }
 
 
-
-    // TODO: - 权限
-    // TODO: - 所有的参数的 null 判断
-
     /* 更新分两种，一种是主动更新，一种是从 modification 中同意
      * 权限：管理员、该项目所在实验室负责人 */
-    /** 主动更新 */
+    /** 主动更新，分好几种，有空再改 */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public Result updateProject(Project vo, HttpSession session) {
-        if (vo == null || vo.getId() == null || Tools.isNullOrEmp(vo.getName(), vo.getAim(),
-                vo.getLab_name()))
+        if (vo == null || vo.getId() == null || !vo.check())
             return ResultCache.ARG_ERROR;
-
+        if (!PermissionService.IS_ADMIN(session)) {
+            Laboratory lab = PermissionService.getManagedLab(session, labService);
+            try {
+                if (lab == null || !labService.containsProject(lab.getId(), vo.getId()))
+                    return ResultCache.PERMISSION_DENIED;
+            } catch (Exception e) {
+                return ResultCache.DATABASE_ERROR;
+            }
+        }
         return projectService.updateProject(vo);
     }
 
-    /** 同意修改 */
-    @RequestMapping(value = "/modify", method = RequestMethod.POST)
-    public Result updateProject(Modification modification) {
-//        if (vo == null || vo.getId() == null || Tools.isNullOrEmp(vo.getName(), vo.getAim(),
-//                vo.getLab_name()))
-//            return ResultCache.ARG_ERROR;
-//
-//        return projectService.updateProject(vo);
-        return null;
-    }
-
-    /** 普通用户删除，实际没有删除，而是更新了一个属性 */
+    /** 普通用户删除，每次只允许删除一个，实际没有删除，而是更新了一个属性 */
     @RequestMapping(value = "/delete/student", method = RequestMethod.POST)
-    public Result updateDeleted(Long id, Integer newValue) {
-        Set<Long> s = new HashSet<>();
-        s.add(id);
-        return projectService.updateDeleted(s, newValue);
-    }
-    /** 删除多个，参数样式：233@445@663 的字符串 */
-    @RequestMapping(value = "/student/project/multi_delete", method = RequestMethod.POST)
-    public Result updateDeleted_m(String ids, Integer newValue) {
-        Set<Long> s; s = new HashSet<>();
-
-        String[] arr = ids.split("@");
-        for (String id: arr) {
-            if (!id.isEmpty())
-                s.add(Long.parseLong(id));
+    public Result updateDeleted(Long pid, Integer newValue, HttpSession session) {
+        if (pid == null)
+            return ResultCache.ARG_ERROR;
+        if (newValue == null)
+            newValue = 1;
+        if (!PermissionService.IS_ADMIN(session)) {
+            if (newValue == 0)
+                return ResultCache.PERMISSION_DENIED;
+            String sid = PermissionService.SID(session);
+            String lid = projectService.getLeaderIdByPid(pid);
+            if (StringUtils.isNullOrEmpty(lid))
+                return ResultCache.ARG_ERROR;
+            if (sid == null || !sid.equals(lid))
+                return ResultCache.PERMISSION_DENIED;
         }
+        Set<Long> s = new HashSet<>();
+        s.add(pid);
         return projectService.updateDeleted(s, newValue);
     }
 
-    /** 按照 id 删除一个项目 */
-    @RequestMapping(value = "/admin/project/delete", method = RequestMethod.POST)
-    public Result delete(Long id) {
-        Set<Long> s = new HashSet<>();
-        s.add(id);
-        return projectService.deleteProjects(s);
-    }
+    /** 实验室负责人、管理员删除多个，ids 以 @ 分隔 */
+    @RequestMapping(value = "/delete", method = RequestMethod.POST)
+    public Result delete_multi(String ids, HttpSession session) {
+        if (StringUtils.isNullOrEmpty(ids))
+            return ResultCache.ARG_ERROR;
+        Set<Long> s = Tools.split_to_long(ids, "@", null);
 
-    /** 删除多个，参数样式：233|445|663 的字符串 */
-    @RequestMapping(value = "/admin/project/multi_delete", method = RequestMethod.POST)
-    public Result delete_m(String ids) {
-        Set<Long> s; s = new HashSet<>();
-        String[] arr = ids.split("|");
-        for (String id: arr) {
-            if (!id.isEmpty())
-                s.add(Long.parseLong(id));
+        if (!PermissionService.IS_ADMIN(session)) {
+            Laboratory lab = PermissionService.getManagedLab(session, labService);
+            if (lab == null)
+                return ResultCache.PERMISSION_DENIED;
+            try {
+                for (Long pid : s)
+                    if (!labService.containsProject(lab.getId(), pid))
+                        return ResultCache.PERMISSION_DENIED;
+            } catch (Exception e) {
+                return ResultCache.DATABASE_ERROR;
+            }
         }
         return projectService.deleteProjects(s);
     }

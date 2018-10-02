@@ -81,9 +81,20 @@ public class StudentService {
 
     public Result getStudentById(String id, Boolean full) {
         try {
-            Student s = full ? studentDAO.getStudentById(id)
-                             : studentDAO.getMinStudentById(id);
-            return ResultCache.getDataOk(s);
+            if (full)
+                return ResultCache.getDataOk(studentDAO.getStudentById(id));
+            String[] arr = {id};
+            return ResultCache.getDataOk(
+                    studentDAO.getMinStudentByIds(arr).stream().findAny().orElseThrow());
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
+        }
+    }
+
+    public Result getStudentByIds(String[] ids) {
+        try {
+            List<Student> list = studentDAO.getMinStudentByIds(ids);
+            return ResultCache.getDataOk(list);
         } catch (Exception e) {
             return ResultCache.DATABASE_ERROR;
         }

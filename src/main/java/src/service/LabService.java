@@ -13,6 +13,10 @@ public class LabService {
     @Autowired
     LabDAO labDAO;
 
+    public boolean containsProject(Long lid, Long pid) {
+        return (labDAO.containsProject(lid, pid) != 0);
+    }
+
     Result getLabByLeaderId(String sid) {
         try {
             return ResultCache.getDataOk(labDAO.getLabByLeaderId(sid));

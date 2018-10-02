@@ -1,5 +1,7 @@
 package src.eric;
 
+import com.mysql.cj.util.StringUtils;
+
 import javax.servlet.http.Cookie;
 import java.awt.*;
 import java.io.IOException;
@@ -69,19 +71,23 @@ public class Tools {
                     Long l = Long.parseLong(element);
                     if (!l.equals(exclude))
                         set.add(l);
-                } catch (Exception e) {
-                    continue;
-                }
+                } catch (Exception ignored) {}
             }
         return set;
     }
 
-    public static <T> T anyObject(Set<T> set) {
-        if (set == null || set.size() == 0)
-            return null;
-        return set.stream().findFirst().orElse(null);
+    public static String[] toArray(Set<String> set) {
+        if (set == null)
+            return new String[0];
+        int s = set.size();
+        String[] arr = new String[s];
+        int c = 0;
+        for (String ele: set) {
+            arr[c] = ele;
+            c++;
+        }
+        return arr;
     }
-
 
     public static String createRandomNum(int bits){
         String randomNumStr = "";

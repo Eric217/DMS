@@ -28,9 +28,12 @@
         from student where id = #{id};
     </select>
 
-    <select id="getMinStudentById" parameterType="string"
+    <select id="getMinStudentByIds"
             resultType="src.model.Student">
-        select id, name from student where id = #{id};
+        select id, name from student where id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
     </select>
 
     <select id="getAllSplit" resultType="src.model.Student"

@@ -22,8 +22,9 @@ public interface StudentDAO {
 
     Student getStudentById(String id);
 
-    /** 这个接口设置的目的只有一个，就是查询登陆用户类型。需要更多信息直接改 mapper */
-    Student getMinStudentById(String id);
+    /** 这个接口只返回 id name。需要更多信息直接改 mapper
+     *  我是真的不想用动态 SQL 。。。  */
+    List<Student> getMinStudentByIds(String[] ids);
 
     List<Student> getAllSplit(PageRowsMap map);
 

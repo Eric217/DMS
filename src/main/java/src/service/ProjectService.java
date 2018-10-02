@@ -20,6 +20,14 @@ public class ProjectService {
     @Autowired
     ProjectDAO projectDAO;
 
+    public String getLeaderIdByPid(Long pid) {
+        try {
+            return projectDAO.getLeaderIdByPid(pid);
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
     @Transactional
     public Result insert(Project vo, Set<String> sids) {
         try {
@@ -98,7 +106,7 @@ public class ProjectService {
 
             if (s == S_ALL) {
                 list = projectDAO.getAllSplit(map);
-            } else if (s == S_CREATING || s == S_REQUESTING) {
+            } else if (s == S_CREATING) {
                 list = projectDAO.getCreating(map);
             } else if (s == S_REJECTED) {
                 list = projectDAO.getRejected(map);
@@ -119,37 +127,71 @@ public class ProjectService {
         }
     }
 
+    public Result getCountOfLab(Long lab_id) {
+        try {
+            return ResultCache.getDataOk(projectDAO.getCountOfLab(lab_id));
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
+        }
+    }
 
-//    public Result getCount(String prop, String like, Boolean viewDeleted) {
-//        Integer count = viewDeleted
-//                ? projectDAO.getCount(prop, like)
-//                : projectDAO.getCount_Fake(prop, like);
-//        return ResultCache.getDataOk(count);
-//    }
-
+    public Result getAllCountOfStatus(Integer status) {
+        try {
+            int s = status, r = 0;
+            if (s == S_ALL) {
+                r = projectDAO.getAllCount();
+            } else if (s == S_CREATING) {
+                r = projectDAO.getCreatingCount();
+            } else if (s == S_REJECTED) {
+                r = projectDAO.getRejectedCount();
+            } else if (s == S_PROCESSING) {
+                r = projectDAO.getProcessingCount();
+            } else if (s == S_CANCELED) {
+                r = projectDAO.getCanceledCount();
+            } else if (s == S_COMPLETE) {
+                r = projectDAO.getCompleteCount();
+            } else if (s == S_OVERTIME) {
+                r = projectDAO.getOvertimeCount();
+            }
+            return ResultCache.getDataOk(r);
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
+        }
+    }
 
     public Result updateProject(Project vo) {
-        projectDAO.updateProject(vo);
-        return ResultCache.OK;
+        try {
+            projectDAO.updateProject(vo);
+            return ResultCache.OK;
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
+        }
     }
 
     @Transactional
     public Result updateDeleted(Set<Long> ids, Integer newValue) {
         if (newValue > 1) newValue = 1;
         if (newValue < 0) newValue = 0;
-        for (Long id: ids) {
-            projectDAO.updateDeleted(id, newValue);
+        try {
+            for (Long id: ids) {
+                projectDAO.updateDeleted(id, newValue);
+            }
+            return ResultCache.OK;
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
         }
-        return ResultCache.OK;
     }
 
     @Transactional
     public Result deleteProjects(Set<Long> ids) {
-        for (Long id: ids) {
-            projectDAO.deleteProjectById(id);
+        try {
+            for (Long id: ids) {
+                projectDAO.deleteProjectById(id);
+            }
+            return ResultCache.OK;
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
         }
-        return ResultCache.OK;
     }
-
 
 }

@@ -11,6 +11,12 @@
         where leader_id = #{sid};
     </select>
 
+    <select id="containsProject" resultType="java.lang.Integer">
+        select count(1) from project
+        where id = #{pid}
+          and lab_name = (select name from laboratory where id = #{lid})
+    </select>
+
     <select id="getLabById" parameterType="java.lang.Long"
             resultType="src.model.Laboratory">
         select * from laboratory where id = #{id};

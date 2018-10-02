@@ -6,16 +6,10 @@ import src.model.Modification;
 @Repository
 public interface ModificationDAO {
 
+    Modification getModByProjectId(Long id);
 
-    Modification getModifiByLeaderId(String sid);
+    void insertModification(Modification vo);
 
-    Modification getModifiById(Long id);
+    void deleteModById(Long id);
 
-    void insertModifi(Modification vo);
-
-    void updateModifi(Modification vo);
-
-    void deleteModifiById(Long id);
-    
-    
 }

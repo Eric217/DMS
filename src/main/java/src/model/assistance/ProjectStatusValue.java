@@ -8,5 +8,5 @@ public interface ProjectStatusValue {
     int S_CANCELED = 4;
     int S_COMPLETE = 5;
     int S_OVERTIME = 6;
-    int S_REQUESTING = 7; // 实验室管理员看的
+    int S_REQUESTING = 7; // 实验室管理员看的, admin 不看
 }
