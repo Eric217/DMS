@@ -175,10 +175,9 @@ public class ProjectController {
                 return ResultCache.ARG_ERROR;
             if (sid == null || !sid.equals(lid))
                 return ResultCache.PERMISSION_DENIED;
+            // TODO: - 判断项目状态，只有非活跃状态的才可以"删除"
         }
-        Set<Long> s = new HashSet<>();
-        s.add(pid);
-        return projectService.updateDeleted(s, newValue);
+        return projectService.updateDeleted(Tools.toSet(pid), newValue);
     }
 
     /** 实验室负责人、管理员删除多个，ids 以 @ 分隔 */

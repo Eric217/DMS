@@ -20,8 +20,6 @@ public class Tools {
         if (email == null || email.isEmpty())
             return false;
 
-
-
         // 要求：只有一个 @ 符号
         return true;
     }
@@ -57,6 +55,13 @@ public class Tools {
             if (!element.isEmpty() && !element.equals(exclude))
                 set.add(element);
         }
+        return set;
+    }
+
+    public static <T> HashSet<T> toSet(T obj) {
+        HashSet<T> set = new HashSet<>();
+        if (obj != null)
+            set.add(obj);
         return set;
     }
 

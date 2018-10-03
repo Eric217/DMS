@@ -26,7 +26,7 @@ public interface ProjectDAO {
     Long getActiveProjectIdByLeaderId(String sid);
 
     /** 获取最大 pid */
-    Long getMaxProjectId();
+//    Long getMaxProjectId();
 
     /** 插入一条 participation, sid 参与 pid */
     void addMember(@Param("sid") String sid, @Param("pid") Long pid);

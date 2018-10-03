@@ -13,7 +13,7 @@ public class ResultCache {
     }
 
     public static Result failWithMessage(String message) {
-        return new Result(ResultStatusValues.V_FAILURE,message);
+        return new Result(ResultStatusValues.V_FAILURE, message);
     }
 
     public static final Result DATABASE_ERROR =

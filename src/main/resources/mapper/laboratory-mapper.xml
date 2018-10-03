@@ -7,7 +7,7 @@
     <!-- min -->
     <select id="getLabByLeaderId" parameterType="string"
             resultType="src.model.Laboratory">
-        select id, name, leader_id from laboratory
+        select id, name, leader_id, create_time from laboratory
         where leader_id = #{sid};
     </select>
 

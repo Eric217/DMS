@@ -27,7 +27,7 @@ create table if not exists notification
   type varchar(20) default '' null,
   content varchar(140) not null,
   `from` varchar(20) default '' null,
-  time timestamp not null
+  time timestamp default CURRENT_TIMESTAMP not null
 )
   ENGINE=InnoDB DEFAULT CHARSET=utf8
 ;

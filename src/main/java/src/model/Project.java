@@ -6,9 +6,11 @@ import src.eric.Tools;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import static src.eric.Constant.ProjectType;
+import static src.model.assistance.ProjectStatusValue.*;
 
 @Data
 @NoArgsConstructor
@@ -44,6 +46,23 @@ public class Project implements Serializable {
                 b = true; break;}
 
         return b && duration >= 15 * 24 * 3600 && duration <= 120 * 24 * 3600;
+    }
+
+    public int status() {
+        if (start_time == null && opt_status != 2)
+            return S_CREATING;
+        if (opt_status == 2)
+            return S_REJECTED;
+        if (opt_status == 4)
+            return S_CANCELED;
+        if (end_time != null)
+            return S_COMPLETE;
+        if (start_time.getTime() + duration*1000 > System.currentTimeMillis()) {
+            if (opt_status == 3 || opt_status == 5)
+                return S_REQUESTING;
+            return S_PROCESSING;
+        }
+        return S_OVERTIME;
     }
 
 }

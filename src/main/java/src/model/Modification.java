@@ -1,8 +1,11 @@
 package src.model;
 
 import lombok.Data;
+import src.eric.Tools;
 
 import java.util.List;
+
+import static src.eric.Constant.ProjectType;
 
 @Data
 public class Modification {
@@ -26,4 +29,15 @@ public class Modification {
     /** 非数据库属性，为了返回给客户端时方便看到成员名字 */
     private List<Student> member_list;
 
+    public boolean check() {
+        if (Tools.isNullOrEmp(name, aim, type, members))
+            return false;
+
+        boolean b = false;
+        for (String i: ProjectType)
+            if (type.equals(i)) {
+                b = true; break;}
+
+        return b && duration >= 15 * 24 * 3600 && duration <= 120 * 24 * 3600;
+    }
 }

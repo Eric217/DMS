@@ -10,6 +10,13 @@
         where pid = #{id};
     </select>
 
+    <select id="getProjectForModificationById" resultType="src.model.Project"
+            parameterType="java.lang.Long">
+        select id, name, lab_name, opt_status, start_time, end_time, duration, submit_time,
+               leader_id from project
+        where id = #{id};
+    </select>
+
     <insert id="insertModification" parameterType="src.model.Modification">
         insert into modification (pid, name, description, duration, coach_id, opt_status,
                                   leader_id, aim, type, members)

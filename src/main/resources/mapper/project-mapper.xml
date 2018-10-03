@@ -46,7 +46,8 @@
 
     <!-- 一个 insert 服务需要四个 DAO 接口 -->
     <!-- insert marco -->
-    <insert id="insertProject" parameterType="src.model.Project">
+    <insert id="insertProject" keyProperty="id" useGeneratedKeys="true"
+            parameterType="src.model.Project">
         insert into project(name, description, duration, coach_id,
                             lab_name, leader_id, aim, type)
         values (#{name}, #{description}, #{duration}, #{coach_id},
@@ -74,9 +75,9 @@
     </select>
 
     <!-- 获取最大 pid -->
-    <select id="getMaxProjectId" resultType="java.lang.Long">
-        select max(id) from project;
-    </select>
+    <!--<select id="getMaxProjectId" resultType="java.lang.Long">-->
+        <!--select max(id) from project;-->
+    <!--</select>-->
     <!-- /insert -->
 
     <!-- 根据 pid 查询项目 -->
@@ -281,7 +282,7 @@
         <result property="type" column="type"/>
         <!--<result property="description" column="description"/>-->
         <!--<result property="aim" column="aim"/>-->
-        <!--<result property="deleted" column="deleted"/>-->
+        <result property="deleted" column="deleted"/>
         <collection property="members" column="id" select="getMembersByProjectId"/>
     </resultMap>
 

@@ -48,11 +48,11 @@ public class PermissionService {
         return lab != null && lab.getId().equals(lab_id);
     }
 
-    public static boolean IS_MY_LAB_PROJ(Long pid, HttpSession session, LabService service) {
-        Laboratory lab = getManagedLab(session, service);
-        if (lab == null) return false;
-        return true;
-    }
+//    public static boolean IS_MY_LAB_PROJ(Long pid, HttpSession session, LabService service) {
+//        Laboratory lab = getManagedLab(session, service);
+//        if (lab == null) return false;
+//        return true;
+//    }
 
     /** @return 已登陆用户当前管理的实验室, nullable */
     public static Laboratory getManagedLab(HttpSession session, LabService labService) {

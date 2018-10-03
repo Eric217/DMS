@@ -7,8 +7,52 @@
     <select id="getNotificationsBySid" parameterType="string"
             resultType="src.model.Notification">
         select * from notification
-        where id in (select nid from notify where sid=#{sid})
+        where id in (select nid from notify where sid = #{sid})
     </select>
 
+    <select id="getNotificationIdsBySid" parameterType="string"
+            resultType="java.lang.Long">
+        select distinct nid from notify
+        where sid = #{sid};
+    </select>
+
+    <select id="getUnreadCountOfNoti" parameterType="java.lang.Long"
+            resultType=" = java.lang.Integer">
+        select count(1) from notify
+        where nid = #{nid};
+    </select>
+
+    <insert id="insertNotification" keyProperty="id" useGeneratedKeys="true"
+            parameterType="src.model.Notification">
+        insert into notification(type, content, `from`)
+        values (#{type}, #{content}, #{from});
+    </insert>
+
+    <insert id="notify">
+        insert into notify(nid, sid)
+        VALUES (#{nid}, #{sid});
+    </insert>
+
+    <delete id="deleteNotify">
+        delete from notify
+        where nid = #{nid} and sid = #{sid};
+    </delete>
+
+    <delete id="deleteNotiById" parameterType="java.lang.Long">
+        delete from notification
+        where id = #{nid};
+    </delete>
+
+
+
+
+
+
+
+
+    <select id="getLabLeaderIdByLabName" resultType="string" parameterType="string">
+        select leader_id from laboratory
+        where name = #{labName};
+    </select>
 
 </mapper>

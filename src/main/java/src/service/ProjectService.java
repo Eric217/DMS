@@ -7,6 +7,7 @@ import src.base.Result;
 import src.base.ResultCache;
 import src.dao.ProjectDAO;
 import src.model.Project;
+import src.model.assistance.NotificationCache;
 import src.model.assistance.PageRowsMap;
 
 import java.util.List;
@@ -19,6 +20,10 @@ public class ProjectService {
 
     @Autowired
     ProjectDAO projectDAO;
+
+    /** 通知服务应该耦合在这里吗？？？ 还是在控制器层写。。。 */
+    @Autowired
+    NotificationService notificationService;
 
     public String getLeaderIdByPid(Long pid) {
         try {
@@ -35,15 +40,19 @@ public class ProjectService {
             Long pid = projectDAO.getActiveProjectIdByLeaderId(vo.getLeader_id());
             if (pid != null)
                 return ResultCache.failWithMessage("同一时间只能管理一个进行中的项目");
-            pid = projectDAO.getMaxProjectId();
-            if (pid == null) pid = 0L;
-            pid ++;
-            vo.setId(pid);
-            projectDAO.insertProject(vo);
-
+            // TODO: - 检查 sid、lid 是否在 punish 期内
+            projectDAO.insertProject(vo); // 如果 lab_name 不合法这里会捕获异常
+            pid = vo.getId();
+            System.out.println("inserted pid = " + pid);
             for (String sid : sids)
                 projectDAO.addMember(sid, pid);
             projectDAO.addMember(vo.getLeader_id(), pid);
+
+            // 通知成员已加入项目
+            notificationService._notifyMembersByIds(sids, NotificationCache.CREATE_P_MEM);
+            // 通知实验室负责人审核
+            notificationService._notifyLabLeaderOfLabName(vo.getLab_name(),
+                    NotificationCache.CREATE_P_LAB(vo.getLeader_id()));
             return ResultCache.OK;
         } catch (Exception e) {
             return ResultCache.DATABASE_ERROR;
@@ -173,9 +182,8 @@ public class ProjectService {
         if (newValue > 1) newValue = 1;
         if (newValue < 0) newValue = 0;
         try {
-            for (Long id: ids) {
+            for (Long id: ids)
                 projectDAO.updateDeleted(id, newValue);
-            }
             return ResultCache.OK;
         } catch (Exception e) {
             return ResultCache.DATABASE_ERROR;
