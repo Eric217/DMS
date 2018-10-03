@@ -14,8 +14,9 @@ var API = {
     logout:         BASE_URL + "/user/logout",
 
     // student
-    get_project:    BASE_URL + "/student/project/all",
-    create_proj:    BASE_URL + "/student/project/create",
+    get_my_project: BASE_URL + "/project/student/all",
+    get_sb_project: BASE_URL + "/project/student/all/admin",
+    create_project: BASE_URL + "/project/create",
     get_my_managed: BASE_URL + "/student/project/managed",
     get_noti:       BASE_URL + "/noti/get",
     get_bull:       BASE_URL + "/bulletin/all",

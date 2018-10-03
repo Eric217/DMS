@@ -9,7 +9,6 @@ import src.dao.ModificationDAO;
 import src.dao.ProjectDAO;
 import src.eric.Tools;
 import src.model.Modification;
-import src.model.Notification;
 import src.model.Project;
 import src.model.Student;
 import src.model.assistance.NotificationCache;
@@ -21,8 +20,6 @@ import java.util.Set;
 
 @Service
 public class ModificationService {
-
-    // TODO: - 发通知
 
     @Autowired
     ModificationDAO modificationDAO;
@@ -93,18 +90,18 @@ public class ModificationService {
             p.setOpt_status(mod.getOpt_status() == 4 ? 4 : 0);
             projectDAO.updateProject(p);
 
-            Set<String> updated_noti = Tools.toSet(p.getLeader_id());
-            Set<String> added_noti = new HashSet<>();
-            Set<String> remove_noti = new HashSet<>();
-
             List<Student> oldMems = p.getMembers();
             List<String> oldMemIds = new ArrayList<>();
             for (Student s: oldMems) {
                 if (!s.getId().equals(p.getLeader_id()))
                     oldMemIds.add(s.getId());
             }
-            HashSet<String> newMemIds = Tools.split(mod.getMembers(), "@",
-                    mod.getLeader_id());
+            HashSet<String> newMemIds = Tools.split(mod.getMembers(), "@", p.getLeader_id());
+
+            Set<String> updated_noti = Tools.toSet(p.getLeader_id());
+            Set<String> added_noti = new HashSet<>();
+            Set<String> remove_noti = new HashSet<>();
+
             for (String sid: newMemIds) {
                 boolean removed = false;
                 for (int i = 0; i < oldMemIds.size(); i++) {
@@ -119,7 +116,6 @@ public class ModificationService {
                     added_noti.add(sid);
                 }
             }
-
             for (String oldId: oldMemIds) {
                 projectDAO.removeMember(oldId, pid);
                 remove_noti.add(oldId);

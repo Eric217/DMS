@@ -30,7 +30,7 @@ public class Modification {
     private List<Student> member_list;
 
     public boolean check() {
-        if (Tools.isNullOrEmp(name, aim, type, members))
+        if (Tools.isNullOrEmp(name, aim, type, members, leader_id))
             return false;
 
         boolean b = false;

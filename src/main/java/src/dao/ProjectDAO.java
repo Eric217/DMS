@@ -40,7 +40,7 @@ public interface ProjectDAO {
 
     void deleteProjectById(Long id);
 
-    void updateDeleted(@Param("id") Long id, @Param("newValue") Integer newValue);
+    Integer updateDeleted(@Param("id") Long id, @Param("newValue") Integer newValue);
 
     Integer getCountOfLab(Long lid);
 

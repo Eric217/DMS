@@ -37,7 +37,7 @@ jQuery(function($) {
             alert("每个项目最少二人");
         }
 
-        $.post(API.create_proj, loginModel, function (data) {
+        $.post(API.create_project, loginModel, function (data) {
             alert(data.message);
             if (data.status === 200) {
                 location.href = "/lab/index_l.html";

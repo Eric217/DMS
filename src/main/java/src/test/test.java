@@ -1,8 +1,6 @@
-package src.urgent;
+package src.test;
 
 import src.eric.Tools;
-
-import java.sql.Connection;
 
 public class test {
     public static void main(String[] args) {

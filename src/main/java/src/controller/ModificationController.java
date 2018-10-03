@@ -42,12 +42,14 @@ public class ModificationController {
         if (p == null)
             return ResultCache.failWithMessage("原项目不存在或读取数据库失败");
         if (!PermissionService.IS_ADMIN(session))
-            if (StringUtils.isNullOrEmpty(p.getLeader_id()) || !p.getLeader_id()
-                        .equals(PermissionService.SID(session)))
+            if (StringUtils.isNullOrEmpty(p.getLeader_id())
+                    || !p.getLeader_id().equals(PermissionService.SID(session)))
                 return ResultCache.PERMISSION_DENIED;
         if (p.status() != ProjectStatusValue.S_PROCESSING)
             return ResultCache.failWithMessage("项目当前状态不可提交修改");
-
+        if (Tools.split(modification.getMembers(), "@", p.getLeader_id()).size() == 0)
+            return ResultCache.ARG_ERROR;
+        modification.setLeader_id(p.getLeader_id());
         return modificationService.insert(modification, p);
     }
 
@@ -62,7 +64,7 @@ public class ModificationController {
         return modificationService.getModificationByPid(pid);
     }
 
-    /** 管理员有可能修改了 modification 后点击同意，因此 */
+
     @RequestMapping(value = "/agree", method = RequestMethod.POST)
     public Result execModification(Long pid, HttpSession session) {
 

@@ -6,10 +6,14 @@ import org.springframework.transaction.annotation.Transactional;
 import src.base.Result;
 import src.base.ResultCache;
 import src.dao.ProjectDAO;
+import src.eric.Tools;
 import src.model.Project;
+import src.model.Student;
 import src.model.assistance.NotificationCache;
 import src.model.assistance.PageRowsMap;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -168,9 +172,50 @@ public class ProjectService {
         }
     }
 
-    public Result updateProject(Project vo) {
+    @Transactional
+    public Result updateProject(Project p, Set<String> newMemIds, Boolean notify) {
         try {
-            projectDAO.updateProject(vo);
+            projectDAO.updateProject(p);
+
+            List<Student> oldMems = projectDAO.getMembersByProjectId(p.getId());
+            List<String> oldMemIds = new ArrayList<>();
+            for (Student s: oldMems) {
+                if (!s.getId().equals(p.getLeader_id()))
+                    oldMemIds.add(s.getId());
+            }
+
+            Set<String> updated_noti = notify ? Tools.toSet(p.getLeader_id()) : null;
+            Set<String> added_noti = notify ? new HashSet<>() : null;
+            Set<String> remove_noti = notify ? new HashSet<>() : null;
+
+            for (String sid: newMemIds) {
+                boolean removed = false;
+                for (int i = 0; i < oldMemIds.size(); i++) {
+                    if (oldMemIds.get(i).equals(sid)) { // old preserved mem
+                        if (notify)
+                           updated_noti.add(sid);
+                        oldMemIds.remove(i);
+                        removed = true; break;
+                    }
+                }
+                if (!removed) { // new participation
+                    projectDAO.addMember(sid, p.getId());
+                    if (notify)
+                        added_noti.add(sid);
+                }
+            }
+
+            for (String oldId: oldMemIds) {
+                projectDAO.removeMember(oldId, p.getId());
+                if (notify)
+                   remove_noti.add(oldId);
+            }
+            if (notify) {
+                notificationService._notifyMembersByIds(updated_noti, NotificationCache.UPDATED);
+                notificationService._notifyMembersByIds(added_noti,
+                        NotificationCache.CREATE_P_MEM);
+                notificationService._notifyMembersByIds(remove_noti, NotificationCache.QUIT_P);
+            }
             return ResultCache.OK;
         } catch (Exception e) {
             return ResultCache.DATABASE_ERROR;
@@ -182,8 +227,12 @@ public class ProjectService {
         if (newValue > 1) newValue = 1;
         if (newValue < 0) newValue = 0;
         try {
-            for (Long id: ids)
-                projectDAO.updateDeleted(id, newValue);
+            for (Long id: ids) {
+                int u = projectDAO.updateDeleted(id, newValue);
+                if (u == 1) {
+                    // TODO: - 通知所有成员已删除。还要考虑真删时候的通知
+                }
+            }
             return ResultCache.OK;
         } catch (Exception e) {
             return ResultCache.DATABASE_ERROR;

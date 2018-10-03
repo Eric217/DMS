@@ -1,6 +1,5 @@
 package src.model.assistance;
 
-import src.eric.Constant;
 import src.model.Notification;
 
 import static src.eric.Constant.NotificationType;

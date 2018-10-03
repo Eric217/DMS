@@ -32,7 +32,7 @@ public class ProjectController {
     @Autowired
     LabService labService;
 
-// TODO: - count 在所有 page rows 模式中都需要。有时间再加。
+    /** 权限：admin，或自己的实验室 */
     @RequestMapping(value = "/count/lab", method = RequestMethod.GET)
     public Result getCountLab(Long lab_id, HttpSession session) {
         if (lab_id == null)
@@ -65,7 +65,7 @@ public class ProjectController {
         if (vo == null)
             return ResultCache.ARG_ERROR;
         vo.setLeader_id(sid);
-        if (!vo.check())
+        if (!vo.check() || vo.getLab_name() == null)
             return ResultCache.failWithMessage("必要信息不能为空或格式错误");
         HashSet<String> sids = Tools.split(memberIds, "@", sid);
         if (sids.size() == 0)
@@ -139,12 +139,12 @@ public class ProjectController {
         return projectService.getProjectsAdmin(page==null ?1:page, rows==null ?10:rows, status);
     }
 
-
     /* 更新分两种，一种是主动更新，一种是从 modification 中同意
      * 权限：管理员、该项目所在实验室负责人 */
-    /** 主动更新，分好几种，有空再改 */
+    /** 主动更新，分好几种，有空再改；不允许更改所在实验室、项目组长 */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    public Result updateProject(Project vo, HttpSession session) {
+    public Result updateProject(Project vo, String memberIds, Boolean notify,
+                                HttpSession session) {
         if (vo == null || vo.getId() == null || !vo.check())
             return ResultCache.ARG_ERROR;
         if (!PermissionService.IS_ADMIN(session)) {
@@ -156,7 +156,13 @@ public class ProjectController {
                 return ResultCache.DATABASE_ERROR;
             }
         }
-        return projectService.updateProject(vo);
+        if (notify == null)
+            notify = false;
+        Set<String> set = Tools.split(memberIds, "@",
+                projectService.getLeaderIdByPid(vo.getId()));
+        if (set.size() == 0)
+            return ResultCache.ARG_ERROR;
+        return projectService.updateProject(vo, set, notify);
     }
 
     /** 普通用户删除，每次只允许删除一个，实际没有删除，而是更新了一个属性 */

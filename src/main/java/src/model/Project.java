@@ -37,7 +37,7 @@ public class Project implements Serializable {
     private List<Student> members;
 
     public boolean check() {
-        if (Tools.isNullOrEmp(name, aim, lab_name, type))
+        if (Tools.isNullOrEmp(name, aim, type))
             return false;
 
         boolean b = false;

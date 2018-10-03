@@ -52,7 +52,7 @@ public class Tools {
         if (exclude == null)
             exclude = "";
         for (String element: arr) {
-            if (!element.isEmpty() && !element.equals(exclude))
+            if (!element.trim().isEmpty() && !element.equals(exclude))
                 set.add(element);
         }
         return set;

@@ -36,10 +36,7 @@ public class NotificationService {
     @Transactional
     public Result notifyStudentsByIds(Set<String> sids, Notification vo) {
         try {
-            notificationDAO.insertNotification(vo);
-            Long nid = vo.getId();
-            for (String sid : sids)
-                notificationDAO.notify(sid, nid);
+            _notifyMembersByIds(sids, vo);
             return ResultCache.OK;
         } catch (Exception e) {
             return ResultCache.DATABASE_ERROR;
@@ -48,10 +45,12 @@ public class NotificationService {
 
     // in package:
     void _notifyMembersByIds(Set<String> sids, Notification vo) {
-        notificationDAO.insertNotification(vo);
-        Long nid = vo.getId();
-        for (String sid : sids)
-            notificationDAO.notify(sid, nid);
+        if (sids.size() > 0) {
+            notificationDAO.insertNotification(vo);
+            Long nid = vo.getId();
+            for (String sid : sids)
+                notificationDAO.notify(sid, nid);
+        }
     }
     void _notifyLabLeaderOfLabName(String lab_name, Notification vo) {
         String l_sid = notificationDAO.getLabLeaderIdByLabName(lab_name);
