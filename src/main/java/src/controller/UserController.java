@@ -93,7 +93,7 @@ public class UserController {
             boolean b2 = last_req != null &&
                     last_req.getTime() + 1000 * MailService.expires_seconds >= now.getTime();
             boolean b3 = code.equals(session.getAttribute(S_VERI_CODE));
-            boolean b4 = session.getAttribute(S_VERI_TYPE).equals(Constant.REGISTER);
+            boolean b4 = Constant.REGISTER.equals(session.getAttribute(S_VERI_TYPE));
             if (!(b1 && b2 && b4))
                 return ResultCache.failWithMessage("验证码已过期，请重新发送");
             if (!b3)
@@ -161,7 +161,7 @@ public class UserController {
         boolean b2 = last_req != null &&
                 last_req.getTime()+1000*MailService.expires_seconds >= now.getTime();
         boolean b3 = code.equals(session.getAttribute(S_VERI_CODE));
-        boolean b4 = session.getAttribute(S_VERI_TYPE).equals(Constant.RESET_PASSWORD);
+        boolean b4 = Constant.RESET_PASSWORD.equals(session.getAttribute(S_VERI_TYPE));
         if (!(b1 && b2 && b4))
             return ResultCache.failWithMessage("验证码已过期，请重新发送");
         if (!b3)
@@ -266,11 +266,6 @@ public class UserController {
             g.drawString(String.valueOf(strCode.charAt(i)), single_w*i+len, 28);
         }
         g.dispose();
-
-        //设置response头信息
-//        response.setHeader("Pragma", "No-cache");
-//        response.setHeader("Cache-Control", "no-cache");
-//        response.setDateHeader("Expires", 0);
 
         session.setAttribute(S_VERI_IMG, strCode);
 

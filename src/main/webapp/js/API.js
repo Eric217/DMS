@@ -1,6 +1,17 @@
 
 var BASE_URL = "http://localhost:8080";
 
+var REQ = function (type, data, url, before, complete, success) {
+    $.ajax({
+        type: type,
+        data: data,
+        url: url,
+        beforeSend: before,
+        success: success,
+        complete: complete
+    });
+};
+
 var API = {
 
     // common user:
@@ -19,7 +30,7 @@ var API = {
     create_project: BASE_URL + "/project/create",
     get_my_managed: BASE_URL + "/student/project/managed",
     get_noti:       BASE_URL + "/noti/get",
-    get_bull:       BASE_URL + "/bulletin/all",
+    get_bull:       BASE_URL + "/bulletin/get",
 
 
     // admin

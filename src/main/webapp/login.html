@@ -44,14 +44,14 @@
         <script src="js/common.js"></script>
 		<script>
             function check_login() {
+
                 $.get(API.login_type, function (data) {
+
                     var u_t = data.data.role;
-                    if (u_t === ROLE.no_user)
+                    if (u_t === undefined || u_t === ROLE.no_user)
                         return;
-                    userInfo.role = u_t;
-                    userInfo.user = data.data.student;
-                    userInfo.lab = data.data.lab;
-                    jump(u_t);
+                    location.href = "/normal/index.html";
+
                 });
             }
 		</script>
@@ -68,7 +68,7 @@
 							<div class="center">
 								<h1>
 									<div class="pic" onclick="gotoSDU()"></div><br>
-									<span class="red">实验室项目管理系统</span>
+									<span class="blue" id="id-title-text">实验室项目管理系统</span>
 								</h1>
 								<h4 class="blue" id="id-company-text">&copy; SDU LAB</h4>
 							</div>
@@ -146,7 +146,8 @@
 														</label>
 
 														<button type="button" id="login-button"
-																class="width-45 pull-right btn btn-sm btn-primary" style="right: 5px;">
+																class="width-45 pull-right btn btn-sm btn-primary"
+																style="right: 5px;">
 															<i class="ace-icon fa fa-key"></i>
 															<span class="bigger-110">Login</span>
 														</button>
@@ -382,12 +383,14 @@
 			});
 		</script>
 
+		<!-- button clicks -->
         <script src="js/login_register.js"></script>
 
+		<!-- initialize page, independent -->
         <script>
-
             $('body').attr('class', 'login-layout light-login');
             $('#id-company-text').attr('class', 'blue');
+            $('#id-title-text').attr('class', 'blue');
             refreshCode();
 		</script>
 

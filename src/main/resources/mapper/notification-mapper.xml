@@ -17,7 +17,7 @@
     </select>
 
     <select id="getUnreadCountOfNoti" parameterType="java.lang.Long"
-            resultType=" = java.lang.Integer">
+            resultType="java.lang.Integer">
         select count(1) from notify
         where nid = #{nid};
     </select>

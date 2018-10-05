@@ -1,53 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-	<meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+    <meta charset="utf-8"/>
 
-	<title>Home - SDU LAB</title>
-	<meta name="description" content="" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <title>Home - SDU LAB</title>
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
 
-	<!-- bootstrap & fontawesome -->
-	<link rel="stylesheet" href="../assets/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="../assets/font-awesome/4.5.0/css/font-awesome.min.css" />
-	<!-- page specific plugin styles -->
-	<!-- text fonts -->
-	<link rel="stylesheet" href="../assets/css/fonts.googleapis.com.css" />
-	<!-- ace styles -->
-	<link rel="stylesheet" href="../assets/css/ace.min.css" class="ace-main-stylesheet" id="main-ace-style" />
-	<!--[if lte IE 9]>
-	<link rel="stylesheet" href="../assets/css/ace-part2.min.css"
-		  class="ace-main-stylesheet"/>
-	<![endif]-->
-	<link rel="stylesheet" href="../assets/css/ace-skins.min.css" />
-	<link rel="stylesheet" href="../assets/css/ace-rtl.min.css" />
-	<!--[if lte IE 9]>
-	<link rel="stylesheet" href="../assets/css/ace-ie.min.css"/>
-	<![endif]-->
+    <!-- bootstrap & fontawesome -->
+    <link rel="stylesheet" href="../assets/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="../assets/font-awesome/4.5.0/css/font-awesome.min.css"/>
+    <!-- page specific plugin styles -->
+    <link rel="stylesheet" href="/assets/css/jquery-ui.min.css"/>
+    <link rel="stylesheet" href="/assets/css/bootstrap-datepicker3.min.css"/>
+    <link rel="stylesheet" href="/assets/css/ui.jqgrid.min.css"/>
 
-	<!-- inline styles related to this page -->
-	<!-- ace settings handler -->
-	<script src="../assets/js/ace-extra.min.js"></script>
-	<!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
-	<!--[if lte IE 8]>
-	<script src="../assets/js/html5shiv.min.js"></script>
-	<script src="../assets/js/respond.min.js"></script>
-	<![endif]-->
-	<!--[if !IE]> -->
-	<script src="../assets/js/jquery-2.1.4.min.js"></script>
-	<!-- <![endif]-->
-	<!--[if IE]>
-	<script src="../assets/js/jquery-1.11.3.min.js"></script>
-	<![endif]-->
-	<script src="/assets/js/angular.min.js"></script>
+    <!-- text fonts -->
+    <link rel="stylesheet" href="../assets/css/fonts.googleapis.com.css"/>
+    <!-- ace styles -->
+    <link rel="stylesheet" href="../assets/css/ace.min.css" class="ace-main-stylesheet"
+          id="main-ace-style"/>
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="../assets/css/ace-part2.min.css"
+          class="ace-main-stylesheet"/>
+    <![endif]-->
+    <link rel="stylesheet" href="../assets/css/ace-skins.min.css"/>
+    <link rel="stylesheet" href="../assets/css/ace-rtl.min.css"/>
+    <!--[if lte IE 9]>
+    <link rel="stylesheet" href="../assets/css/ace-ie.min.css"/>
+    <![endif]-->
 
-	<script src="/js/API.js"></script>
-	<script src="/js/common.js"></script>
+    <link rel="stylesheet" href="/css/index.css"/>
 
-	<!-- TODO: - on page show 是变化的-->
-	<script>
-        function check_in_lab() {
+    <!-- inline styles related to this page -->
+    <!-- ace settings handler -->
+    <script src="../assets/js/ace-extra.min.js"></script>
+    <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
+    <!--[if lte IE 8]>
+    <script src="../assets/js/html5shiv.min.js"></script>
+    <script src="../assets/js/respond.min.js"></script>
+    <![endif]-->
+    <!--[if !IE]> -->
+    <script src="../assets/js/jquery-2.1.4.min.js"></script>
+    <!-- <![endif]-->
+    <!--[if IE]>
+    <script src="../assets/js/jquery-1.11.3.min.js"></script>
+    <![endif]-->
+    <!--<script src="/assets/js/angular.min.js"></script>-->
+
+    <script src="/js/API.js"></script>
+    <script src="/js/common.js"></script>
+
+
+    <script>
+        function layoutViews() {
+
+            if (userInfo.role === ROLE.admin) {
+
+                $('.admin_class').removeClass("hidden");
+            } else if (userInfo.role === ROLE.lab) {
+
+            } else if (userInfo.role === ROLE.normal) {
+                $('#my_noti').removeClass("hidden");
+                $('#my_noti_arrow').removeClass("hidden");
+                $('#mark_all_read').removeClass("hidden");
+                $('#my_project_li').removeClass("hidden");
+                $('#right_top_profile').removeClass("hidden");
+                $('#right_drag_profile').removeClass("hidden");
+            }
+
+            $.get(API.get_noti, {sid: userInfo.user.id}, function (data) {
+                var dataArr = data.data;
+                if (dataArr === undefined || dataArr.length === 0) {
+                    $('#my_noti').text("没有通知");
+                    $('#my_noti_arrow').addClass("invisible");
+                    $('#mark_all_read').hide();
+                    $('#noti_col').hide();
+                }
+            });
+
             // $.get(API.login_type, function (data) {
             //     var u_t = data.data.role;
             //
@@ -63,338 +95,308 @@
             //     userInfo.lab = data.data.lab;
             //     fillNameLabel();
             // });
+
+
         }
-	</script>
+    </script>
 
 </head>
 
 <!-- sdu color 142 37 30 -->
-<!-- TODO: - on page show 是变化的-->
-<body class="no-skin" onpageshow="check_in_lab()">
+<body class="no-skin">
 
 <div id="navbar" class="navbar navbar-default ace-save-state">
-	<div class="navbar-container ace-save-state" id="navbar-container">
-		<button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler" data-target="#sidebar">
-			<span class="sr-only">Toggle sidebar</span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-			<span class="icon-bar"></span>
-		</button>
-		<!-- 在所有情况下，我都让他指向 login，由 login 统一负责跳转-->
-		<a href="/normal/index.html" class="navbar-brand pull-left">
-			<img src="/assets/images/sdu/soft_white.png" style="display: inline"/>
-			<span>实验室项目管理系统</span>
-		</a>
+    <div class="navbar-container ace-save-state" id="navbar-container">
+        <button type="button" class="navbar-toggle menu-toggler pull-left" id="menu-toggler"
+                data-target="#sidebar">
+            <span class="sr-only">Toggle sidebar</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
 
-		<div class="navbar-buttons navbar-header pull-right" role="navigation">
-			<ul class="nav ace-nav">
+        <a href="/normal/index.html" class="navbar-brand pull-left">
+            <img src="/assets/images/sdu/soft_white.png" style="display: inline"/>
+            <span>实验室项目管理系统</span>
+        </a>
 
-				<li id="right_top_lab" class="light-blue dropdown-modal" style="margin-top: 8px;
-						border-radius: 5px;">
-					<a href="#">
-						<span>&nbsp;&nbsp;实验室&nbsp;&nbsp;</span>
-					</a>
-				</li>
+        <div class="navbar-buttons navbar-header pull-right" role="navigation">
+            <ul class="nav ace-nav">
 
-				<li id="right_top_profile" class="light-blue dropdown-modal" style="margin-top: 8px;
-						border-radius: 5px;">
-					<a href="/student/profile.html">
-						<span> 个人中心 </span>
-					</a>
-				</li>
+                <li id="right_top_lab" class="light-blue dropdown-modal hidden right_top">
+                    <a href="#">
+                        <span>&nbsp;&nbsp;实验室&nbsp;&nbsp;</span>
+                    </a>
+                </li>
 
-				<li class="light-blue dropdown-modal" style="margin-top: 8px; border-radius: 5px;">
-					<a data-toggle="dropdown" href="#" class="dropdown-toggle">
-						<img class="nav-user-photo"
-							 src="../assets/images/avatars/user2.png"/>
-						<span class="user-info">
+                <li id="right_top_profile" class="light-blue dropdown-modal hidden right_top">
+                    <a href="/student/profile.html">
+                        <span> 个人中心 </span>
+                    </a>
+                </li>
+
+                <li class="light-blue dropdown-modal right_top">
+                    <a data-toggle="dropdown" href="#" class="dropdown-toggle">
+                        <img class="nav-user-photo" id="head_image"
+                             src="/assets/images/avatars/user2.png"/>
+                        <span class="user-info">
 									<small>Welcome,</small>
-									<span class="bigger-110" id="user_name_label">未登陆</span>
+									<span class="bigger-110" id="user_name_label"></span>
 								</span>
-						<i class="ace-icon fa fa-caret-down"></i>
-					</a>
+                        <i class="ace-icon fa fa-caret-down"></i>
+                    </a>
 
-					<ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
+                    <ul class="user-menu dropdown-menu-right dropdown-menu dropdown-yellow dropdown-caret dropdown-close">
 
-						<li id="right_drag_profile">
-							<a href="/student/profile.html">
-								<i class="ace-icon fa fa-user"></i>
-								Profile
-							</a>
-						</li>
+                        <li id="right_drag_profile" class="hidden">
+                            <a href="/student/profile.html">
+                                <i class="ace-icon fa fa-user"></i>
+                                Profile
+                            </a>
+                        </li>
 
-						<li class="divider"></li>
+                        <li class="divider hidden" id="drop_down_divider"></li>
 
-						<li>
-							<a href="" onclick="logout()">
-								<i class="ace-icon fa fa-power-off"></i>
-								Logout
-							</a>
-						</li>
-					</ul>
-				</li>
-			</ul>
-		</div>
-	</div><!-- /.navbar-container -->
+                        <li>
+                            <a href="" onclick="logout()">
+                                <i class="ace-icon fa fa-power-off"></i>
+                                Logout
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div><!-- /.navbar-container -->
 </div>
 
 <div class="main-container ace-save-state" id="main-container">
-	<script type="text/javascript">
-        try{ace.settings.loadState('main-container')}catch(e){}
-	</script>
+    <script type="text/javascript">
+        try {
+            ace.settings.loadState('main-container')
+        } catch (e) {
+        }
+    </script>
 
-	<div id="sidebar" class="sidebar                  responsive                    ace-save-state">
-		<script type="text/javascript">
-            try{ace.settings.loadState('sidebar')}catch(e){}
-		</script>
-		<div class="sidebar-shortcuts" id="sidebar-shortcuts">
-		</div><!-- /.sidebar-shortcuts -->
+    <div id="sidebar" class="sidebar responsive ace-save-state">
+        <script> try {
+            ace.settings.loadState('sidebar')
+        } catch (e) {
+        } </script>
+        <div class="sidebar-shortcuts" id="sidebar-shortcuts">
+        </div><!-- /.sidebar-shortcuts -->
 
-		<ul class="nav nav-list">
-			<li class="">
-				<!-- TODO: - 某些情况下，点击主页 是变化的-->
-				<a href="/normal/index.html">
-					<i class="menu-icon fa fa-home home-icon"></i>
-					<span class="menu-text"> 主页 </span>
-				</a>
-				<b class="arrow"></b>
-			</li>
+        <ul class="nav nav-list">
 
-
-			<li class="">
-				<!-- TODO: - 列表 默认展开 是变化的-->
-				<a href="#" class="dropdown-toggle">
-					<i class="menu-icon fa fa-list"></i>
-					<span class="menu-text"> 我的项目 </span>
-					<b class="arrow fa fa-angle-down"></b>
-				</a>
-
-				<b class="arrow"></b>
-
-				<ul class="submenu">
-					<li class="">
-						<a href="/student/create.html" >
-							<i class="menu-icon fa fa-caret-right"></i>
-							新建项目
-						</a>
-						<b class="arrow"></b>
-					</li>
-					<li class="">
-						<a href="#" onclick="goURI(0, 0)">
-							<i class="menu-icon fa fa-caret-right"></i>
-							全部项目
-						</a>
-						<b class="arrow"></b>
-					</li>
-					<li class="">
-						<a href="#" onclick="goURI(0, 1)">
-							<i class="menu-icon fa fa-caret-right"></i>
-							我管理的项目
-						</a>
-						<b class="arrow"></b>
-					</li>
-
-					<li class="">
-						<a href="#" onclick="goURI(1, 0)">
-							<i class="menu-icon fa fa-caret-right"></i>
-							待审核项目
-						</a>
-						<b class="arrow"></b>
-					</li>
-
-					<li class="">
-						<a href="#" onclick="goURI(3, 0)">
-							<i class="menu-icon fa fa-caret-right"></i>
-							进行中的项目
-						</a>
-						<b class="arrow"></b>
-					</li>
+            <li>
+                <a href="/normal/index.html">
+                    <i class="menu-icon fa fa-home home-icon"></i>
+                    <span class="menu-text"> 主页 </span>
+                </a>
+                <b class="arrow"></b>
+            </li>
 
 
-					<li class="">
-						<a href="#" onclick="goURI(5, 0)">
-							<i class="menu-icon fa fa-caret-right"></i>
-							已完成项目
-						</a>
-						<b class="arrow"></b>
-					</li>
-					<li class="">
-						<a href="#" onclick="goURI(2, 0)">
-							<i class="menu-icon fa fa-caret-right"></i>
-							被拒绝的项目
-						</a>
-						<b class="arrow"></b>
-					</li>
-					<li class="">
-						<a href="#" onclick="goURI(4, 0)">
-							<i class="menu-icon fa fa-caret-right"></i>
-							已取消项目
-						</a>
-						<b class="arrow"></b>
-					</li>
-					<li class="">
-						<a href="#" onclick="goURI(6, 0)">
-							<i class="menu-icon fa fa-caret-right"></i>
-							已超时项目
-						</a>
-						<b class="arrow"></b>
-					</li>
-				</ul>
-			</li>
+            <li class="hidden" id="my_project_li">
+                <!-- TODO: - 列表 默认展开 是变化的-->
+                <a href="#" class="dropdown-toggle">
+                    <i class="menu-icon fa fa-list"></i>
+                    <span class="menu-text"> 我的项目 </span>
+                    <b class="arrow fa fa-angle-down"></b>
+                </a>
+
+                <b class="arrow"></b>
+
+                <ul class="submenu">
+                    <li class="">
+                        <a href="/student/create.html">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            新建项目
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="">
+                        <a href="#" onclick="goURI(0, 0)">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            我的全部项目
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+
+                </ul>
+            </li>
+
+            <li class="" id="lab_li">
+                <a href="" class="dropdown-toggle">
+                    <i class="menu-icon fa fa-list-alt"></i>
+                    <span class="menu-text"> 实验室 </span>
+
+                    <b class="arrow fa fa-angle-down"></b>
+                </a>
+
+                <b class="arrow"></b>
+
+                <ul class="submenu">
+                    <li class="hidden admin_class" id="create_lab_li">
+                        <a href="">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            新建实验室
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="">
+                        <a href="#">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            查看所有实验室
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="hidden my_lab_class" id="my_lab_li">
+                        <a href="#">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            我负责的实验室
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="hidden my_lab_class">
+                        <a href="#" onclick="goURI(0, 0, 1)">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            实验室全部项目
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="hidden my_lab_class">
+                        <a href="#" onclick="goURI(1, 0, 1)">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            待审核项目
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="hidden my_lab_class">
+                        <a href="#">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            待处理请求
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="hidden my_lab_class">
+                        <a href="#" onclick="goURI(3, 0, 1)">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            进行中的项目
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                    <li class="hidden my_lab_class">
+                        <a href="#" onclick="goURI(6, 0, 1)">
+                            <i class="menu-icon fa fa-caret-right"></i>
+                            超时项目处理
+                        </a>
+                        <b class="arrow"></b>
+                    </li>
+                </ul>
+            </li>
+
+        </ul><!-- /.nav-list -->
+
+        <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+            <i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state"
+               data-icon1="ace-icon fa fa-angle-double-left"
+               data-icon2="ace-icon fa fa-angle-double-right">
+            </i>
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="main-content-inner">
+
+            <div class="breadcrumbs ace-save-state" id="breadcrumbs">
+                <ul class="breadcrumb">
+                    <li>
+                        <i class="ace-icon fa fa-home home-icon"></i>
+                        <a href="/normal/index.html">主页</a>
+                    </li>
+
+                </ul><!-- /.breadcrumb -->
+            </div>
+
+            <div class="page-content">
+
+                <div class="space-2"></div>
+
+                <div class="page-header">
+                    <h1>
+                        <span class="hidden" id="my_noti">我的通知&nbsp;</span>
+                        <i class="ace-icon fa fa-angle-down" id="my_noti_arrow"></i>
+                        <button type="button" class="width-15 btn btn-sm btn-primary hidden"
+                                id="post_noti" style="margin-left: 40px">
+                            <span class="bigger-120">发布通知</span>
+                            <i class="ace-icon fa fa-angle-double-right bigger-125"></i>
+                        </button>
+                        <span class="h4 pull-right hidden" id="mark_all_read" style="cursor:
+                        pointer"
+                              onclick="">清空全部通知</span>
+                    </h1>
+                </div> <!-- 通知 header -->
+
+                <div class="row">
+                    <div class="col-xs-12" id="noti_col">
+
+                        <table id="noti-table"></table>
+                        <div id="noti-pager"></div>
+
+                    </div>
+                </div>
+
+                <div class="space-4"></div>
+                <div class="page-header">
+                    <h1>
+                        <span>公告&nbsp;</span>
+                        <i class="ace-icon fa fa-angle-down"></i>
+                        <button type="button"
+                                class="width-15 btn btn-sm btn-primary hidden admin_class"
+                                id="post_bulletin" style="margin-left: 40px">
+                            <span class="bigger-120">发布公告</span>
+                            <i class="ace-icon fa fa-angle-double-right bigger-125"></i>
+                        </button>
+                    </h1>
+                </div> <!-- 公告 header -->
+                <div class="row">
+                    <div class="col-xs-12" id="bull_col">
+                        <table id="bull_table"></table>
+                        <div id="bull_pager"></div>
+                    </div>
+                </div>
+            </div><!-- /.page-content -->
+
+        </div>
 
 
-		</ul><!-- /.nav-list -->
+    </div><!-- /.main-content -->
 
-		<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
-			<i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state"
-			   data-icon1="ace-icon fa fa-angle-double-left"
-			   data-icon2="ace-icon fa fa-angle-double-right">
-			</i>
-		</div>
-	</div>
+    <div class="footer">
+        <div class="footer-inner">
+            <div class="footer-content">
+                <span class="bigger-120">SDU LAB &copy; 2018 </span>
+            </div>
+        </div>
+    </div>
 
-	<div class="main-content">
-		<div class="main-content-inner">
-			<div class="breadcrumbs ace-save-state" id="breadcrumbs">
-				<ul class="breadcrumb">
-					<li>
-						<i class="ace-icon fa fa-home home-icon"></i>
-						<a href="/lab/index_l.html">主页</a>
-					</li>
-
-
-				</ul><!-- /.breadcrumb -->
-			</div>
-			<div class="page-content">
-
-				<div class="space-2"></div>
-
-				<div class="page-header">
-					<h1>
-						<span>我的通知</span>
-						<i class="ace-icon fa fa-angle-double-right"></i>
-					</h1>
-				</div><!-- /.page-header -->
-
-
-				<div ng-app="PMS" ng-controller="noti_control">
-
-					<table class="table table-bordered table-hover">
-						<thead>
-						<tr>
-							<th>类型</th>
-							<th>内容</th>
-							<th>时间</th>
-							<th class="hidden-480">来自</th>
-							<th class="hidden-480">操作</th>
-						</tr>
-						</thead>
-
-						<tr ng-repeat="x in names">
-							<td>
-								<span class="bigger-115"> {{ x.type }}</span>
-							</td>
-							<td>
-								<span class="bigger-115"> {{ x.content }}</span>
-							</td>
-							<td>
-								<span class="bigger-115"> {{ x.time }}</span>
-							</td>
-							<td>
-								<span class="bigger-115"> {{ x.from }}</span>
-							</td>
-							<td>
-								<a href="#" onclick="">知道了</a>
-							</td>
-						</tr>
-
-					</table>
-				</div>
-
-
-
-				<div class="page-header">
-					<h1>
-						<span>公告</span>
-						<i class="ace-icon fa fa-angle-double-right"></i>
-					</h1>
-				</div><!-- /.page-header -->
-
-				<table id="bull_table" class="table table-bordered table-hover"></table>
-
-
-				<script>
-
-                    $.get(API.get_bull, function (data) {
-
-                        var arr = data.data;
-                        var tableStr = "<table class=\"table table-bordered table-hover\">\n" +
-                            "\t\t\t\t\t\t\t\t<thead>\n" +
-                            "\t\t\t\t\t\t\t\t<tr>\n" +
-                            "\t\t\t\t\t\t\t\t\t<th>标题</th>\n" +
-                            "\t\t\t\t\t\t\t\t\t<th>时间</th>\n" +
-                            "\t\t\t\t\t\t\t\t\t<th>内容</th>\n" +
-                            "\t\t\t\t\t\t\t\t\t<th>操作</th>\n" +
-                            "\t\t\t\t\t\t\t\t</tr>\n" +
-                            "\t\t\t\t\t\t\t\t</thead>";
-                        for (var i = 0; i < arr.length; i++) {
-                            if (arr[i].time !== undefined) {
-                                arr[i].time = getServerTime(arr[i].time).format('yyyy-MM-dd hh:mm');
-                            }
-                            var x = arr[i];
-
-                            tableStr += "<tr><td><span class=\"bigger-115\"> "+ x.title
-                                +"</span></td><td><span class=\"bigger-115\">" + x.time
-                                +"</span></td><td><span class=\"bigger-115\">" +
-                                x.content +
-                                "</span></td><td><a href=\"#\" onclick=\"\">查看全文</a></td></tr>" ;
-
-
-
-                            tableStr = tableStr + "</table>";
-
-
-                            $("#bull_table").html(tableStr);
-                        }
-
-                    });
-
-
-				</script>
-
-
-			</div><!-- /.page-content -->
-
-		</div>
-
-
-	</div><!-- /.main-content -->
-
-	<div class="footer">
-		<div class="footer-inner">
-			<div class="footer-content">
-						<span class="bigger-120">
-
-							SDU LAB &copy; 2018
-						</span>
-
-			</div>
-		</div>
-	</div>
-
-	<a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
-		<i class="ace-icon fa fa-angle-double-up icon-only bigger-110"></i>
-	</a>
+    <a href="#" id="btn-scroll-up" class="btn-scroll-up btn btn-sm btn-inverse">
+        <i class="ace-icon fa fa-angle-double-up icon-only bigger-180"></i>
+    </a>
 </div><!-- /.main-container -->
 
 <!-- basic scripts -->
 
 <script type="text/javascript">
-    if('ontouchstart' in document.documentElement) document.write("<script src='../assets/js/jquery.mobile.custom.min.js'>"+"<"+"/script>");
+    if ('ontouchstart' in document.documentElement) document.write("<script src='../assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
 </script>
 <script src="../assets/js/bootstrap.min.js"></script>
 
 <!-- page specific plugin scripts -->
+<script src="/assets/js/bootstrap-datepicker.min.js"></script>
+<script src="/assets/js/jquery.jqGrid.min.js"></script>
+<script src="/assets/js/grid.locale-en.js"></script>
 
 <!-- ace scripts -->
 <script src="../assets/js/ace-elements.min.js"></script>
@@ -403,40 +405,473 @@
 
 <script>
 
+    var font_formatter = function() {
+        return "class='bigger-115'";
+    };
 
-    var app = angular.module('PMS', []);
-    app.controller('noti_control', function ($scope, $http) {
+    var view_detail = function (cellValue, options, rowObject) {
 
-        $http({method: "get", params: {}, url: API.login_type}).then(function success(response) {
-            var u_t = response.data.data.role;
+        // var imageHtml = "\"<input type='button' value='查看贷款申请详细' onclick='' />\"";
+        // return imageHtml;
 
-            if (u_t === ROLE.no_user)
-                location.href = "/login.html";
-            else if (u_t === ROLE.lab) { // normal
-                location.href = "/lab/index_l.html";
-            } else if (u_t === ROLE.admin) { // admin
-                location.href = "/admin/index_a.html";
-            }
-            userInfo.role = u_t;
-            userInfo.user = response.data.data.student;
-            userInfo.lab = response.data.data.lab;
+        var code = "/normal/viewBulletin.html?" + rowObject.id;
+        var detail = "<a href=\"" + code + "\">查看详情</a>";
+        return detail;
+        return detail + userInfo.role === ROLE.admin ?
+            "<i class='ace-icon fa fa-trash-o red'></i>" : '';
+
+    };
+
+    $.get(API.login_type, function (data) {
+
+        var u_t = data.data.role;
+
+        if (u_t === ROLE.no_user)
+            location.href = "/login.html";
+        else if (u_t === ROLE.lab) { // normal
+            location.href = "/lab/index_l.html";
+        } else if (u_t === ROLE.admin) { // admin
+            location.href = "/admin/index_a.html";
+        }
+        userInfo.role = u_t;
+        userInfo.user = data.data.student;
+        userInfo.lab = data.data.lab;
+
+        fillNameLabel();
+        layoutViews();
 
 
+        jQuery(function ($) {
+            var grid_selector = "#noti-table";
+            var pager_selector = "#noti-pager";
 
-            $http({ method: "get", params: {sid: userInfo.user.id}, url: API.get_noti }).then(function
-                success(response) {
-                var arr = response.data.data;
-                for (var i = 0; i < arr.length; i++) {
-                    if (arr[i].time !== undefined) {
-                        arr[i].time = getServerTime(arr[i].time).format('yyyy-MM-dd hh:mm');
+            var parent_column = $(grid_selector).closest('[class*="col-"]'); // .closest('.parent')
+            //resize to fit page size
+            $(window).on('resize.jqGrid', function () {
+                $(grid_selector).jqGrid('setGridWidth', parent_column.width());
+            });
+
+            //resize on sidebar collapse/expand
+            $(document).on('settings.ace.jqGrid', function (ev, event_name, collapsed) {
+                if (event_name === 'sidebar_collapsed' || event_name === 'main_container_fixed') {
+                    //setTimeout is for webkit only to give time for DOM changes and then redraw!!!
+                    setTimeout(function () {
+                        $(grid_selector).jqGrid('setGridWidth', parent_column.width());
+                    }, 20);
+                }
+            });
+
+            jQuery(grid_selector).jqGrid({
+
+                url: API.get_noti,
+                postData: {sid: userInfo.user.id},
+                datatype: "json",
+                height: 'auto',
+                colNames: ['类型', '内容', '时间', '来自', '操作'],
+                colModel: [
+                    {name: 'type', index: 'type', width: 70, sorttype: "string"},
+                    {name: 'content', index: 'content', width: 200, sortable: false},
+                    {
+                        name: 'time', index: 'time', sorttype: "date", width: 60,
+                        formatter: getFormattedServerTime
+                    },
+                    {name: 'from', index: 'from', width: 70, sorttype: "string"},
+                    {
+                        name: 'myac',
+                        index: '',
+                        width: 70,
+                        sortable: false,
+                        formatter: 'actions',
+                        formatoptions: {
+                            keys: true,
+                            delOptions: {
+                                recreateForm: true,
+                                beforeShowForm: beforeDeleteCallback
+                            },
+                            editbutton: false
+                        }
+                    }],
+
+                viewrecords: true,
+                rowNum: 10,
+                rowList: [10, 20, 30],
+                pager: pager_selector,
+                altRows: true,
+                selectable: false,
+                loadComplete: function () {
+                    var table = this;
+                    setTimeout(function () {
+                        styleCheckbox(table);
+                        updateActionIcons(table);
+                        updatePagerIcons(table);
+                        enableTooltips(table);
+                    }, 0);
+                },
+
+                jsonReader: {
+                    root: 'data',
+
+                }
+
+                // caption: "jqGrid with inline editing"
+                //,autowidth: true,
+
+
+            });
+            $(window).triggerHandler('resize.jqGrid');
+
+            //enable search/filter toolbar
+            //jQuery(grid_selector).jqGrid('filterToolbar',{defaultSearch:true,stringResult:true})
+            //jQuery(grid_selector).filterToolbar({});
+
+            //navButtons
+            jQuery(grid_selector).jqGrid('navGrid', pager_selector,
+                { 	//navbar options
+                    search: true,
+                    searchicon: 'ace-icon fa fa-search orange',
+                    refresh: true,
+                    refreshicon: 'ace-icon fa fa-refresh green',
+                },
+                {
+                    //delete record form
+                    recreateForm: true,
+                    beforeShowForm: function (e) {
+                        var form = $(e[0]);
+                        if (form.data('styled'))
+                            return false;
+                        form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />');
+                        style_delete_form(form);
+                        form.data('styled', true);
+                    },
+                    onClick: function (e) {
+                        alert(1);
+                        console.log(e);
+                    }
+                },
+                {
+                    //search form
+                    recreateForm: true,
+                    afterShowSearch: function (e) {
+                        var form = $(e[0]);
+                        form.closest('.ui-jqdialog').find('.ui-jqdialog-title').wrap('<div class="widget-header" />')
+                        style_search_form(form);
+                    },
+                    afterRedraw: function () {
+                        style_search_filters($(this));
+                    }
+                    ,
+                    multipleSearch: true,
+                },
+                {
+                    //view record form
+                    recreateForm: true,
+                    beforeShowForm: function (e) {
+                        var form = $(e[0]);
+                        form.closest('.ui-jqdialog').find('.ui-jqdialog-title').wrap('<div class="widget-header" />')
                     }
                 }
-                $scope.names = arr;
-            });
-            fillNameLabel();
-        });
-    });
+            );
 
+
+            function style_delete_form(form) {
+                var buttons = form.next().find('.EditButton .fm-button');
+                buttons.addClass('btn btn-sm btn-white btn-round').find('[class*="-icon"]').hide();//ui-icon, s-icon
+                buttons.eq(0).addClass('btn-danger').prepend('<i class="ace-icon fa fa-trash-o"></i>');
+                buttons.eq(1).addClass('btn-default').prepend('<i class="ace-icon fa fa-times"></i>')
+            }
+
+            function style_search_filters(form) {
+                form.find('.delete-rule').val('X');
+                form.find('.add-rule').addClass('btn btn-xs btn-primary');
+                form.find('.add-group').addClass('btn btn-xs btn-success');
+                form.find('.delete-group').addClass('btn btn-xs btn-danger');
+            }
+
+            function style_search_form(form) {
+                var dialog = form.closest('.ui-jqdialog');
+                var buttons = dialog.find('.EditTable');
+                buttons.find('.EditButton a[id*="_reset"]').addClass('btn btn-sm btn-info').find('.ui-icon').attr('class', 'ace-icon fa fa-retweet');
+                buttons.find('.EditButton a[id*="_query"]').addClass('btn btn-sm btn-inverse').find('.ui-icon').attr('class', 'ace-icon fa fa-comment-o');
+                buttons.find('.EditButton a[id*="_search"]').addClass('btn btn-sm btn-purple').find('.ui-icon').attr('class', 'ace-icon fa fa-search');
+            }
+
+            function beforeDeleteCallback(e) {
+                var form = $(e[0]);
+                if (form.data('styled')) return false;
+
+                form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
+                style_delete_form(form);
+
+                form.data('styled', true);
+            }
+
+            //it causes some flicker when reloading or navigating grid
+            //it may be possible to have some custom formatter to do this as the grid is being created to prevent this
+            //or go back to default browser checkbox styles for the grid
+            function styleCheckbox(table) {
+                /**
+                 $(table).find('input:checkbox').addClass('ace')
+                 .wrap('<label />')
+                 .after('<span class="lbl align-top" />')
+                 $('.ui-jqgrid-labels th[id*="_cb"]:first-child')
+                 .find('input.cbox[type=checkbox]').addClass('ace')
+                 .wrap('<label />').after('<span class="lbl align-top" />');
+                 */
+            }
+
+            //unlike navButtons icons, action icons in rows seem to be hard-coded
+            //you can change them like this in here if you want
+            function updateActionIcons(table) {
+                /**
+                 var replacement =
+                 {
+						'ui-ace-icon fa fa-pencil' : 'ace-icon fa fa-pencil blue',
+						'ui-ace-icon fa fa-trash-o' : 'ace-icon fa fa-trash-o red',
+						'ui-icon-disk' : 'ace-icon fa fa-check green',
+						'ui-icon-cancel' : 'ace-icon fa fa-times red'
+					};
+                 $(table).find('.ui-pg-div span.ui-icon').each(function(){
+						var icon = $(this);
+						var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+						if($class in replacement) icon.attr('class', 'ui-icon '+replacement[$class]);
+					})
+                 */
+            }
+
+            //replace icons with FontAwesome icons like above
+            function updatePagerIcons(table) {
+                var replacement =
+                    {
+                        'ui-icon-seek-first': 'ace-icon fa fa-angle-double-left bigger-140',
+                        'ui-icon-seek-prev': 'ace-icon fa fa-angle-left bigger-140',
+                        'ui-icon-seek-next': 'ace-icon fa fa-angle-right bigger-140',
+                        'ui-icon-seek-end': 'ace-icon fa fa-angle-double-right bigger-140'
+                    };
+                $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+                    var icon = $(this);
+                    var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+
+                    if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+                })
+            }
+
+            function enableTooltips(table) {
+                $('.navtable .ui-pg-button').tooltip({container: 'body'});
+                $(table).find('.ui-pg-div').tooltip({container: 'body'});
+            }
+
+            $(document).one('ajaxloadstart.page', function (e) {
+                $.jgrid.gridDestroy(grid_selector);
+                $('.ui-jqdialog').remove();
+            });
+        });
+
+        jQuery(function ($) {
+            var grid_selector = "#bull_table";
+            var pager_selector = "#bull_pager";
+
+            var parent_column = $(grid_selector).closest('[class*="col-"]'); // .closest('.parent')
+            //resize to fit page size
+            $(window).on('resize.jqGrid', function () {
+                $(grid_selector).jqGrid('setGridWidth', parent_column.width());
+            });
+
+            $(document).on('settings.ace.jqGrid', function (ev, event_name, collapsed) {
+                if (event_name === 'sidebar_collapsed' || event_name === 'main_container_fixed') {
+                    //setTimeout is for webkit only to give time for DOM changes and then redraw!!!
+                    setTimeout(function () {
+                        $(grid_selector).jqGrid('setGridWidth', parent_column.width());
+                    }, 20);
+                }
+            });
+
+            jQuery(grid_selector).jqGrid({
+
+                url: API.get_bull,
+                postData: {page: 1, rows: 100000},
+                datatype: "json",
+                height: 'auto',
+                colNames: ['来自', '标题', '时间', '操作'],
+                colModel: [
+                    {name: 'from', index: 'from', width: 58, sortable: false, cellattr:
+                        font_formatter},
+                    {name: 'title', index: 'title', width: 200, sortable: false, cellattr: font_formatter},
+                    {
+                        name: 'time', index: 'time', sorttype: "date", width: 60, cellattr:font_formatter,
+                        formatter: getFormattedServerTime
+                    },
+                    {
+                        name: 'id', index: 'id', width: 45, sortable: false,
+                        formatter: view_detail, cellattr:font_formatter
+                    }],
+
+                viewrecords: true,
+                rowNum: 10,
+                rowList: [10, 20, 30],
+                pager: pager_selector,
+                altRows: true,
+                selectable: false,
+                loadComplete: function () {
+                    var table = this;
+                    setTimeout(function () {
+                        styleCheckbox(table);
+                        updateActionIcons(table);
+                        updatePagerIcons(table);
+                        enableTooltips(table);
+                    }, 0);
+                },
+
+                jsonReader: {
+                    root: 'data',
+                }
+
+            });
+            $(window).triggerHandler('resize.jqGrid');
+            //navButtons
+            jQuery(grid_selector).jqGrid('navGrid', pager_selector,
+                { 	//navbar options
+                    add: false,
+                    edit: false,
+                    search: true,
+                    searchicon: 'ace-icon fa fa-search orange',
+                    refresh: true,
+                    refreshicon: 'ace-icon fa fa-refresh green',
+                },
+                {
+                    //delete record form
+                    recreateForm: true,
+                    beforeShowForm: function (e) {
+                        var form = $(e[0]);
+                        if (form.data('styled'))
+                            return false;
+                        form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />');
+                        style_delete_form(form);
+                        form.data('styled', true);
+                    },
+                    onClick: function (e) {
+                        alert(1);
+                        console.log(e);
+                    }
+                },
+                {
+                    //search form
+                    recreateForm: true,
+                    afterShowSearch: function (e) {
+                        var form = $(e[0]);
+                        form.closest('.ui-jqdialog').find('.ui-jqdialog-title').wrap('<div class="widget-header" />')
+                        style_search_form(form);
+                    },
+                    afterRedraw: function () {
+                        style_search_filters($(this));
+                    }
+                    ,
+                    multipleSearch: true,
+                },
+                {
+                    //view record form
+                    recreateForm: true,
+                    beforeShowForm: function (e) {
+                        var form = $(e[0]);
+                        form.closest('.ui-jqdialog').find('.ui-jqdialog-title').wrap('<div class="widget-header" />')
+                    }
+                }
+            );
+
+
+            function style_delete_form(form) {
+                var buttons = form.next().find('.EditButton .fm-button');
+                buttons.addClass('btn btn-sm btn-white btn-round').find('[class*="-icon"]').hide();//ui-icon, s-icon
+                buttons.eq(0).addClass('btn-danger').prepend('<i class="ace-icon fa fa-trash-o"></i>');
+                buttons.eq(1).addClass('btn-default').prepend('<i class="ace-icon fa fa-times"></i>')
+            }
+
+            function style_search_filters(form) {
+                form.find('.delete-rule').val('X');
+                form.find('.add-rule').addClass('btn btn-xs btn-primary');
+                form.find('.add-group').addClass('btn btn-xs btn-success');
+                form.find('.delete-group').addClass('btn btn-xs btn-danger');
+            }
+
+            function style_search_form(form) {
+                var dialog = form.closest('.ui-jqdialog');
+                var buttons = dialog.find('.EditTable');
+                buttons.find('.EditButton a[id*="_reset"]').addClass('btn btn-sm btn-info').find('.ui-icon').attr('class', 'ace-icon fa fa-retweet');
+                buttons.find('.EditButton a[id*="_query"]').addClass('btn btn-sm btn-inverse').find('.ui-icon').attr('class', 'ace-icon fa fa-comment-o');
+                buttons.find('.EditButton a[id*="_search"]').addClass('btn btn-sm btn-purple').find('.ui-icon').attr('class', 'ace-icon fa fa-search');
+            }
+
+            function beforeDeleteCallback(e) {
+                var form = $(e[0]);
+                if (form.data('styled')) return false;
+
+                form.closest('.ui-jqdialog').find('.ui-jqdialog-titlebar').wrapInner('<div class="widget-header" />')
+                style_delete_form(form);
+
+                form.data('styled', true);
+            }
+
+            //it causes some flicker when reloading or navigating grid
+            //it may be possible to have some custom formatter to do this as the grid is being created to prevent this
+            //or go back to default browser checkbox styles for the grid
+            function styleCheckbox(table) {
+                /**
+                 $(table).find('input:checkbox').addClass('ace')
+                 .wrap('<label />')
+                 .after('<span class="lbl align-top" />')
+                 $('.ui-jqgrid-labels th[id*="_cb"]:first-child')
+                 .find('input.cbox[type=checkbox]').addClass('ace')
+                 .wrap('<label />').after('<span class="lbl align-top" />');
+                 */
+            }
+
+            //unlike navButtons icons, action icons in rows seem to be hard-coded
+            //you can change them like this in here if you want
+            function updateActionIcons(table) {
+                /**
+                 var replacement =
+                 {
+						'ui-ace-icon fa fa-pencil' : 'ace-icon fa fa-pencil blue',
+						'ui-ace-icon fa fa-trash-o' : 'ace-icon fa fa-trash-o red',
+						'ui-icon-disk' : 'ace-icon fa fa-check green',
+						'ui-icon-cancel' : 'ace-icon fa fa-times red'
+					};
+                 $(table).find('.ui-pg-div span.ui-icon').each(function(){
+						var icon = $(this);
+						var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+						if($class in replacement) icon.attr('class', 'ui-icon '+replacement[$class]);
+					})
+                 */
+            }
+
+            //replace icons with FontAwesome icons like above
+            function updatePagerIcons(table) {
+                var replacement =
+                    {
+                        'ui-icon-seek-first': 'ace-icon fa fa-angle-double-left bigger-140',
+                        'ui-icon-seek-prev': 'ace-icon fa fa-angle-left bigger-140',
+                        'ui-icon-seek-next': 'ace-icon fa fa-angle-right bigger-140',
+                        'ui-icon-seek-end': 'ace-icon fa fa-angle-double-right bigger-140'
+                    };
+                $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
+                    var icon = $(this);
+                    var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
+
+                    if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
+                })
+            }
+
+            function enableTooltips(table) {
+                $('.navtable .ui-pg-button').tooltip({container: 'body'});
+                $(table).find('.ui-pg-div').tooltip({container: 'body'});
+            }
+
+            $(document).one('ajaxloadstart.page', function (e) {
+                $.jgrid.gridDestroy(grid_selector);
+                $('.ui-jqdialog').remove();
+            });
+        });
+
+    });
 
 
 </script>

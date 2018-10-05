@@ -2,7 +2,8 @@
 var userInfo = {
     role: 0,
     user: null,
-    lab: null
+    lab: null,
+    admin: null
 };
 
 Date.prototype.format = function(format) {
@@ -25,7 +26,9 @@ Date.prototype.format = function(format) {
 function getServerTime(time) {
     return new Date(time.replace('+0000', 'Z'));
 }
-
+function getFormattedServerTime(cellvalue, options, rowObject) {
+    return new Date(rowObject.time.replace('+0000', 'Z')).format('yyyy-MM-dd hh:mm');
+}
 function gotoSDU() {
     location.href = "http://www.sdu.edu.cn";
 }

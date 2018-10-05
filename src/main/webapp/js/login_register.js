@@ -3,16 +3,19 @@ jQuery(function($) {
     $('#btn-login-light').on('click', function (e) {
         $('body').attr('class', 'login-layout light-login');
         $('#id-company-text').attr('class', 'blue');
+        $('#id-title-text').attr('class', 'blue');
         e.preventDefault();
     });
     $('#btn-login-dark').on('click', function (e) {
         $('body').attr('class', 'login-layout');
-        $('#id-company-text').attr('class', 'blue');
+        $('#id-company-text').attr('class', 'light-blue');
+        $('#id-title-text').attr('class', 'blue');
         e.preventDefault();
     });
     $('#btn-login-blur').on('click', function (e) {
         $('body').attr('class', 'login-layout blur-login');
         $('#id-company-text').attr('class', 'light-blue');
+        $('#id-title-text').attr('class', 'light-blue');
         e.preventDefault();
     });
     $('#login-button').on('click', function (e) {
@@ -82,7 +85,11 @@ jQuery(function($) {
             alert("请先同意服务条款");
             return;
         }
-        $.post(API.register, regModel, function (data) {
+        REQ("post", regModel, API.register, function () {
+            $('#register_button').attr({disabled: "disabled"});
+        }, function () {
+            $('#register_button').removeAttr("disabled");
+        }, function (data) {
             alert(data.message);
             if (data.status === 200) {
                 location.href = "/login.html";
@@ -149,5 +156,5 @@ jQuery(function($) {
 function refreshCode() {
     var code_img = $('#code_image');
     code_img.attr("src", null);
-    code_img.attr("src", API.image_code);
+    code_img.attr("src", API.image_code + "?" + Math.random());
 }
