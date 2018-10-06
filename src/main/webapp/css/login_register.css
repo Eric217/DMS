@@ -1,9 +1,8 @@
-.pic {
-    height: 82px;
-    width: 263px;
-    margin: auto;
+.sdu_pic {
+    height: 82px;!important;
+    width: 263px;!important;
     cursor: pointer;
-    background-image: url(/assets/images/sdu/sdu_text_red.png);
+
 }
 
 #verify_input {

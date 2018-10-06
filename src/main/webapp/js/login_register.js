@@ -1,5 +1,29 @@
 
+function refreshCode() {
+    var code_img = $('#code_image');
+    code_img.attr("src", null);
+    code_img.attr("src", API.image_code + "?" + Math.random());
+}
+
+function check_login() {
+    $.get(API.login_type, function (data) {
+        var u_t = data.data.role;
+        if (u_t === undefined || u_t === ROLE.no_user)
+            return;
+        location.href = "/normal/index.html";
+    });
+}
+
+
 jQuery(function($) {
+
+    $(document).on('click', '.toolbar a[data-target]', function(e) {
+        e.preventDefault();
+        var target = $(this).data('target');
+        $('.widget-box.visible').removeClass('visible');//hide others
+        $(target).addClass('visible');//show target
+    });
+
     $('#btn-login-light').on('click', function (e) {
         $('body').attr('class', 'login-layout light-login');
         $('#id-company-text').attr('class', 'blue');
@@ -17,6 +41,9 @@ jQuery(function($) {
         $('#id-company-text').attr('class', 'light-blue');
         $('#id-title-text').attr('class', 'light-blue');
         e.preventDefault();
+    });
+    $('.sdu_pic').on('click', function () {
+        location.href = "http://www.sdu.edu.cn";
     });
     $('#login-button').on('click', function (e) {
         var loginModel = {
@@ -39,7 +66,10 @@ jQuery(function($) {
         }
         $.post(API.login, loginModel, function (data) {
             if (data.status === 200) {
-                jump(data.data.role);
+                if (data.data.role === undefined || data.data.role === ROLE.no_user)
+                    alert("发生了意外错误");
+                else
+                    location.href = "/normal/index.html";
             } else {
                 alert(data.message);
                 refreshCode();
@@ -153,8 +183,3 @@ jQuery(function($) {
 
 });
 
-function refreshCode() {
-    var code_img = $('#code_image');
-    code_img.attr("src", null);
-    code_img.attr("src", API.image_code + "?" + Math.random());
-}

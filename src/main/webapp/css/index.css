@@ -7,14 +7,22 @@
     width:16%!important;
 }
 
+.smaller-92 {
+    font-size:92%!important
+}
+
 .my_pointer {
     cursor: pointer;
 }
 
-.my_lab_class {
+.my_lab_cls {
 
 }
 
-.admin_class {
+.admin_cls {
+
+}
+
+.stu_profile {
 
 }

@@ -30,7 +30,10 @@ var API = {
     create_project: BASE_URL + "/project/create",
     get_my_managed: BASE_URL + "/student/project/managed",
     get_noti:       BASE_URL + "/noti/get",
+    del_noti:       BASE_URL + "/noti/read", // nid=123
+    del_noti_all:   BASE_URL + "/noti/read/all",
     get_bull:       BASE_URL + "/bulletin/get",
+    del_bull:       BASE_URL + "/bulletin/delete", // ids=12@23
 
 
     // admin

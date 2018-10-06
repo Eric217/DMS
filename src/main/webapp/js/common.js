@@ -6,6 +6,16 @@ var userInfo = {
     admin: null
 };
 
+/** @param data jquery response -> data */
+function fillUserInfo(data) {
+    var u_t = data.role;
+    if (u_t === undefined || u_t === ROLE.no_user)
+        location.href = "/login.html";
+    userInfo.role = u_t;
+    userInfo.user = data.student;
+    userInfo.lab = data.lab;
+}
+
 Date.prototype.format = function(format) {
     var o = {
         "M+" : this.getMonth()+1, //month
@@ -29,8 +39,12 @@ function getServerTime(time) {
 function getFormattedServerTime(cellvalue, options, rowObject) {
     return new Date(rowObject.time.replace('+0000', 'Z')).format('yyyy-MM-dd hh:mm');
 }
-function gotoSDU() {
-    location.href = "http://www.sdu.edu.cn";
+
+function PermissionDenied(msg) {
+    if (!msg)
+        msg = "权限不足，即将刷新页面";
+    alert(msg);
+    location.reload();
 }
 
 function getArgsObj() {
@@ -45,19 +59,6 @@ function getArgsObj() {
     }
     return arg_obj;
 }
-
-function jump(user_type) {
-
-    if (user_type === 1) { // normal
-        location.href = "/normal/index.html";
-    } else if (user_type === 2) { // lab
-        location.href = "/lab/index_l.html";
-    } else if (user_type === 3) { // admin
-        location.href = "/admin/index_a.html";
-    }
-
-}
-
 
 
 function check_index() {

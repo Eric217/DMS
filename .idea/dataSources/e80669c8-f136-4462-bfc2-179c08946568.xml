@@ -1170,7 +1170,7 @@
     <column id="290" parent="275" name="from">
       <Position>5</Position>
       <DataType>varchar(20)|0s</DataType>
-      <DefaultExpression>&apos;&apos;</DefaultExpression>
+      <DefaultExpression>&apos;系统通知&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
     <key id="291" parent="275" name="PRIMARY">
@@ -1354,7 +1354,8 @@
     <column id="321" parent="278" name="type">
       <Position>2</Position>
       <DataType>varchar(20)|0s</DataType>
-      <DefaultExpression>&apos;&apos;</DefaultExpression>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;系统通知&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
     <column id="322" parent="278" name="content">
@@ -1366,7 +1367,7 @@
     <column id="323" parent="278" name="from">
       <Position>4</Position>
       <DataType>varchar(20)|0s</DataType>
-      <DefaultExpression>&apos;&apos;</DefaultExpression>
+      <DefaultExpression>&apos;系统通知&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
     <column id="324" parent="278" name="time">
