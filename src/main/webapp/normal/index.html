@@ -9,58 +9,50 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
 
     <!-- bootstrap & fontawesome -->
-    <link rel="stylesheet" href="../assets/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="../assets/font-awesome/4.5.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/assets/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/assets/font-awesome/4.5.0/css/font-awesome.min.css"/>
     <!-- page specific plugin styles -->
     <link rel="stylesheet" href="/assets/css/jquery-ui.min.css"/>
     <link rel="stylesheet" href="/assets/css/bootstrap-datepicker3.min.css"/>
     <link rel="stylesheet" href="/assets/css/ui.jqgrid.min.css"/>
 
     <!-- text fonts -->
-    <link rel="stylesheet" href="../assets/css/fonts.googleapis.com.css"/>
+    <link rel="stylesheet" href="/assets/css/fonts.googleapis.com.css"/>
     <!-- ace styles -->
-    <link rel="stylesheet" href="../assets/css/ace.min.css" class="ace-main-stylesheet"
+    <link rel="stylesheet" href="/assets/css/ace.min.css" class="ace-main-stylesheet"
           id="main-ace-style"/>
     <!--[if lte IE 9]>
-    <link rel="stylesheet" href="../assets/css/ace-part2.min.css"
+    <link rel="stylesheet" href="/assets/css/ace-part2.min.css"
           class="ace-main-stylesheet"/>
     <![endif]-->
-    <link rel="stylesheet" href="../assets/css/ace-skins.min.css"/>
-    <link rel="stylesheet" href="../assets/css/ace-rtl.min.css"/>
+    <link rel="stylesheet" href="/assets/css/ace-skins.min.css"/>
+    <link rel="stylesheet" href="/assets/css/ace-rtl.min.css"/>
     <!--[if lte IE 9]>
-    <link rel="stylesheet" href="../assets/css/ace-ie.min.css"/>
+    <link rel="stylesheet" href="/assets/css/ace-ie.min.css"/>
     <![endif]-->
 
-    <link rel="stylesheet" href="/css/index.css"/>
+    <link rel="stylesheet" href="/css/common.css"/>
 
     <!-- inline styles related to this page -->
     <!-- ace settings handler -->
-    <script src="../assets/js/ace-extra.min.js"></script>
+    <script src="/assets/js/ace-extra.min.js"></script>
     <!-- HTML5shiv and Respond.js for IE8 to support HTML5 elements and media queries -->
     <!--[if lte IE 8]>
-    <script src="../assets/js/html5shiv.min.js"></script>
-    <script src="../assets/js/respond.min.js"></script>
+    <script src="/assets/js/html5shiv.min.js"></script>
+    <script src="/assets/js/respond.min.js"></script>
     <![endif]-->
     <!--[if !IE]> -->
-    <script src="../assets/js/jquery-2.1.4.min.js"></script>
+    <script src="/assets/js/jquery-2.1.4.min.js"></script>
     <!-- <![endif]-->
     <!--[if IE]>
-    <script src="../assets/js/jquery-1.11.3.min.js"></script>
+    <script src="/assets/js/jquery-1.11.3.min.js"></script>
     <![endif]-->
-    <!--<script src="/assets/js/angular.min.js"></script>-->
 
-    <script src="/js/API.js"></script>
-    <script src="/js/common.js"></script>
-
-
-    <script>
-
-    </script>
 
 </head>
 
 <!-- sdu color 142 37 30 -->
-<body class="no-skin" onpageshow="appear_again()">
+<body class="no-skin">
 
 <div id="navbar" class="navbar navbar-default ace-save-state">
     <div class="navbar-container ace-save-state" id="navbar-container">
@@ -144,15 +136,16 @@
         </div><!-- /.sidebar-shortcuts -->
 
         <ul class="nav nav-list">
-
+            <!-- 主页 -->
             <li>
                 <a href="/normal/index.html">
-                    <i class="menu-icon fa fa-home home-icon"></i>
+                    <i class="menu-icon fa fa-home"></i>
                     <span class="menu-text"> 主页 </span>
                 </a>
                 <b class="arrow"></b>
             </li>
 
+            <!-- 学生 -->
             <li class="hidden admin_cls">
                 <a href="#" class="dropdown-toggle">
                     <i class="menu-icon fa fa-user"></i>
@@ -170,14 +163,14 @@
                         <b class="arrow"></b>
                     </li>
                     <li>
-                        <a href="#" onclick="goURI(0, 0)">
+                        <a href="#">
                             <i class="menu-icon fa fa-caret-right"></i>
                             参与过项目的学生
                         </a>
                         <b class="arrow"></b>
                     </li>
                     <li>
-                        <a href="#" onclick="goURI(0, 0)">
+                        <a href="#">
                             <i class="menu-icon fa fa-caret-right"></i>
                             学生处罚管理
                         </a>
@@ -186,28 +179,27 @@
                 </ul>
             </li>
 
+            <!-- 项目 -->
             <li class="hidden admin_cls">
                 <a href="#">
                     <i class="menu-icon fa fa-folder-open"></i>
                     <span class="menu-text">项目</span>
-                    <!--<b class="arrow fa fa-angle-down"></b>-->
                 </a>
                 <b class="arrow"></b>
             </li>
 
+            <!-- 我的项目 -->
             <li class="hidden" id="my_project_li">
-                <!-- TODO: - 列表 默认展开 是变化的-->
                 <a href="#" class="dropdown-toggle">
                     <i class="menu-icon fa fa-list"></i>
-                    <span class="menu-text"> 我的项目 </span>
+                    <span class="menu-text">我的项目</span>
                     <b class="arrow fa fa-angle-down"></b>
                 </a>
-
                 <b class="arrow"></b>
 
                 <ul class="submenu">
                     <li>
-                        <a href="/student/create.html">
+                        <a href="/project/create.html">
                             <i class="menu-icon fa fa-caret-right"></i>
                             新建项目
                         </a>
@@ -224,11 +216,11 @@
                 </ul>
             </li>
 
+            <!-- 实验室 -->
             <li id="lab_li">
                 <a href="" class="dropdown-toggle">
-                    <i class="menu-icon fa fa-list-alt"></i>
-                    <span class="menu-text"> 实验室 </span>
-
+                    <i class="menu-icon fa fa-bank"></i>
+                    <span class="menu-text">实验室</span>
                     <b class="arrow fa fa-angle-down"></b>
                 </a>
 
@@ -305,7 +297,7 @@
                 </ul>
             </li>
 
-        </ul><!-- /.nav-list -->
+        </ul>
 
         <div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
             <i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state"
@@ -324,6 +316,16 @@
                         <a href="/normal/index.html">主页</a>
                     </li>
 
+                    <!--suppress HtmlUnknownTag -->
+                    <div class="nav-search hidden" id="nav-search">
+                        <form class="form-search" onsubmit="">
+								<span class="input-icon">
+									<input type="text" placeholder="搜索本实验室成员"
+                                           class="nav-search-input" id="nav-search-input" autocomplete="off" />
+									<i class="ace-icon fa fa-search nav-search-icon"></i>
+								</span>
+                        </form>
+                    </div>
                 </ul><!-- /.breadcrumb -->
             </div>
 
@@ -332,10 +334,11 @@
                 <div class="space-2"></div>
                 <div class="page-header hidden" id="my_noti_header">
                     <h1>
-                        <span id="my_noti">我的通知&nbsp;</span>
+                        <span id="my_noti">我的通知</span>
+                        <span>&nbsp;</span>
                         <i class="ace-icon fa fa-refresh smaller-92"
                            style="cursor: pointer" id="my_noti_refresh"></i>
-                        <button class="width-15 btn btn-sm btn-primary hidden" type="button"
+                        <button class="width-17 btn btn-sm btn-primary hidden" type="button"
                                 id="post_noti_butt" style="margin-left: 40px">
                             <span class="bigger-120">发布通知</span>
                             <i class="ace-icon fa fa-angle-double-right bigger-125"></i>
@@ -367,7 +370,7 @@
                         <span>公告&nbsp;</span>
                         <i class="ace-icon fa fa-angle-down"></i>
                         <button type="button" id="post_bulletin" style="margin-left: 40px"
-                                class="width-15 btn btn-sm btn-primary hidden admin_cls">
+                                class="width-17 btn btn-sm btn-primary hidden admin_cls">
                             <span class="bigger-120">发布公告</span>
                             <i class="ace-icon fa fa-angle-double-right bigger-125"></i>
                         </button>
@@ -399,9 +402,9 @@
 <!-- basic scripts -->
 
 <script> if ('ontouchstart' in document.documentElement)
-    document.write("<script src='../assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
+    document.write("<script src='/assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
 </script>
-<script src="../assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/bootstrap.min.js"></script>
 
 <!-- page specific plugin scripts -->
 <script src="/assets/js/bootstrap-datepicker.min.js"></script>
@@ -409,396 +412,15 @@
 <script src="/assets/js/grid.locale-en.js"></script>
 
 <!-- ace scripts -->
-<script src="../assets/js/ace-elements.min.js"></script>
-<script src="../assets/js/ace.min.js"></script>
+<script src="/assets/js/ace-elements.min.js"></script>
+<script src="/assets/js/ace.min.js"></script>
 
-<script src="../js/index_all.js"></script>
-
-<script>
-
-    // 用于响应点击浏览器的返回 按钮，稍稍控制一下权限
-    var execOnce = true;
-
-    function appear_again() {
-        if (execOnce)
-            execOnce = false;
-        else {
-            $.get(API.login_type, function (data) {
-                var u_t = data.data.role;
-                if (u_t === undefined || u_t === ROLE.no_user)
-                    location.href = "/login.html";
-                else if (u_t !== userInfo.role)
-                    PermissionDenied("页面已过期，即将刷新页面");
-                userInfo.user = data.data.student;
-                userInfo.lab = data.data.lab;
-                console.log("success backed");
-            });
-        }
-    }
-
-    function layoutViews() {
-
-        if (userInfo.role === ROLE.admin) {
-            $('.admin_cls').removeClass("hidden");
-            $('#user_name_label').text("管理员");
-            $('#post_noti_header').removeClass("hidden");
-            $('#head_image').attr('src', "/assets/images/avatars/admin.png");
-
-        } else if (userInfo.role !== ROLE.no_user) { // 已登陆的学生，含实验室负责人
-            $('#head_image').attr("src", "/assets/images/avatars/user2.png");
-            $('#user_name_label').text(userInfo.user.name);
-            $('#my_noti_header').removeClass("hidden");
-            $('#my_project_li').removeClass("hidden");
-            $('.stu_profile').removeClass("hidden");
-            if (userInfo.role === ROLE.lab) {
-                $('#right_top_lab').removeClass("hidden");
-                $('#post_bulletin').removeClass("hidden");
-                $('#post_noti_butt').removeClass("hidden");
-                $('.my_lab_cls').removeClass("hidden");
-            }
-
-            $.get(API.get_noti, {sid: userInfo.user.id}, function (data) {
-                var dataArr = data.data;
-                if (dataArr === undefined || dataArr.length === 0) {
-                    $('#my_noti').text("没有通知   ");
-                    $('#mark_all_read').hide();
-                } else {
-                    $('#noti_col').removeClass("hidden");
-                }
-            });
-
-        }
-
-    }
-
-    var delete_noti = function (rid) {
-
-        $.post(API.del_noti, {nid: rid}, function (data) {
-            switch (data.status) {
-                case 200:
-                    alert(data.message);
-                    $('#noti-table').trigger("reloadGrid");
-                    break;
-                case 300:
-                    alert(data.message);
-                    break;
-                case 400:
-                    PermissionDenied(data.message);
-                    break;
-                default:
-                    alert("操作失败");
-            }
-        });
-    };
-
-    var delete_bull = function (rid) {
-
-        $.post(API.del_bull, {ids: rid}, function (data) {
-            switch (data.status) {
-                case 200:
-                    alert(data.message);
-                    $('#bull_table').trigger("reloadGrid");
-                    break;
-                case 300:
-                    alert(data.message);
-                    break;
-                case 400:
-                    PermissionDenied(data.message);
-                    break;
-                default:
-                    alert("操作失败");
-            }
-        });
-    };
-
-    $.get(API.login_type, function (data) {
-
-        fillUserInfo(data.data);
-        layoutViews();
-
-        var font_formatter = function () {
-            return "class='bigger-125'";
-        };
-
-        jQuery(function ($) {
-            if (userInfo.role === ROLE.admin)
-                return;
-            var grid_selector = "#noti-table";
-            var pager_selector = "#noti-pager";
-
-            var parent_column = $(grid_selector).closest('[class*="col-"]'); // .closest('.parent')
-            //resize to fit page size
-            $(window).on('resize.jqGrid', function () {
-                $(grid_selector).jqGrid('setGridWidth', parent_column.width());
-            });
-
-            //resize on sidebar collapse/expand
-            $(document).on('settings.ace.jqGrid', function (ev, event_name) {
-                if (event_name === 'sidebar_collapsed' || event_name === 'main_container_fixed') {
-                    //setTimeout is for webkit only to give time for DOM changes and then redraw!!!
-                    setTimeout(function () {
-                        $(grid_selector).jqGrid('setGridWidth', parent_column.width());
-                    }, 20);
-                }
-            });
-
-            var noti_inner_div = function (cellValue, options, rowObject) {
-                var rid = rowObject.id;
-                return "<span>&nbsp;&nbsp;</span>" +
-                    "<i class='ace-icon fa fa-trash-o red bigger-110' " +
-                    "style='cursor: pointer' " +
-                    "onclick='delete_noti(" + rid + ")'></i>";
-            };
-
-            jQuery(grid_selector).jqGrid({
-
-                url: API.get_noti,
-                postData: {sid: userInfo.user.id},
-                datatype: "json",
-                height: 'auto',
-                colNames: ['类型', '内容', '时间', '来自', '操作'],
-                colModel: [
-                    {
-                        name: 'type', index: 'type', width: 70, sorttype: "string", cellattr:
-                        font_formatter
-                    },
-                    {
-                        name: 'content',
-                        index: 'content',
-                        width: 200,
-                        sortable: false,
-                        cellattr:
-                        font_formatter
-                    },
-                    {
-                        name: 'time', index: 'time', sorttype: "date", width: 66,
-                        formatter: getFormattedServerTime, cellattr:
-                        font_formatter
-                    },
-                    {
-                        name: 'from', index: 'from', width: 64, sorttype: "string", cellattr:
-                        font_formatter
-                    },
-                    {
-                        name: 'id', index: 'id', width: 45, sortable: false,
-                        formatter: noti_inner_div, cellattr: font_formatter
-                    }
-                ],
-
-                viewrecords: true,
-                rowNum: 10,
-                rowList: [10, 20, 30],
-                pager: pager_selector,
-                altRows: true,
-                selectable: false,
-
-                loadComplete: function () {
-                    var table = this;
-                    setTimeout(function () {
-                        updatePagerIcons();
-                        enableTooltips(table);
-                    }, 0);
-                    if (0 === $('#noti-table').jqGrid('getGridParam', 'records'))
-                        layoutViews();
-                },
-
-                jsonReader: {
-                    root: 'data',
-                }
-            });
-
-            $(window).triggerHandler('resize.jqGrid');
-
-            //navButtons
-            jQuery(grid_selector).jqGrid('navGrid', pager_selector,
-                { 	//navbar options
-                    add: false,
-                    del: false,
-                    edit: false,
-                    search: false,
-                    // searchicon: 'ace-icon fa fa-search orange',
-                    refresh: true,
-                    refreshicon: 'ace-icon fa fa-refresh green',
-                },
-                {   //view record form
-                    recreateForm: true,
-                    beforeShowForm: function (e) {
-                        var form = $(e[0]);
-                        form.closest('.ui-jqdialog').find('.ui-jqdialog-title').wrap('<div class="widget-header" />')
-                    }
-                }
-            );
-
-            function updatePagerIcons() {
-                var replacement =
-                    {
-                        'ui-icon-seek-first': 'ace-icon fa fa-angle-double-left bigger-140',
-                        'ui-icon-seek-prev': 'ace-icon fa fa-angle-left bigger-140',
-                        'ui-icon-seek-next': 'ace-icon fa fa-angle-right bigger-140',
-                        'ui-icon-seek-end': 'ace-icon fa fa-angle-double-right bigger-140'
-                    };
-                $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
-                    var icon = $(this);
-                    var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
-
-                    if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
-                })
-            }
-
-            function enableTooltips(table) {
-                $('.navtable .ui-pg-button').tooltip({container: 'body'});
-                $(table).find('.ui-pg-div').tooltip({container: 'body'});
-            }
-
-            $(document).one('ajaxloadstart.page', function () {
-                $.jgrid.gridDestroy(grid_selector);
-                $('.ui-jqdialog').remove();
-            });
-        });
-
-        jQuery(function ($) {
-            var grid_selector = "#bull_table";
-            var pager_selector = "#bull_pager";
-
-            var parent_column = $(grid_selector).closest('[class*="col-"]'); // .closest('.parent')
-            //resize to fit page size
-            $(window).on('resize.jqGrid', function () {
-                $(grid_selector).jqGrid('setGridWidth', parent_column.width());
-            });
-            $(document).on('settings.ace.jqGrid', function (ev, event_name) {
-                if (event_name === 'sidebar_collapsed' || event_name === 'main_container_fixed') {
-                    //setTimeout is for webkit only to give time for DOM changes and then redraw!!!
-                    setTimeout(function () {
-                        $(grid_selector).jqGrid('setGridWidth', parent_column.width());
-                    }, 20);
-                }
-            });
-
-            var bull_inner_div = function (cellValue, options, rowObject) {
-
-                var rid = rowObject.id;
-                var code = "/normal/viewBulletin.html" + "?" + rid;
-                if (userInfo.role === ROLE.admin)
-                    return "<span>&nbsp;</span>" +
-                        "<a href=\"" + code + "\">查看详情</a>" +
-                        "<span>&nbsp;&nbsp;&nbsp;</span>" +
-                        "<i class='ace-icon fa fa-trash-o red bigger-110' " +
-                        "style='cursor: pointer' " +
-                        "onclick='delete_bull(" + rid + ")'></i>";
-                return "<span>&nbsp;</span><a href=\"" + code + "\">查看详情</a>";
-            };
-
-            jQuery(grid_selector).jqGrid({
-
-                url: API.get_bull,
-                postData: {page: 1, rows: 100000},
-                datatype: "json",
-                height: 'auto',
-                colNames: ['来自', '标题', '时间', '操作'],
-                colModel: [
-                    {
-                        name: 'from', index: 'from', width: 58, sortable: false, cellattr:
-                        font_formatter
-                    },
-                    {
-                        name: 'title',
-                        index: 'title',
-                        width: 200,
-                        sortable: false,
-                        cellattr: font_formatter
-                    },
-                    {
-                        name: 'time',
-                        index: 'time',
-                        sorttype: "date",
-                        width: 60,
-                        cellattr: font_formatter,
-                        formatter: getFormattedServerTime
-                    },
-                    {
-                        name: 'id', index: 'id', width: 45, sortable: false,
-                        formatter: bull_inner_div, cellattr: font_formatter
-                    }],
-
-                viewrecords: true,
-                rowNum: 10,
-                rowList: [10, 20, 30],
-                pager: pager_selector,
-                altRows: true,
-                selectable: false,
-                multiselect: userInfo.role === ROLE.admin,
-                loadComplete: function () {
-                    var table = this;
-                    setTimeout(function () {
-                        updatePagerIcons();
-                        enableTooltips(table);
-                    }, 0);
-                },
-
-                jsonReader: {
-                    root: 'data',
-                }
-
-            });
-            $(window).triggerHandler('resize.jqGrid');
+<!-- index scripts -->
+<script src="/js/API.js"></script>
+<script src="/js/common.js"></script>
+<script src="/js/index.js"></script>
 
 
-            var deleteRows = function (rowid) {
-                // if (ro)
-                alert("delete bulls multi :" + rowid);
-            };
-
-            //navButtons
-            jQuery(grid_selector).jqGrid('navGrid', pager_selector,
-                { 	//navbar options
-                    add: false,
-                    edit: false,
-                    del: userInfo.role === ROLE.admin,
-                    delfunc: deleteRows,
-                    search: false,
-                    refresh: true,
-                    refreshicon: 'ace-icon fa fa-refresh green',
-                },
-                {
-                    //view record form
-                    recreateForm: true,
-                    beforeShowForm: function (e) {
-                        var form = $(e[0]);
-                        form.closest('.ui-jqdialog').find('.ui-jqdialog-title').wrap('<div class="widget-header" />')
-                    }
-                }
-            );
-
-            function updatePagerIcons() {
-                var replacement = {
-                    'ui-icon-seek-first': 'ace-icon fa fa-angle-double-left bigger-140',
-                    'ui-icon-seek-prev': 'ace-icon fa fa-angle-left bigger-140',
-                    'ui-icon-seek-next': 'ace-icon fa fa-angle-right bigger-140',
-                    'ui-icon-seek-end': 'ace-icon fa fa-angle-double-right bigger-140'
-                };
-                $('.ui-pg-table:not(.navtable) > tbody > tr > .ui-pg-button > .ui-icon').each(function () {
-                    var icon = $(this);
-                    var $class = $.trim(icon.attr('class').replace('ui-icon', ''));
-
-                    if ($class in replacement) icon.attr('class', 'ui-icon ' + replacement[$class]);
-                })
-            }
-
-            function enableTooltips(table) {
-                $('.navtable .ui-pg-button').tooltip({container: 'body'});
-                $(table).find('.ui-pg-div').tooltip({container: 'body'});
-            }
-
-            $(document).one('ajaxloadstart.page', function () {
-                $.jgrid.gridDestroy(grid_selector);
-                $('.ui-jqdialog').remove();
-            });
-        });
-
-    });
-
-
-</script>
 <script>
     function goURI(status, manage, lab) {
         var u = "/student/project_s.html?";
@@ -813,35 +435,6 @@
         location.href = u;
     }
 
-    // 按钮响应
-    jQuery(function ($) {
-        $('#my_noti_refresh').on('click', function () {
-            location.href = "/normal/index.html";
-        });
-        $('#mark_all_read').on('click', function (e) {
-            $.post(API.del_noti_all, function (data) {
-                switch (data.status) {
-                    case 200:
-                        alert(data.message);
-                        layoutViews();
-                        break;
-                    case 300:
-                        alert(data.message);
-                        break;
-                    case 400:
-                        PermissionDenied(data.message);
-                        break;
-                    default:
-                        alert("操作失败");
-                }
-            });
-            e.preventDefault();
-        });
-        $('#post_noti').on('click', function () {
-            location.href = '/post_noti.html';
-        });
-
-    });
 
 </script>
 

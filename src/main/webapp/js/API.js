@@ -35,6 +35,7 @@ var API = {
     get_bull:       BASE_URL + "/bulletin/get",
     del_bull:       BASE_URL + "/bulletin/delete", // ids=12@23
 
+    get_lab_names:  BASE_URL + "/lab/get/name",
 
     // admin
     get_pro_admin:  BASE_URL + "/admin/project/all"
@@ -48,14 +49,3 @@ var ROLE = {
     admin:      3
 };
 
-var ProjectStatus = {
-    checking: "审核中",
-    rejected: "已拒绝",
-    canceled: "已取消",
-    processing: "进行中",
-    finished: "已完成",
-    overtime: "已超时",
-
-    request_modi: "请求修改中",
-    request_chck: "请求检查中"
-};

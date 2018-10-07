@@ -30,9 +30,9 @@ public class Modification {
     private List<Student> member_list;
 
     public boolean check() {
-        if (Tools.isNullOrEmp(name, aim, type, members, leader_id))
+        if (Tools.isNullOrTrimEmp(name, aim, type, members, leader_id))
             return false;
-
+        name = name.trim();
         boolean b = false;
         for (String i: ProjectType)
             if (type.equals(i)) {

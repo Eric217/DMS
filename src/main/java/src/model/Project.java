@@ -6,7 +6,6 @@ import src.eric.Tools;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import static src.eric.Constant.ProjectType;
@@ -37,9 +36,10 @@ public class Project implements Serializable {
     private List<Student> members;
 
     public boolean check() {
-        if (Tools.isNullOrEmp(name, aim, type))
-            return false;
 
+        if (Tools.isNullOrTrimEmp(name, aim, type))
+            return false;
+        name = name.trim();
         boolean b = false;
         for (String i: ProjectType)
             if (type.equals(i)) {

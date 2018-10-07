@@ -38,19 +38,20 @@ public class NotificationController {
      *  @param to 以 @ 分隔 */
     @RequestMapping(value = "/post", method = RequestMethod.POST)
     public Result postNotiToAny(String to, Notification vo, HttpSession session) {
-        if (vo == null || Tools.isNullOrEmp(to, vo.getContent()))
+        if (vo == null || Tools.isNullOrTrimEmp(to, vo.getContent()))
             return ResultCache.ARG_ERROR;
         if (!PermissionService.IS_ADMIN(session))
             return ResultCache.PERMISSION_DENIED;
         vo.setFrom(Constant.SYSTEM_ADMIN);
-        vo.setType(Constant.SYSTEM_NOTIFICATION);
+        var t = vo.getType();
+        vo.setType(Tools.isNullOrTrimEmp(t) ? Constant.SYSTEM_NOTIFICATION : t.trim());
         return notificationService.notifyStudentsByIds(
                 Tools.split(to, "@", null), vo);
     }
 
     @RequestMapping(value = "/post2", method = RequestMethod.POST)
     public Result postNotiToProject(Long pid, Notification vo, HttpSession session) {
-//        if (vo == null || Tools.isNullOrEmp(to, vo.getContent()))
+//        if (vo == null || Tools.isNullOrTrimEmp(to, vo.getContent()))
 //            return ResultCache.ARG_ERROR;
 //        if (!PermissionService.IS_ADMIN(session))
 //            return ResultCache.PERMISSION_DENIED;

@@ -16,6 +16,7 @@ public interface LabDAO {
     Laboratory getLabById(Long id);
 
     List<Laboratory> getAllLabs();
+    List<String> getAllLabNames();
 
     void insertLab(Laboratory vo);
 

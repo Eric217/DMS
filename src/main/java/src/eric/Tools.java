@@ -35,9 +35,13 @@ public class Tools {
         return true;
     }
 
-    public static boolean isNullOrEmp(String... strings) {
+    public static boolean validateRealStudent(String sdu_mail, String name) { // TODO: - CHECK
+        return true;
+    }
+
+    public static boolean isNullOrTrimEmp(String... strings) {
         for (String str: strings) {
-            if (str == null || str.isEmpty())
+            if (str == null || str.trim().isEmpty())
                 return true;
         }
         return false;

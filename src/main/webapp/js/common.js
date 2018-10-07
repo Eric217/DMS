@@ -6,6 +6,18 @@ var userInfo = {
     admin: null
 };
 
+var ProjectStatus = {
+    checking: "审核中",
+    rejected: "已拒绝",
+    canceled: "已取消",
+    processing: "进行中",
+    finished: "已完成",
+    overtime: "已超时",
+
+    request_modi: "请求修改中",
+    request_chck: "请求检查中"
+};
+
 /** @param data jquery response -> data */
 function fillUserInfo(data) {
     var u_t = data.role;
@@ -16,6 +28,25 @@ function fillUserInfo(data) {
     userInfo.lab = data.lab;
 }
 
+// 用于响应点击浏览器的返回 按钮，稍稍控制一下权限
+var execOnce = true;
+onpageshow = function () {
+    if (execOnce)
+        execOnce = false;
+    else {
+        $.get(API.login_type, function (data) {
+            var u_t = data.data.role;
+            if (u_t === undefined || u_t === ROLE.no_user)
+                location.href = "/login.html";
+            else if (u_t !== userInfo.role)
+                PermissionDenied("页面已过期，即将刷新页面");
+            userInfo.user = data.data.student;
+            userInfo.lab = data.data.lab;
+        });
+    }
+};
+
+// 日期格式化器
 Date.prototype.format = function(format) {
     var o = {
         "M+" : this.getMonth()+1, //month
@@ -40,13 +71,16 @@ function getFormattedServerTime(cellvalue, options, rowObject) {
     return new Date(rowObject.time.replace('+0000', 'Z')).format('yyyy-MM-dd hh:mm');
 }
 
-function PermissionDenied(msg) {
-    if (!msg)
-        msg = "权限不足，即将刷新页面";
-    alert(msg);
-    location.reload();
+function isNumber(obj) {
+    return typeof obj === 'number' && !isNaN(obj)
 }
 
+function checkLength(dom, num) {
+    if (dom.value.length > num)
+        dom.value = dom.value.substring(0, num);
+}
+
+// html 参数
 function getArgsObj() {
     var str = (location.search.replace('?', ''));
     var args = str.split('&');
@@ -58,33 +92,6 @@ function getArgsObj() {
         }
     }
     return arg_obj;
-}
-
-
-function check_index() {
-
-    $.get(API.login_type, function (data) {
-
-        var u_t = data.data.role;
-        if (u_t === ROLE.no_user)
-            location.href = "/login.html";
-
-        userInfo.role = u_t;
-        userInfo.user = data.data.student;
-        // 用户是 role 类型，但访问的 path 不是他的，需要跳转。
-        if (u_t === ROLE.normal) { // normal
-            if (location.pathname.indexOf("normal") === -1)
-                location.href = "/normal/index.html";
-        } else if (u_t === ROLE.lab) { // lab
-            if (location.pathname.indexOf("lab") === -1)
-                location.href = "/lab/index_l.html";
-        } else if (u_t === ROLE.admin) { // admin
-            if (location.pathname.indexOf("admin") === -1)
-                location.href = "/admin/index_a.html";
-            userInfo.user = data.data.admin;
-        }
-        fillNameLabel();
-    });
 }
 
 function calculate_status(pro) {
@@ -107,13 +114,42 @@ function calculate_status(pro) {
     }
     return ProjectStatus.overtime;
 
-} 
+}
 
+// 根据权限初步布局
+function layoutBars() {
+
+    if (userInfo.role === ROLE.admin) {
+        $('.admin_cls').removeClass("hidden");
+        $('#user_name_label').text("管理员");
+        $('#head_image').attr('src', "/assets/images/avatars/admin.png");
+
+    } else if (userInfo.role !== ROLE.no_user) { // 已登陆的学生，含实验室负责人
+        $('#head_image').attr("src", "/assets/images/avatars/user2.png");
+        $('#user_name_label').text(userInfo.user.name);
+        $('#my_project_li').removeClass("hidden");
+        $('.stu_profile').removeClass("hidden");
+        if (userInfo.role === ROLE.lab) {
+            $('#right_top_lab').removeClass("hidden");
+            $('.my_lab_cls').removeClass("hidden");
+        }
+    }
+}
 
 
 function logout() {
-    $.post(API.logout, function () {
-        location.href = "/login.html";
+    $.post(API.logout, function (data) {
+        if (data.status === 200)
+            location.href = "/login.html";
+        else
+            alert(data.message);
     });
+}
 
+function PermissionDenied(msg) {
+    if (!msg)
+        msg = "权限不足，即将刷新页面";
+    alert(msg);
+    // noinspection SillyAssignmentJS
+    location.href = location.href;
 }

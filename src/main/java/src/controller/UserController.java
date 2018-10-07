@@ -86,8 +86,9 @@ public class UserController {
     public Result verifyCode(String email, String code, String password,
                              String name, HttpSession session) {
         try {
-            if (Tools.isNullOrEmp(email, code, name) || !Tools.isRightPass(password))
+            if (Tools.isNullOrTrimEmp(email, code, name) || !Tools.isRightPass(password))
                 return ResultCache.ARG_ERROR;
+            name = name.trim();
             boolean b1 = email.equals(session.getAttribute(S_VERI_MAIL));
             Date last_req = (Date) session.getAttribute(S_VERI_LAST), now = new Date();
             boolean b2 = last_req != null &&
@@ -100,7 +101,9 @@ public class UserController {
                 return ResultCache.failWithMessage("验证码输入错误");
             if (studentService.emailExist(email))
                 return ResultCache.failWithMessage("该邮箱已被注册");
-
+            b3 = Tools.validateRealStudent(email, name);
+            if (!b3)
+                return ResultCache.failWithMessage("邮箱与姓名不匹配");
             Student student = new Student();
             String sid = email.split("@")[0];
             student.setId(sid);
@@ -152,7 +155,7 @@ public class UserController {
     /** 提交重置密码 */
     @RequestMapping(value = "/resetPassword/code", method = RequestMethod.POST)
     public Result verifyCode_2(String email, String code, String password, HttpSession session) {
-        if (Tools.isNullOrEmp(email, code))
+        if (Tools.isNullOrTrimEmp(email, code))
             return ResultCache.failWithMessage("不能为空");
         if (!Tools.isRightPass(password))
             return ResultCache.failWithMessage("密码格式错误");

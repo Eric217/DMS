@@ -29,6 +29,14 @@ public class LabController {
         return labService.getAllLabs();
     }
 
+    /** 已登陆权限：查看实验室名字列表 */
+    @RequestMapping(value = "/get/name", method = RequestMethod.GET)
+    public Result getAllLabNames(HttpSession session) {
+        if (!PermissionService.IS_LOGIN(session))
+            return ResultCache.PERMISSION_DENIED;
+        return labService.getAllLabNames();
+    }
+
     /** 已登陆权限：查看实验室信息 */
     @RequestMapping(value = "/get", method = RequestMethod.GET)
     public Result getLabById(Long id, HttpSession session) {

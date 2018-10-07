@@ -26,7 +26,7 @@ public class StudentController {
     /** 权限：自己，管理员 */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public Result updateStudent(Student s, HttpSession session) {
-        if (s == null || Tools.isNullOrEmp(s.getId(), s.getName()))
+        if (s == null || Tools.isNullOrTrimEmp(s.getId(), s.getName()))
             return ResultCache.ARG_ERROR;
         if (!PermissionService.IS_ADMIN(session))
             if (!PermissionService.IS_CURRENT_USER(s.getId(), session))

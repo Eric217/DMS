@@ -47,7 +47,6 @@ public class ProjectService {
             // TODO: - 检查 sid、lid 是否在 punish 期内
             projectDAO.insertProject(vo); // 如果 lab_name 不合法这里会捕获异常
             pid = vo.getId();
-            System.out.println("inserted pid = " + pid);
             for (String sid : sids)
                 projectDAO.addMember(sid, pid);
             projectDAO.addMember(vo.getLeader_id(), pid);

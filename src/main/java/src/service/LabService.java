@@ -41,6 +41,14 @@ public class LabService {
         }
     }
 
+    public Result getAllLabNames() {
+        try {
+            return ResultCache.getDataOk(labDAO.getAllLabNames());
+        } catch (Exception e) {
+            return ResultCache.DATABASE_ERROR;
+        }
+    }
+
     public Result insertLab(Laboratory vo) {
         try {
             labDAO.insertLab(vo);

@@ -56,8 +56,9 @@ public class BulletinController {
 
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public Result createBulletin(Bulletin vo, HttpSession session) {
-        if (vo == null || Tools.isNullOrEmp(vo.getTitle(), vo.getContent()))
+        if (vo == null || Tools.isNullOrTrimEmp(vo.getTitle(), vo.getContent()))
             return ResultCache.ARG_ERROR;
+        vo.setTitle(vo.getTitle().trim());
         if (PermissionService.IS_ADMIN(session))
             vo.setFrom(Constant.SYSTEM_BULLETIN);
         else {
@@ -99,7 +100,7 @@ public class BulletinController {
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public Result updateBulletin(Bulletin vo, HttpSession session) {
 
-        if (vo == null || vo.getId() == null || Tools.isNullOrEmp(vo.getTitle(), vo.getContent()))
+        if (vo == null || vo.getId() == null || Tools.isNullOrTrimEmp(vo.getTitle(), vo.getContent()))
             return ResultCache.ARG_ERROR;
         if (!PermissionService.IS_ADMIN(session)) {
             Laboratory lab = PermissionService.getManagedLab(session, labService);

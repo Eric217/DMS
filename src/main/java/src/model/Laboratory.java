@@ -16,7 +16,11 @@ public class Laboratory {
     private String create_time;
 
     public boolean check() {
-        return !Tools.isNullOrEmp(name, classroom, description);
+        if (Tools.isNullOrTrimEmp(name, classroom, description))
+            return false;
+        name = name.trim();
+        classroom = classroom.trim();
+        return true;
     }
 
 }

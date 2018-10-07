@@ -26,6 +26,11 @@
         select id, name, classroom, leader_id, create_time from laboratory;
     </select>
 
+    <select id="getAllLabNames" resultType="string">
+        select name from laboratory;
+    </select>
+
+
     <insert id="insertLab" parameterType="src.model.Laboratory">
         insert into laboratory(name, classroom, description, leader_id)
         values (#{name}, #{classroom}, #{description}, #{leader_id});

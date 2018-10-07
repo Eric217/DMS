@@ -3,19 +3,27 @@
     <words>
       <w>ajaxloadstart</w>
       <w>cellattr</w>
+      <w>chck</w>
       <w>datatype</w>
+      <w>datepicker</w>
       <w>delfunc</w>
       <w>dropdown</w>
       <w>editbutton</w>
       <w>formatoptions</w>
+      <w>googleapis</w>
       <w>gview</w>
       <w>jqdialog</w>
+      <w>modi</w>
       <w>multiselect</w>
       <w>navbar</w>
       <w>noti</w>
+      <w>onpageshow</w>
+      <w>ontouchstart</w>
+      <w>proj</w>
       <w>refreshicon</w>
       <w>sorttype</w>
       <w>titlebar</w>
+      <w>toggler</w>
       <w>viewrecords</w>
       <w>yyyy</w>
     </words>
