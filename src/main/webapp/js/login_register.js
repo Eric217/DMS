@@ -5,6 +5,31 @@ function refreshCode() {
     code_img.attr("src", API.image_code + "?" + Math.random());
 }
 
+function getCode(jqv_obj, n) {
+
+    (function() {
+        if(n > 0) {
+            $('#send_code').attr("disabled", true);
+            $('#send_code2').attr("disabled", true);
+            jqv_obj.text('' + (n--) + '秒后再试');
+            setTimeout(arguments.callee, 1000);
+        } else {
+            $('#send_code').attr("disabled", false);
+            $('#send_code2').attr("disabled", false);
+            jqv_obj.text('发送验证码');
+        }
+    })();
+}
+
+onpageshow = function () {
+    $.get(API.login_type, function (data) {
+        var u_t = data.data.role;
+        if (u_t === undefined || u_t === ROLE.no_user)
+            return;
+        location.href = "/index.html";
+    });
+};
+
 jQuery(function($) {
 
     $(document).on('click', '.toolbar a[data-target]', function(e) {
@@ -128,6 +153,7 @@ jQuery(function($) {
         $.post(API.register_code, model, function (data) {
             alert(data.message);
         });
+        getCode($('.sending_code'), 10);
         e.preventDefault();
     });
     $("#send_code2").on('click', function (e) {
@@ -141,6 +167,7 @@ jQuery(function($) {
         $.post(API.resetPass_code, model, function (data) {
             alert(data.message);
         });
+        getCode($('.sending_code'), 10);
         e.preventDefault();
     });
     $("#reset_password").on('click', function (e) {
@@ -173,14 +200,6 @@ jQuery(function($) {
 
 });
 
-onpageshow = function () {
-    $.get(API.login_type, function (data) {
-        var u_t = data.data.role;
-        if (u_t === undefined || u_t === ROLE.no_user)
-            return;
-        location.href = "/index.html";
-    });
-};
 
 if ('ontouchstart' in document.documentElement)
     document.write("<script src='assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");

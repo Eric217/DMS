@@ -76,6 +76,7 @@
                                                                    id="username_input"
                                                                    class="form-control"
                                                                    name="username"
+                                                                   maxlength="20"
                                                                    placeholder="学号/管理员账号"/>
 															<i class="ace-icon fa fa-user"></i>
 														</span>
@@ -87,6 +88,7 @@
                                                                    id="pass_input"
                                                                    class="form-control"
                                                                    name="password"
+                                                                   maxlength="20"
                                                                    placeholder="密码"/>
 															<i class="ace-icon fa fa-lock"></i>
 														</span>
@@ -97,6 +99,7 @@
 															<input type="text"
                                                                    class="form-control"
                                                                    id="verify_input"
+                                                                   maxlength="10"
                                                                    placeholder="验证码" style=""/>
 															<div>
 																<div style="position: absolute;
@@ -196,7 +199,7 @@
 															<button type="button"
                                                                     class="width-40 pull-right btn btn-sm btn-danger"
                                                                     id="send_code2">
-																<span class="bigger-110">发送验证码</span>
+																<span class="bigger-110 sending_code">发送验证码</span>
 															</button>
 														</span>
                                             </label>
@@ -229,7 +232,7 @@
                                 <div class="toolbar center">
                                     <a href="#" data-target="#login-box"
                                        class="back-to-login-link">
-                                        Back to login
+                                        返回登陆
                                         <i class="ace-icon fa fa-arrow-right"></i>
                                     </a>
                                 </div>
@@ -252,6 +255,7 @@
                                             <label class="block clearfix">
 														<span class="block input-icon input-icon-right">
 															<input type="email"
+                                                                   maxlength="30"
                                                                    id="email_input1"
                                                                    class="form-control"
                                                                    placeholder="山东大学学生邮箱"/>
@@ -264,12 +268,14 @@
 															<input type="text"
                                                                    class="form-control"
                                                                    placeholder="验证码"
+                                                                   maxlength="10"
                                                                    id="verify_input2"
                                                             />
 															<button type="button"
                                                                     class="width-40 pull-right btn btn-sm btn-primary"
                                                                     id="send_code">
-																<span class="bigger-110">发送验证码</span>
+																<span
+                                                                        class="bigger-110 sending_code">发送验证码</span>
 															</button>
 														</span>
 
@@ -279,6 +285,7 @@
 														<span class="block input-icon input-icon-right">
 															<input type="text" id="name_input"
                                                                    class="form-control"
+                                                                   maxlength="20"
                                                                    placeholder="真实姓名"/>
 															<i class="ace-icon fa fa-user"></i>
 														</span>
@@ -289,6 +296,7 @@
 															<input type="password"
                                                                    id="pass_input2"
                                                                    class="form-control"
+                                                                   maxlength="16"
                                                                    placeholder="8 ~ 16 位密码"/>
 															<i class="ace-icon fa fa-lock"></i>
 														</span>
@@ -299,7 +307,9 @@
                                                        id="check_r_box"/>
                                                 <span class="lbl">
 															I accept the
-															<a href="#">User Agreement</a>
+															<a href=""
+                                                               onclick="window.open('/agreement')">User
+                                                                Agreement</a>
 														</span>
                                             </label>
 
@@ -328,7 +338,7 @@
                                     <a href="#" data-target="#login-box"
                                        class="back-to-login-link">
                                         <i class="ace-icon fa fa-arrow-left"></i>
-                                        Back to login
+                                        返回登陆
                                     </a>
                                 </div>
                             </div><!-- /.widget-body -->

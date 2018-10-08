@@ -1,123 +1,4 @@
 
-// 按钮响应
-jQuery(function ($) {
-    $('#my_noti_refresh').on('click', function () {
-        location.href = "/index.html"
-    });
-    $('#mark_all_read').on('click', function (e) {
-        $.post(API.del_noti_all, function (data) {
-            switch (data.status) {
-                case 200:
-                    alert(data.message);
-                    layoutBasicViews();
-                    break;
-                case 300:
-                    alert(data.message);
-                    break;
-                case 400:
-                    PermissionDenied(data.message);
-                    break;
-                default:
-                    alert("操作失败");
-            }
-        });
-        e.preventDefault();
-    });
-    $('#post_noti').on('click', function () {
-        location.href = '/notification/post.html';
-    });
-    $('#post_bulletin').on('click', function () {
-        location.href = '/bulletin/edit.html';
-    });
-
-
-});
-
-// 布局
-function layoutBasicViews() {
-
-    if (userInfo.role === ROLE.admin) {
-        $('#post_noti_header').removeClass("hidden");
-        $('#noti_col').addClass("hidden");
-    } else if (userInfo.role !== ROLE.no_user) { // 已登陆的学生，含实验室负责人
-        $('#my_noti_header').removeClass("hidden");
-        if (userInfo.role === ROLE.lab) {
-            $('#post_bulletin').removeClass("hidden");
-            $('#post_noti_butt').removeClass("hidden");
-        }
-        $.get(API.get_noti, {sid: userInfo.user.id}, function (data) {
-            if (data.status !== 200) {
-                alert(data.message);
-                return;
-            }
-            var dataArr = data.data;
-            var noti_col = $('#noti_col');
-            if (dataArr === undefined || dataArr.length === 0) {
-                $('#my_noti').text("没有通知");
-                $('#mark_all_read').hide();
-                if (!noti_col.hasClass("hidden"))
-                    noti_col.addClass("hidden");
-            } else {
-                if (noti_col.hasClass("hidden"))
-                    noti_col.removeClass("hidden");
-            }
-        });
-    }
-}
-
-// 点击 grid 自带的刷新按钮，只会把自己刷没，然后只能通过自定义的刷新按钮刷新整个界面。
-function layoutNotiCol(records) {
-    if (records === 0) {
-        $('#my_noti').text("没有通知");
-        $('#mark_all_read').hide();
-        $('#noti_col').hide();
-    }
-}
-
-
-// 下面两个函数是写在一个字符串里调用的，删除功能
-// noinspection JSUnusedLocalSymbols
-var delete_noti = function (rid) {
-
-    $.post(API.del_noti, {nid: rid}, function (data) {
-        switch (data.status) {
-            case 200:
-                alert(data.message);
-                $('#noti_table').trigger("reloadGrid");
-                break;
-            case 300:
-                alert(data.message);
-                break;
-            case 400:
-                PermissionDenied(data.message);
-                break;
-            default:
-                alert("操作失败");
-        }
-    });
-};
-
-// noinspection JSUnusedLocalSymbols
-var delete_bull = function (rid) {
-
-    $.post(API.del_bull, {ids: rid}, function (data) {
-        switch (data.status) {
-            case 200:
-                alert(data.message);
-                $('#bull_table').trigger("reloadGrid");
-                break;
-            case 300:
-                alert(data.message);
-                break;
-            case 400:
-                PermissionDenied(data.message);
-                break;
-            default:
-                alert("操作失败");
-        }
-    });
-};
-
 // 初始化页面
 $.get(API.login_type, function (data) {
 
@@ -280,7 +161,6 @@ $.get(API.login_type, function (data) {
         });
     });
 
-
     // 加载 noti
     jQuery(function ($) {
         if (userInfo.role === ROLE.admin)
@@ -417,12 +297,67 @@ $.get(API.login_type, function (data) {
         });
     });
 
-
-
-
-
-
-
-
 });
 
+// 布局
+function layoutBasicViews() {
+
+    if (userInfo.role === ROLE.admin) {
+        $('#post_noti_header').removeClass("hidden");
+        $('#noti_col').addClass("hidden");
+    } else if (userInfo.role !== ROLE.no_user) { // 已登陆的学生，含实验室负责人
+        $('#my_noti_header').removeClass("hidden");
+        if (userInfo.role === ROLE.lab) {
+            $('#post_bulletin').removeClass("hidden");
+            $('#post_noti_butt').removeClass("hidden");
+        }
+    }
+}
+// 点击 grid 自带的刷新按钮，只会把自己刷没，然后只能通过自定义的刷新按钮刷新整个界面。
+function layoutNotiCol(records) {
+    if (records === 0) {
+        $('#my_noti').text("没有通知");
+        $('#mark_all_read').hide();
+        $('#noti_col').hide();
+    }
+}
+
+// 按钮响应
+jQuery(function ($) {
+    $('#my_noti_refresh').on('click', function () {
+        location.href = "/index.html"
+    });
+    $('#mark_all_read').on('click', function (e) {
+        $.post(API.del_noti_all, function (data) {
+            reactToResponse(data, function () {
+               layoutNotiCol(0);
+            });
+        });
+        e.preventDefault();
+    });
+    $('#post_noti').on('click', function () {
+        location.href = '/notification/post.html';
+    });
+    $('#post_bulletin').on('click', function () {
+        location.href = '/bulletin/edit.html';
+    });
+});
+
+// 下面两个函数是写在一个字符串里调用的，删除功能
+// noinspection JSUnusedLocalSymbols
+var delete_noti = function (rid) {
+    $.post(API.del_noti, {nid: rid}, function (data) {
+        reactToResponse(data, function () {
+            $('#noti_table').trigger("reloadGrid");
+        });
+    });
+};
+
+// noinspection JSUnusedLocalSymbols
+var delete_bull = function (rid) {
+    $.post(API.del_bull, {ids: rid}, function (data) {
+        reactToResponse(data, function () {
+            $('#bull_table').trigger("reloadGrid");
+        });
+    });
+};

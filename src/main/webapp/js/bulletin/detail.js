@@ -40,8 +40,7 @@ function layoutViews() {
     $('#bull_from').text(bulletin.from);
     $('#bull_time').text(formatServerTime(bulletin.time));
     $('#bull_title').text(bulletin.title);
-    $('#bull_content').html("<span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>" +
-        bulletin.content);
+    $('#bull_content').html(bulletin.content);
 }
 
 jQuery(function($) {

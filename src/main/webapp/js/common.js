@@ -183,3 +183,17 @@ function PermissionDenied(msg) {
     // noinspection SillyAssignmentJS
     location.href = location.href;
 }
+
+function reactToResponse(data, success) {
+    switch (data.status) {
+        case 200:
+            alert(data.message);
+            success(); break;
+        case 300:
+            alert(data.message); break;
+        case 400:
+            PermissionDenied(data.message); break;
+        default:
+            alert("操作失败");
+    }
+}

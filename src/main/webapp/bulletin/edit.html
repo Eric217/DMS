@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/assets/font-awesome/4.5.0/css/font-awesome.min.css"/>
 
+    <link rel="stylesheet" href="/assets/css/jquery-ui.custom.min.css"/>
+
     <!-- text fonts -->
     <link rel="stylesheet" href="/assets/css/fonts.googleapis.com.css"/>
     <!-- ace styles -->
@@ -37,13 +39,6 @@
     <script src="/assets/js/html5shiv.min.js"></script>
     <script src="/assets/js/respond.min.js"></script>
     <![endif]-->
-    <!--[if !IE]> -->
-    <script src="/assets/js/jquery-2.1.4.min.js"></script>
-    <!-- <![endif]-->
-    <!--[if IE]>
-    <script src="/assets/js/jquery-1.11.3.min.js"></script>
-    <![endif]-->
-
 
 </head>
 
@@ -341,33 +336,31 @@
 
                 <div class="row">
                     <div class="col-xs-12">
-                        <div class="space-6"></div>
+                        <div class="space-8"></div>
 
-                        <form class="form-horizontal col-md-offset-1 ">
-                            <div class="form-group row">
-                                <label for="bull_name"
-                                       class="col-sm-2 control-label bigger-120"><span
-                                        style="margin-right: 10px"></span>公告标题:</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="bull_name"
-                                           placeholder="公告标题，30字以内"
-                                           onkeyup="checkLength(this, 30)">
+                        <div class="width-90 center-block">
+
+                            <form class="form-horizontal ">
+                                <div class="form-group row">
+                                    <label for="bull_name"
+                                           class="col-sm-2 control-label bigger-160 bolder blue"><span
+                                            style="margin-right: 10px; "></span>公告标题:</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" class="form-control bigger-125"
+                                               id="bull_name"
+                                               placeholder="公告标题，30字以内" maxlength="30"
+                                               style="height: 43px">
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
 
-                            <div class="form-group row">
-                                <label for="bull_content" class="col-sm-2 control-label bigger-120"><span
-                                        style="margin-right: 10px"></span>公告内容:</label>
+                            <h3 class="header blue clearfix align-center bigger-160">公告内容</h3>
 
-                                <div class="col-sm-8">
-                                <textarea type="text" class="form-control" id="bull_content"
-                                          rows="25" onkeyup="checkLength(this, 20000)"
-                                          placeholder="公告内容，建议不超过20000字"
-                                ></textarea>
-                                </div>
-                            </div>
-                            <div class="space-6"></div>
-                        </form>
+                            <div class="wysiwyg-editor" id="editor1" style="max-height:
+                            2000px; height: 350px;"></div>
+                            <div class="hr hr-double dotted"></div>
+
+                        </div>
 
                         <div class="space-14"></div>
 
@@ -398,11 +391,21 @@
 </div><!-- /.main-container -->
 
 <!-- basic scripts -->
-
+<!--[if !IE]> -->
+<script src="/assets/js/jquery-2.1.4.min.js"></script>
+<!-- <![endif]-->
+<!--[if IE]>
+<script src="/assets/js/jquery-1.11.3.min.js"></script>
+<![endif]-->
 <script> if ('ontouchstart' in document.documentElement)
     document.write("<script src='/assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
 </script>
 <script src="/assets/js/bootstrap.min.js"></script>
+<!-- page specific plugin scripts -->
+<script src="/assets/js/jquery-ui.custom.min.js"></script>
+<script src="/assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="/assets/js/jquery.hotkeys.index.min.js"></script>
+<script src="/assets/js/bootstrap-wysiwyg.min.js"></script>
 
 <!-- ace scripts -->
 <script src="/assets/js/ace-elements.min.js"></script>
@@ -412,6 +415,7 @@
 <script src="/js/API.js"></script>
 <script src="/js/common.js"></script>
 <script src="/js/bulletin/edit.js"></script>
+
 
 </body>
 </html>
