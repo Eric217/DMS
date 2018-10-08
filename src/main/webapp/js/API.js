@@ -24,7 +24,7 @@ var API = {
     resetPassword:  BASE_URL + "/user/resetPassword/code",
     logout:         BASE_URL + "/user/logout",
 
-    // student
+
     get_my_project: BASE_URL + "/project/student/all",
     get_sb_project: BASE_URL + "/project/student/all/admin",
     create_project: BASE_URL + "/project/create",
@@ -32,12 +32,17 @@ var API = {
     get_noti:       BASE_URL + "/noti/get",
     del_noti:       BASE_URL + "/noti/read", // nid=123
     del_noti_all:   BASE_URL + "/noti/read/all",
-    get_bull:       BASE_URL + "/bulletin/get",
+
+    get_bulls:      BASE_URL + "/bulletin/get",
+    get_bull:       BASE_URL + "/bulletin/one", // id=123
     del_bull:       BASE_URL + "/bulletin/delete", // ids=12@23
+    create_bull:    BASE_URL + "/bulletin/create",
+    update_bull:    BASE_URL + "/bulletin/update", // id must
+    bull_count:     BASE_URL + "/bulletin/count",
 
     get_lab_names:  BASE_URL + "/lab/get/name",
 
-    // admin
+
     get_pro_admin:  BASE_URL + "/admin/project/all"
 
 };

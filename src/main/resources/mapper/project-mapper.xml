@@ -65,13 +65,15 @@
         where sid = #{sid} and pid = #{pid};
     </delete>
 
-    <!-- 一个学生只允许管理一个进行中的项目（队长），参与多个项目（组员）-->
+    <!-- 一个学生只允许管理一个活跃的项目（队长），参与多个项目（组员）-->
+    <!-- 非活跃状态：已拒绝，已取消，已完成，已超时 -->
     <select id="getActiveProjectIdByLeaderId" parameterType="string"
             resultType="java.lang.Long">
         select id from project
         where leader_id = #{sid}
-        and start_time is not null and end_time is null and opt_status != 4
-        and to_seconds(start_time) + duration > to_seconds(now()) and deleted = 0;
+        and end_time is null and opt_status != 4 and opt_status != 2
+        and (start_time is null or
+         to_seconds(start_time) + duration > to_seconds(now())) and deleted = 0;
     </select>
 
     <!-- 获取最大 pid -->

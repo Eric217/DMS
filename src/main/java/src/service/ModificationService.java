@@ -3,6 +3,7 @@ package src.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import src.base.Result;
 import src.base.ResultCache;
 import src.dao.ModificationDAO;
@@ -68,6 +69,7 @@ public class ModificationService {
             }
             return ResultCache.OK;
         } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
     }
@@ -123,10 +125,12 @@ public class ModificationService {
             // 给 组长、old preserved mem 通知更新完成
             notificationService._notifyMembersByIds(updated_noti, NotificationCache.UPDATED);
             notificationService._notifyMembersByIds(added_noti,
-                    NotificationCache.CREATE_P_MEM);
-            notificationService._notifyMembersByIds(remove_noti, NotificationCache.QUIT_P);
+                    NotificationCache.CREATE_P_MEM(p.getName()));
+            notificationService._notifyMembersByIds(remove_noti,
+                    NotificationCache.QUIT_P(p.getName()));
             return ResultCache.OK;
         } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
     }
@@ -140,6 +144,7 @@ public class ModificationService {
                     NotificationCache.UPDATE_FAIL);
             return ResultCache.OK;
         } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
     }

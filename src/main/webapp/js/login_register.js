@@ -59,7 +59,7 @@ jQuery(function($) {
                 if (data.data.role === undefined || data.data.role === ROLE.no_user)
                     alert("发生了意外错误");
                 else
-                    location.href = "/normal/index.html";
+                    location.href = "/index.html";
             } else {
                 alert(data.message);
                 refreshCode();
@@ -178,7 +178,7 @@ onpageshow = function () {
         var u_t = data.data.role;
         if (u_t === undefined || u_t === ROLE.no_user)
             return;
-        location.href = "/normal/index.html";
+        location.href = "/index.html";
     });
 };
 

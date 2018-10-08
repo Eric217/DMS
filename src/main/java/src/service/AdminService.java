@@ -3,6 +3,7 @@ package src.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import src.base.Result;
 import src.base.ResultCache;
 import src.dao.AdminDAO;
@@ -30,6 +31,7 @@ public class AdminService {
         try {
             adminDAO.addAdministrator(admin);
         } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
         return ResultCache.OK;

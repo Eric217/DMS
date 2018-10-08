@@ -21,8 +21,11 @@ var ProjectStatus = {
 /** @param data jquery response -> data */
 function fillUserInfo(data) {
     var u_t = data.role;
-    if (u_t === undefined || u_t === ROLE.no_user)
+    if (u_t === undefined || u_t === ROLE.no_user) {
+        if (userInfo.role !== ROLE.no_user)
+            alert('会话已过期，即将刷新页面');
         location.href = "/login.html";
+    }
     userInfo.role = u_t;
     userInfo.user = data.student;
     userInfo.lab = data.lab;
@@ -65,10 +68,19 @@ Date.prototype.format = function(format) {
 };
 
 function getServerTime(time) {
+
     return new Date(time.replace('+0000', 'Z'));
 }
-function getFormattedServerTime(cellvalue, options, rowObject) {
-    return new Date(rowObject.time.replace('+0000', 'Z')).format('yyyy-MM-dd hh:mm');
+
+function formatServerTime(time) {
+    try {
+        var a = time.split('T');
+        var b = a[1].split(':');
+        a = a[0] + ' ' + b[0] + ':' + b[1];
+        return a;
+    } catch (e) {
+        return '日期格式异常';
+    }
 }
 
 function isNumber(obj) {
@@ -88,10 +100,28 @@ function getArgsObj() {
     for (var i = args.length - 1; i >= 0; i--) {
         if (args[i].length > 0) {
             var arg = args[i].split('=');
-            arg_obj.set(arg[0], arg[1]);
+            if (arg.length === 1)
+                arg_obj.set(arg[0], '');
+            else if (arg.length === 2)
+                arg_obj.set(arg[0], arg[1]);
         }
     }
     return arg_obj;
+}
+
+// html 参数，如果 withEqual = true，?a=b 返回 [a, b]; 否则 返回 a
+function getOneArg(withEqual) {
+    var arg = location.search.replace('?', '').split('=');
+    if (withEqual) {
+        if (arg.length === 0)
+            return ['', ''];
+        if (arg.length === 1)
+            return [arg[0], ''];
+        return arg;
+    }
+    if (arg.length === 0)
+        return '';
+    return arg[0];
 }
 
 function calculate_status(pro) {

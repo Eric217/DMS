@@ -1,8 +1,10 @@
 package src.service;
 
+import org.apache.ibatis.transaction.Transaction;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import src.base.Result;
 import src.base.ResultCache;
 import src.dao.ProjectDAO;
@@ -25,7 +27,9 @@ public class ProjectService {
     @Autowired
     ProjectDAO projectDAO;
 
-    /** 通知服务应该耦合在这里吗？？？ 还是在控制器层写。。。 */
+    /**
+     * 通知服务应该耦合在这里吗？？？ 还是在控制器层写。。。
+     */
     @Autowired
     NotificationService notificationService;
 
@@ -47,17 +51,27 @@ public class ProjectService {
             // TODO: - 检查 sid、lid 是否在 punish 期内
             projectDAO.insertProject(vo); // 如果 lab_name 不合法这里会捕获异常
             pid = vo.getId();
-            for (String sid : sids)
-                projectDAO.addMember(sid, pid);
+
+            try {
+                for (String sid : sids)
+                    projectDAO.addMember(sid, pid);
+            } catch (Exception e) {
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                return ResultCache.failWithMessage("成员学号不存在");
+            }
             projectDAO.addMember(vo.getLeader_id(), pid);
 
             // 通知成员已加入项目
-            notificationService._notifyMembersByIds(sids, NotificationCache.CREATE_P_MEM);
+            notificationService._notifyMembersByIds(sids,
+                    NotificationCache.CREATE_P_MEM(vo.getName()));
+            notificationService._notifyMembersByIds(Tools.toSet(vo.getLeader_id()),
+                    NotificationCache.CREATE_P_LEA(vo.getName()));
             // 通知实验室负责人审核
             notificationService._notifyLabLeaderOfLabName(vo.getLab_name(),
                     NotificationCache.CREATE_P_LAB(vo.getLeader_id()));
             return ResultCache.OK;
         } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
     }
@@ -87,7 +101,7 @@ public class ProjectService {
     public Result getAllProjectsByLabId(Integer page, Integer rows, Long lab_id) {
         try {
             return ResultCache.getDataOk(projectDAO.getAllSplitOfLabId(rows,
-                    rows*(page-1), lab_id));
+                    rows * (page - 1), lab_id));
         } catch (Exception e) {
             return ResultCache.DATABASE_ERROR;
         }
@@ -112,7 +126,8 @@ public class ProjectService {
 
     public Result getProjectsAdmin(Integer page, Integer rows, Integer status) {
         try {
-            List<Project> list = null; int s = status;
+            List<Project> list = null;
+            int s = status;
 
             PageRowsMap map = new PageRowsMap(rows, rows * (page - 1));
 
@@ -178,7 +193,7 @@ public class ProjectService {
 
             List<Student> oldMems = projectDAO.getMembersByProjectId(p.getId());
             List<String> oldMemIds = new ArrayList<>();
-            for (Student s: oldMems) {
+            for (Student s : oldMems) {
                 if (!s.getId().equals(p.getLeader_id()))
                     oldMemIds.add(s.getId());
             }
@@ -187,14 +202,15 @@ public class ProjectService {
             Set<String> added_noti = notify ? new HashSet<>() : null;
             Set<String> remove_noti = notify ? new HashSet<>() : null;
 
-            for (String sid: newMemIds) {
+            for (String sid : newMemIds) {
                 boolean removed = false;
                 for (int i = 0; i < oldMemIds.size(); i++) {
                     if (oldMemIds.get(i).equals(sid)) { // old preserved mem
                         if (notify)
-                           updated_noti.add(sid);
+                            updated_noti.add(sid);
                         oldMemIds.remove(i);
-                        removed = true; break;
+                        removed = true;
+                        break;
                     }
                 }
                 if (!removed) { // new participation
@@ -204,19 +220,21 @@ public class ProjectService {
                 }
             }
 
-            for (String oldId: oldMemIds) {
+            for (String oldId : oldMemIds) {
                 projectDAO.removeMember(oldId, p.getId());
                 if (notify)
-                   remove_noti.add(oldId);
+                    remove_noti.add(oldId);
             }
             if (notify) {
                 notificationService._notifyMembersByIds(updated_noti, NotificationCache.UPDATED);
                 notificationService._notifyMembersByIds(added_noti,
-                        NotificationCache.CREATE_P_MEM);
-                notificationService._notifyMembersByIds(remove_noti, NotificationCache.QUIT_P);
+                        NotificationCache.CREATE_P_MEM(p.getName()));
+                notificationService._notifyMembersByIds(remove_noti,
+                        NotificationCache.QUIT_P(p.getName()));
             }
             return ResultCache.OK;
         } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
     }
@@ -226,7 +244,7 @@ public class ProjectService {
         if (newValue > 1) newValue = 1;
         if (newValue < 0) newValue = 0;
         try {
-            for (Long id: ids) {
+            for (Long id : ids) {
                 int u = projectDAO.updateDeleted(id, newValue);
                 if (u == 1) {
                     // TODO: - 通知所有成员已删除。还要考虑真删时候的通知
@@ -234,6 +252,7 @@ public class ProjectService {
             }
             return ResultCache.OK;
         } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
     }
@@ -241,11 +260,12 @@ public class ProjectService {
     @Transactional
     public Result deleteProjects(Set<Long> ids) {
         try {
-            for (Long id: ids) {
+            for (Long id : ids) {
                 projectDAO.deleteProjectById(id);
             }
             return ResultCache.OK;
         } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
     }

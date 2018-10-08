@@ -1155,14 +1155,14 @@
     </column>
     <column id="288" parent="275" name="title">
       <Position>3</Position>
-      <DataType>varchar(20)|0s</DataType>
+      <DataType>varchar(30)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
     <column id="289" parent="275" name="content">
       <Position>4</Position>
-      <DataType>varchar(2095)|0s</DataType>
+      <DataType>varchar(20000)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
@@ -1419,6 +1419,8 @@
       <RefSchemaName>eric_db</RefSchemaName>
       <RefTableName>notification</RefTableName>
       <RefColNames>id</RefColNames>
+      <OnUpdate>cascade</OnUpdate>
+      <OnDelete>cascade</OnDelete>
     </foreign-key>
     <foreign-key id="333" parent="279" name="notify_student_id_fk">
       <ColNames>sid</ColNames>

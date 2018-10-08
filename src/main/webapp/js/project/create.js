@@ -2,6 +2,11 @@
 // 初始化页面
 $.get(API.login_type, function (data) {
 
+    if (data.data.role === ROLE.admin) {
+        alert("管理员不参与项目，因此不可创建");
+        location.href = "/index.html";
+    }
+
     fillUserInfo(data.data);
     layoutBars();
 
@@ -9,6 +14,10 @@ $.get(API.login_type, function (data) {
 
 // 下拉框
 $.get(API.get_lab_names, function (data) {
+    if (data.status !== 200) {
+        alert(data.message);
+        return;
+    }
     var names = data.data;
     var opts = "";
     for (var idx in names) {
@@ -18,7 +27,7 @@ $.get(API.get_lab_names, function (data) {
     $('#lab_select').append(opts);
 });
 
-
+// 按钮事件
 jQuery(function($) {
 
     $('#create_butt').on('click', function (e) {

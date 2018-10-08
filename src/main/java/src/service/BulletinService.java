@@ -3,6 +3,7 @@ package src.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import src.base.Result;
 import src.base.ResultCache;
 import src.dao.BulletinDAO;
@@ -42,6 +43,7 @@ public class BulletinService {
             bulletinDAO.insert(vo);
             return ResultCache.OK;
         } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
     }
@@ -51,6 +53,7 @@ public class BulletinService {
             bulletinDAO.update(vo);
             return ResultCache.OK;
         } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
     }
@@ -62,6 +65,7 @@ public class BulletinService {
                 bulletinDAO.deleteById(id);
             return ResultCache.OK;
         } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
     }

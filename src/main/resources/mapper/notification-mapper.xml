@@ -8,6 +8,7 @@
             resultType="src.model.Notification">
         select * from notification
         where id in (select nid from notify where sid = #{sid})
+        order by time desc;
     </select>
 
     <select id="getNotificationIdsBySid" parameterType="string"

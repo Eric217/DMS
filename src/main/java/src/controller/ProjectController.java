@@ -32,7 +32,9 @@ public class ProjectController {
     @Autowired
     LabService labService;
 
-    /** 权限：admin，或自己的实验室 */
+    /**
+     * 权限：admin，或自己的实验室
+     */
     @RequestMapping(value = "/count/lab", method = RequestMethod.GET)
     public Result getCountLab(Long lab_id, HttpSession session) {
         if (lab_id == null)
@@ -53,8 +55,10 @@ public class ProjectController {
         return projectService.getAllCountOfStatus(status);
     }
 
-    /** @param vo 具体需要一些 not null 的参数
-     *  @param memberIds 以 @ 分割，除 leader 外至少一个人 */
+    /**
+     * @param vo        具体需要一些 not null 的参数
+     * @param memberIds 以 @ 分割，除 leader 外至少一个人
+     */
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public Result createProject(Project vo, String memberIds, HttpSession session) {
         String sid = PermissionService.SID(session);
@@ -73,7 +77,9 @@ public class ProjectController {
         return projectService.insert(vo, sids);
     }
 
-    /** 查看某个学生的所有项目，权限：admin，或自己的 */
+    /**
+     * 查看某个学生的所有项目，权限：admin，或自己的
+     */
     @RequestMapping(value = "/student", method = RequestMethod.GET)
     public Result getProjectsByStudentId(String sid, HttpSession session) {
         if (sid == null || sid.isEmpty())
@@ -85,7 +91,9 @@ public class ProjectController {
         return ResultCache.PERMISSION_DENIED;
     }
 
-    /** 查看某一个很详细的 Project */
+    /**
+     * 查看某一个很详细的 Project
+     */
     @RequestMapping(value = "/one", method = RequestMethod.GET)
     public Result getProjectById(Long id, HttpSession session) {
         String sid = PermissionService.SID(session);
@@ -104,18 +112,21 @@ public class ProjectController {
             return r;
         if (p.getDeleted() == 1)
             return ResultCache.failWithMessage("项目不存在");
-        for (Student s: p.getMembers()) {
+        for (Student s : p.getMembers()) {
             if (s.getId().equals(sid))
                 return r;
         }
         return ResultCache.PERMISSION_DENIED;
     }
 
-    /** 查看某个实验室的 Projects
-     *  @param status 取 进行中，待审核，请求中，所有，只有在-所有-情况下才需要 page rows 参数 */
+    /**
+     * 查看某个实验室的 Projects
+     *
+     * @param status 取 进行中，待审核，请求中，所有，只有在-所有-情况下才需要 page rows 参数
+     */
     @RequestMapping(value = "/lab", method = RequestMethod.GET)
     public Result getProjectsByLabId(Integer page, Integer rows, Integer status, Long lab_id,
-                                      HttpSession session) {
+                                     HttpSession session) {
         if (lab_id == null || status == null || (status != S_PROCESSING &&
                 status != S_CREATING && status != S_REQUESTING && status != S_ALL))
             return ResultCache.ARG_ERROR;
@@ -124,11 +135,13 @@ public class ProjectController {
                 return ResultCache.PERMISSION_DENIED;
         if (status == S_ALL)
             return projectService.getAllProjectsByLabId(page == null ? 1 : page,
-                                                        rows == null ? 10 : rows, lab_id);
+                    rows == null ? 10 : rows, lab_id);
         return projectService.getProjectsWithStatusByLabId(status, lab_id);
     }
 
-    /** 对于管理人员, 获取任意状态的项目 */
+    /**
+     * 对于管理人员, 获取任意状态的项目
+     */
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public Result getProjectsAdmin(Integer page, Integer rows, Integer status,
                                    HttpSession session) {
@@ -136,12 +149,15 @@ public class ProjectController {
             return ResultCache.ARG_ERROR;
         if (!PermissionService.IS_ADMIN(session))
             return ResultCache.PERMISSION_DENIED;
-        return projectService.getProjectsAdmin(page==null ?1:page, rows==null ?10:rows, status);
+        return projectService.getProjectsAdmin(page == null ? 1 : page, rows == null ? 10 : rows, status);
     }
 
     /* 更新分两种，一种是主动更新，一种是从 modification 中同意
      * 权限：管理员、该项目所在实验室负责人 */
-    /** 主动更新，分好几种，有空再改；不允许更改所在实验室、项目组长 */
+
+    /**
+     * 主动更新，分好几种，有空再改；不允许更改所在实验室、项目组长
+     */
     @RequestMapping(value = "/update", method = RequestMethod.POST)
     public Result updateProject(Project vo, String memberIds, Boolean notify,
                                 HttpSession session) {
@@ -165,7 +181,9 @@ public class ProjectController {
         return projectService.updateProject(vo, set, notify);
     }
 
-    /** 普通用户删除，每次只允许删除一个，实际没有删除，而是更新了一个属性 */
+    /**
+     * 普通用户删除，每次只允许删除一个，实际没有删除，而是更新了一个属性
+     */
     @RequestMapping(value = "/delete/student", method = RequestMethod.POST)
     public Result updateDeleted(Long pid, Integer newValue, HttpSession session) {
         if (pid == null)
@@ -186,7 +204,9 @@ public class ProjectController {
         return projectService.updateDeleted(Tools.toSet(pid), newValue);
     }
 
-    /** 实验室负责人、管理员删除多个，ids 以 @ 分隔 */
+    /**
+     * 实验室负责人、管理员删除多个，ids 以 @ 分隔
+     */
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public Result delete_multi(String ids, HttpSession session) {
         if (StringUtils.isNullOrEmpty(ids))

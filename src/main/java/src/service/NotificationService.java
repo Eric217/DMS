@@ -4,6 +4,7 @@ package src.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import src.base.Result;
 import src.base.ResultCache;
 import src.dao.NotificationDAO;
@@ -39,11 +40,12 @@ public class NotificationService {
             _notifyMembersByIds(sids, vo);
             return ResultCache.OK;
         } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
     }
 
-    // in package:
+    // in package, xpt unhandled
     void _notifyMembersByIds(Set<String> sids, Notification vo) {
         if (sids.size() > 0) {
             notificationDAO.insertNotification(vo);
@@ -73,6 +75,7 @@ public class NotificationService {
             removeOne(nid, sid);
             return ResultCache.OK;
         } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
     }
@@ -92,6 +95,7 @@ public class NotificationService {
                 removeOne(nid, sid);
             return ResultCache.OK;
         } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
     }

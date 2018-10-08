@@ -65,7 +65,7 @@ public class BulletinController {
             Laboratory lab = PermissionService.getManagedLab(session, labService);
             if (lab == null)
                 return ResultCache.PERMISSION_DENIED;
-            vo.setFrom(lab.getName());
+            vo.setFrom(lab.getName() + "实验室");
         }
         return bulletinService.insertBulletin(vo);
     }

@@ -34,7 +34,7 @@
 
     <update id="update" parameterType="src.model.Bulletin">
         update bulletin
-        set time = now(), title = #{title}, content = #{content}
+        set time = current_timestamp(), title = #{title}, content = #{content}
         where id = #{id};
     </update>
 

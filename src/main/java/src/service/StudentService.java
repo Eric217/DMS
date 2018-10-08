@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import src.base.Result;
 import src.base.ResultCache;
 import src.dao.StudentDAO;
@@ -46,6 +47,7 @@ public class StudentService {
             studentDAO.updatePassword(email, encodePassword(newPass));
             return ResultCache.OK;
         } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
     }
@@ -55,6 +57,7 @@ public class StudentService {
             studentDAO.insertStudent(vo);
             return ResultCache.OK;
         } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
     }
@@ -65,6 +68,7 @@ public class StudentService {
             for (String id : ids)
                 studentDAO.deleteStudent(id);
         } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
         return ResultCache.OK;
@@ -75,6 +79,7 @@ public class StudentService {
             studentDAO.updateStudent(vo);
             return ResultCache.OK;
         } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
     }

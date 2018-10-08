@@ -15,10 +15,21 @@ public class NotificationCache {
         return n;
     }
 
-    public static final Notification CREATE_P_MEM = noti(2, SYSTEM_NOTIFICATION,
-            "您参与了一个新项目");
-    public static final Notification QUIT_P = noti(2, SYSTEM_NOTIFICATION,
-            "您退出了项一个项目");
+    public static Notification CREATE_P_MEM(String p_name) {
+        return noti(2,
+                SYSTEM_NOTIFICATION,
+                "您参与了一个新项目: " + p_name);
+    }
+    public static Notification CREATE_P_LEA(String p_name) {
+        return noti(2, SYSTEM_NOTIFICATION,
+                "新项目: " + p_name + " 创建成功");
+    }
+
+    public static Notification QUIT_P(String p_name) {
+        return noti(2, SYSTEM_NOTIFICATION,
+            "您退出了项目: " + p_name);
+    }
+
 
 
     public static Notification CREATE_P_LAB(String from) {
