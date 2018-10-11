@@ -7,7 +7,7 @@ var bulletin = null;
 // 初始化页面
 $.get(API.login_type, function (data) {
 
-    fillUserInfo(data.data);
+    if (!fillUserInfo(data.data)) return;
     layoutBars();
     p1 = true;
     if (p2)
@@ -41,6 +41,7 @@ function layoutViews() {
     $('#bull_time').text(formatServerTime(bulletin.time));
     $('#bull_title').text(bulletin.title);
     $('#bull_content').html(bulletin.content);
+    $('#read_count').text(bulletin.read_count);
 }
 
 jQuery(function($) {

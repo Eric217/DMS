@@ -191,15 +191,22 @@ public class ProjectController {
         if (newValue == null)
             newValue = 1;
         if (!PermissionService.IS_ADMIN(session)) {
-            if (newValue == 0)
-                return ResultCache.PERMISSION_DENIED;
             String sid = PermissionService.SID(session);
-            String lid = projectService.getLeaderIdByPid(pid);
-            if (StringUtils.isNullOrEmpty(lid))
-                return ResultCache.ARG_ERROR;
-            if (sid == null || !sid.equals(lid))
+            if (newValue == 0 || StringUtils.isNullOrEmpty(sid))
                 return ResultCache.PERMISSION_DENIED;
-            // TODO: - 判断项目状态，只有非活跃状态的才可以"删除"
+
+            Result r = projectService.getProjectById(pid);
+            Project p = (Project) r.getData();
+            if (p == null)
+                return r;
+            if (!sid.equals(p.getLeader_id()))
+                return ResultCache.PERMISSION_DENIED;
+            int p_status = p.status();
+            if (!p.deletable(p_status))
+                return ResultCache.failWithMessage("此项目状态下不允许删除");
+            if (p_status == S_CREATING)
+                return projectService.deleteProjects(Tools.toSet(pid));
+            // 否则正常 return
         }
         return projectService.updateDeleted(Tools.toSet(pid), newValue);
     }

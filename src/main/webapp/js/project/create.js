@@ -5,9 +5,10 @@ $.get(API.login_type, function (data) {
     if (data.data.role === ROLE.admin) {
         alert("管理员不参与项目，因此不可创建");
         location.href = "/index.html";
+        return;
     }
 
-    fillUserInfo(data.data);
+    if (!fillUserInfo(data.data)) return;
     layoutBars();
 
 });

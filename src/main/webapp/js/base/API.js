@@ -25,19 +25,22 @@ var API = {
     logout:         BASE_URL + "/user/logout",
 
 
-    get_my_project: BASE_URL + "/project/student/all",
+    get_my_project: BASE_URL + "/project/student",          // sid=20160030 not null
     get_sb_project: BASE_URL + "/project/student/all/admin",
+    get_all_proj:   BASE_URL + "/project/all",              // page, rows, status = 0
     create_project: BASE_URL + "/project/create",
-    get_my_managed: BASE_URL + "/student/project/managed",
+    del_proj_admin: BASE_URL + "/project/delete",           // ids=12@34
+    del_proj_stu:   BASE_URL + "/project/delete/student",   // pid=1
+
     get_noti:       BASE_URL + "/noti/get",
-    del_noti:       BASE_URL + "/noti/read", // nid=123
+    del_noti:       BASE_URL + "/noti/read",                // nid=123
     del_noti_all:   BASE_URL + "/noti/read/all",
 
     get_bulls:      BASE_URL + "/bulletin/get",
-    get_bull:       BASE_URL + "/bulletin/one", // id=123
-    del_bull:       BASE_URL + "/bulletin/delete", // ids=12@23
+    get_bull:       BASE_URL + "/bulletin/one",             // id=123
+    del_bull:       BASE_URL + "/bulletin/delete",          // ids=12@23
     create_bull:    BASE_URL + "/bulletin/create",
-    update_bull:    BASE_URL + "/bulletin/update", // id must
+    update_bull:    BASE_URL + "/bulletin/update",          // id=1
     bull_count:     BASE_URL + "/bulletin/count",
 
     get_lab_names:  BASE_URL + "/lab/get/name",

@@ -11,6 +11,7 @@ function leaveWithMsg(msg) {
         alert(msg);
     if (bull_id.length > 0) { // 有 id 的
         location.href = '/bulletin/detail.html' + location.search;
+        return;
     }
     location.href = '/index.html';
 }
@@ -18,9 +19,9 @@ function leaveWithMsg(msg) {
 // 初始化页面
 $.get(API.login_type, function (data) {
 
-    fillUserInfo(data.data);
-    if (userInfo.role === ROLE.normal)
-        leaveWithMsg("没有权限，即将离开页面");
+    if (!fillUserInfo(data.data)) return;
+    if (userInfo.role === ROLE.normal) {
+        leaveWithMsg("没有权限，即将离开页面"); return; }
     layoutBars();
     p1 = true;
     if (p2)
@@ -69,8 +70,8 @@ jQuery(function($) {
     $('#post_edit_bull').on('click', function (e) {
         var t1 = $('#bull_name').val();
         var t2 = $('#editor1').html();
-        if (bulletin && t1 === bulletin.title && t2 === bulletin.content)
-            leaveWithMsg();
+        if (bulletin && t1 === bulletin.title && t2 === bulletin.content) {
+            leaveWithMsg(); return; }
 
         if (bull_id.length > 0) { // update with id
             bulletin = {

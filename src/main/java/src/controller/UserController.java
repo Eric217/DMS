@@ -66,7 +66,7 @@ public class UserController {
                 return ResultCache.failWithMessage("该邮箱已被注册");
 
             String random = Tools.createRandomNum(6);
-            MailService.sendMail(email, random);
+            MailService.sendCode(email, random);
             session.setAttribute(S_VERI_CODE, random);
             session.setAttribute(S_VERI_LAST, now);
             session.setAttribute(S_VERI_MAIL, email);
@@ -137,7 +137,7 @@ public class UserController {
                 return ResultCache.failWithMessage("该邮箱尚未注册");
 
             String random = Tools.createRandomNum(6);
-            MailService.sendMail(email, random);
+            MailService.sendCode(email, random);
             session.setAttribute(S_VERI_CODE, random);
             session.setAttribute(S_VERI_LAST, now);
             session.setAttribute(S_VERI_MAIL, email);

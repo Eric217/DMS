@@ -1,9 +1,10 @@
 package src.test;
 
-import src.eric.Tools;
+
+import src.service.MailService;
 
 public class test {
     public static void main(String[] args) {
-        System.out.println(Tools.createRandomNumWithLetters(5));
+
     }
 }

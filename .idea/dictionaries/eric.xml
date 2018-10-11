@@ -3,6 +3,7 @@
     <words>
       <w>ajaxloadstart</w>
       <w>cellattr</w>
+      <w>cellvalue</w>
       <w>chck</w>
       <w>clearfix</w>
       <w>datatype</w>
@@ -10,6 +11,7 @@
       <w>delfunc</w>
       <w>dropdown</w>
       <w>editbutton</w>
+      <w>fontawesome</w>
       <w>formatoptions</w>
       <w>googleapis</w>
       <w>gview</w>
@@ -23,6 +25,7 @@
       <w>ontouchstart</w>
       <w>proj</w>
       <w>refreshicon</w>
+      <w>searchicon</w>
       <w>sorttype</w>
       <w>titlebar</w>
       <w>toggler</w>

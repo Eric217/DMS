@@ -2,17 +2,9 @@
 // 初始化页面
 $.get(API.login_type, function (data) {
 
-    fillUserInfo(data.data);
+    if (!fillUserInfo(data.data)) return;
     layoutBars();
     layoutBasicViews();
-
-    var font_formatter = function () {
-        return "class='bigger-125'";
-    };
-
-    var date_formatter = function(cellvalue, options, rowObject) {
-        return formatServerTime(rowObject.time);
-    };
 
     // 加载 bull
     jQuery(function ($) {
@@ -71,7 +63,7 @@ $.get(API.login_type, function (data) {
                     index: 'time',
                     width: 64,
                     cellattr: font_formatter,
-                    formatter: date_formatter,
+                    formatter: time_formatter,
                     sortable: false
                 },
                 {
@@ -211,7 +203,7 @@ $.get(API.login_type, function (data) {
                 },
                 {
                     name: 'time', index: 'time', width: 70, sortable: false,
-                    formatter: date_formatter, cellattr: font_formatter
+                    formatter: time_formatter, cellattr: font_formatter
                 },
                 {
                     name: 'from', index: 'from', width: 58, sortable: false,
@@ -336,10 +328,10 @@ jQuery(function ($) {
         e.preventDefault();
     });
     $('#post_noti').on('click', function () {
-        location.href = '/notification/post.html';
+        location.href = '../../notification/post.html';
     });
     $('#post_bulletin').on('click', function () {
-        location.href = '/bulletin/edit.html';
+        location.href = '../../bulletin/edit.html';
     });
 });
 

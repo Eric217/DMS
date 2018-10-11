@@ -20,6 +20,8 @@ public interface BulletinDAO {
 
     void update(Bulletin vo);
 
+    void updateReadCount(Long id);
+
     void deleteById(Long id);
 
 }

@@ -7,28 +7,55 @@ var userInfo = {
 };
 
 var ProjectStatus = {
-    checking: "审核中",
+
+    /** 待审核*/
+    checking: "待审核",
+
     rejected: "已拒绝",
     canceled: "已取消",
-    processing: "进行中",
     finished: "已完成",
     overtime: "已超时",
 
-    request_modi: "请求修改中",
-    request_chck: "请求检查中"
+    processing: "进行中",
+
+    request_modi: "请求修改中", // 3
+    request_cncl: "请求取消中", // 5
+    request_chck: "请求验收中"  // 6
 };
+
+function getProjStatus(rowObject) {
+    if (!rowObject.start_time) {
+        if (rowObject.opt_status === 2)
+            return ProjectStatus.rejected;
+        return ProjectStatus.checking;
+    } else if (rowObject.opt_status === 4) {
+        return ProjectStatus.canceled;
+    } else if (rowObject.end_time)
+        return ProjectStatus.finished;
+    else if (secondsSince(rowObject.start_time) > rowObject.duration)
+        return ProjectStatus.overtime;
+    if (rowObject.opt_status === 3)
+        return ProjectStatus.request_modi;
+    if (rowObject.opt_status === 5)
+        return ProjectStatus.request_cncl;
+    if (rowObject.opt_status === 6)
+        return ProjectStatus.request_chck;
+    return ProjectStatus.processing;
+}
 
 /** @param data jquery response -> data */
 function fillUserInfo(data) {
     var u_t = data.role;
     if (u_t === undefined || u_t === ROLE.no_user) {
-        if (userInfo.role !== ROLE.no_user)
-            alert('会话已过期，即将刷新页面');
+        if (ROLE.no_user !== userInfo.role)
+            alert('会话已过期，即将跳转');
         location.href = "/login.html";
+        return false;
     }
     userInfo.role = u_t;
     userInfo.user = data.student;
     userInfo.lab = data.lab;
+    return true;
 }
 
 // 用于响应点击浏览器的返回 按钮，稍稍控制一下权限
@@ -41,8 +68,8 @@ onpageshow = function () {
             var u_t = data.data.role;
             if (u_t === undefined || u_t === ROLE.no_user)
                 location.href = "/login.html";
-            else if (u_t !== userInfo.role)
-                PermissionDenied("页面已过期，即将刷新页面");
+            else if (u_t !== userInfo.role) {
+                PermissionDenied("页面已过期，即将刷新页面", location.href); return; }
             userInfo.user = data.data.student;
             userInfo.lab = data.data.lab;
         });
@@ -67,9 +94,21 @@ Date.prototype.format = function(format) {
     return format;
 };
 
-function getServerTime(time) {
+/** start 为服务器返回的字符串，函数返回秒数，总是 now - start */
+function secondsSince(start) {
+    var a = start.split('T'); // [2018-10-08, 22:18:09.000+0000]
+    var d = a[0].split('-'); // [2018, 10, 08]
+    a = a[1].split('.')[0].split(':'); // [22, 18, 09];
+    return (new Date().getTime() - new Date(Number(d[0]), Number(d[1])-1, Number(d[2]),
+        Number(a[0]), Number(a[1]), Number(a[2])).getTime())/1000;
+}
 
-    return new Date(time.replace('+0000', 'Z'));
+function font_formatter() {
+    return "class='bigger-125'";
+}
+
+function time_formatter(cellvalue, options, rowObject) {
+    return formatServerTime(rowObject.time);
 }
 
 function formatServerTime(time) {
@@ -124,27 +163,7 @@ function getOneArg(withEqual) {
     return arg[0];
 }
 
-function calculate_status(pro) {
-    if (5 === pro.opt_status)
-        return ProjectStatus.request_chck;
-    if (2 === pro.opt_status)
-        return ProjectStatus.rejected;
-    if (pro.start_time === undefined)
-        return ProjectStatus.checking;
-    if (4 === pro.opt_status)
-        return ProjectStatus.canceled;
-    if (pro.end_time !== undefined)
-        return ProjectStatus.finished;
 
-    if (pro.start_time !== undefined && pro.end_time === undefined &&
-        pro.start_time.getTime() + pro.duration*1000 > new Date().getTime()) {
-        if (3 === pro.opt_status)
-            return ProjectStatus.request_modi;
-        return ProjectStatus.processing;
-    }
-    return ProjectStatus.overtime;
-
-}
 
 // 根据权限初步布局
 function layoutBars() {
@@ -176,12 +195,13 @@ function logout() {
     });
 }
 
-function PermissionDenied(msg) {
+function PermissionDenied(msg, dest) {
     if (!msg)
-        msg = "权限不足，即将刷新页面";
+        msg = "权限不足，即将离开页面";
     alert(msg);
-    // noinspection SillyAssignmentJS
-    location.href = location.href;
+    if (dest)
+        location.href = dest;
+    location.href = '/index.html';
 }
 
 function reactToResponse(data, success) {

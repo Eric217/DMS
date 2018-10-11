@@ -29,10 +29,20 @@ public class BulletinService {
         }
     }
 
-    public Result getBulletinById(Long id, boolean min) {
+    @Transactional
+    public Result getBulletinById(Long id) {
         try {
-            return ResultCache.getDataOk(min? bulletinDAO.getBulletinMinById(id)
-                                            : bulletinDAO.getBulletinById(id));
+            bulletinDAO.updateReadCount(id);
+            return ResultCache.getDataOk(bulletinDAO.getBulletinById(id));
+        } catch (Exception e) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            return ResultCache.DATABASE_ERROR;
+        }
+    }
+
+    public Result getMinBulletinById(Long id) {
+        try {
+            return ResultCache.getDataOk(bulletinDAO.getBulletinMinById(id));
         } catch (Exception e) {
             return ResultCache.DATABASE_ERROR;
         }

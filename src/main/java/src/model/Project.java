@@ -65,4 +65,10 @@ public class Project implements Serializable {
         return S_OVERTIME;
     }
 
+    public boolean deletable(int status) {
+        return status == S_CREATING || status == S_REJECTED || status == S_CANCELED
+                || status == S_COMPLETE || status == S_OVERTIME;
+
+    }
+
 }

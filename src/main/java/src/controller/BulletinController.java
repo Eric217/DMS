@@ -33,7 +33,8 @@ public class BulletinController {
             return ResultCache.PERMISSION_DENIED;
         if (id == null || id < 0)
             return ResultCache.ARG_ERROR;
-        return bulletinService.getBulletinById(id, false);
+
+        return bulletinService.getBulletinById(id);
     }
 
     @RequestMapping(value = "/count", method = RequestMethod.GET)
@@ -88,8 +89,8 @@ public class BulletinController {
         Laboratory lab = PermissionService.getManagedLab(session, labService);
         if (lab == null)
             return ResultCache.PERMISSION_DENIED;
-        Bulletin b = (Bulletin) bulletinService.getBulletinById(
-                set.stream().findAny().orElseThrow(),true).getData();
+        Bulletin b = (Bulletin) bulletinService.getMinBulletinById(
+                set.stream().findAny().orElseThrow()).getData();
         if (b == null)
             return ResultCache.failWithMessage("id 对应的公告不存在，或数据库读写失败");
         if (!lab.getName().equals(b.getFrom()))

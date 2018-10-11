@@ -28,4 +28,13 @@
     font-size:92%!important
 }
 
-bigger-132{font-size:131%!important}
+.bigger-132 {
+    font-size:131%!important
+}
+.bigger-122 {
+    font-size:122%!important
+}
+.my_blue {
+    background-color: #478fca!important;
+    border-color: white;
+}

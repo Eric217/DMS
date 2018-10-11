@@ -1173,73 +1173,80 @@
       <DefaultExpression>&apos;系统通知&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="291" parent="275" name="PRIMARY">
+    <column id="291" parent="275" name="read_count">
+      <Position>6</Position>
+      <DataType>int(11) unsigned|0s</DataType>
+      <NotNull>1</NotNull>
+      <DefaultExpression>&apos;0&apos;</DefaultExpression>
+      <ColumnKind>normal</ColumnKind>
+    </column>
+    <key id="292" parent="275" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="292" parent="276" name="id">
+    <column id="293" parent="276" name="id">
       <Position>1</Position>
       <DataType>int(11) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="293" parent="276" name="name">
+    <column id="294" parent="276" name="name">
       <Position>2</Position>
       <DataType>varchar(20)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="294" parent="276" name="classroom">
+    <column id="295" parent="276" name="classroom">
       <Position>3</Position>
       <DataType>varchar(20)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="295" parent="276" name="description">
+    <column id="296" parent="276" name="description">
       <Position>4</Position>
       <DataType>varchar(500)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="296" parent="276" name="leader_id">
+    <column id="297" parent="276" name="leader_id">
       <Position>5</Position>
       <DataType>char(12)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="297" parent="276" name="create_time">
+    <column id="298" parent="276" name="create_time">
       <Position>6</Position>
       <DataType>timestamp|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="298" parent="276" name="laboratory_name_uindex">
+    <index id="299" parent="276" name="laboratory_name_uindex">
       <ColNames>name</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <index id="299" parent="276" name="laboratory_student_id_fk">
+    <index id="300" parent="276" name="laboratory_student_id_fk">
       <ColNames>leader_id</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <key id="300" parent="276" name="PRIMARY">
+    <key id="301" parent="276" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="301" parent="276" name="laboratory_name_uindex">
+    <key id="302" parent="276" name="laboratory_name_uindex">
       <ColNames>name</ColNames>
       <UnderlyingIndexName>laboratory_name_uindex</UnderlyingIndexName>
     </key>
-    <key id="302" parent="276" name="laboratory_student_id_fk">
+    <key id="303" parent="276" name="laboratory_student_id_fk">
       <ColNames>leader_id</ColNames>
       <UnderlyingIndexName>laboratory_student_id_fk</UnderlyingIndexName>
     </key>
-    <foreign-key id="303" parent="276" name="laboratory_student_id_fk">
+    <foreign-key id="304" parent="276" name="laboratory_student_id_fk">
       <ColNames>leader_id</ColNames>
       <RefSchemaName>eric_db</RefSchemaName>
       <RefTableName>student</RefTableName>
@@ -1247,88 +1254,88 @@
       <OnUpdate>cascade</OnUpdate>
       <OnDelete>set-null</OnDelete>
     </foreign-key>
-    <column id="304" parent="277" name="id">
+    <column id="305" parent="277" name="id">
       <Position>1</Position>
       <DataType>int(11) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="305" parent="277" name="pid">
+    <column id="306" parent="277" name="pid">
       <Position>2</Position>
       <DataType>int(11) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="306" parent="277" name="name">
+    <column id="307" parent="277" name="name">
       <Position>3</Position>
       <DataType>varchar(20)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="307" parent="277" name="description">
+    <column id="308" parent="277" name="description">
       <Position>4</Position>
       <DataType>varchar(255)|0s</DataType>
       <DefaultExpression>&apos;&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="308" parent="277" name="duration">
+    <column id="309" parent="277" name="duration">
       <Position>5</Position>
       <DataType>int(10) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;2592000&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="309" parent="277" name="coach_id">
+    <column id="310" parent="277" name="coach_id">
       <Position>6</Position>
       <DataType>varchar(20)|0s</DataType>
       <DefaultExpression>&apos;&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="310" parent="277" name="opt_status">
+    <column id="311" parent="277" name="opt_status">
       <Position>7</Position>
       <DataType>smallint(5) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;0&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="311" parent="277" name="leader_id">
+    <column id="312" parent="277" name="leader_id">
       <Position>8</Position>
       <DataType>char(12)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="312" parent="277" name="aim">
+    <column id="313" parent="277" name="aim">
       <Position>9</Position>
       <DataType>varchar(1000)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="313" parent="277" name="type">
+    <column id="314" parent="277" name="type">
       <Position>10</Position>
       <DataType>varchar(20)|0s</DataType>
       <DefaultExpression>&apos;&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="314" parent="277" name="members">
+    <column id="315" parent="277" name="members">
       <Position>11</Position>
       <DataType>varchar(127)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="315" parent="277" name="modification_project_id_fk">
+    <index id="316" parent="277" name="modification_project_id_fk">
       <ColNames>pid</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="316" parent="277" name="modification_student_id_fk">
+    <index id="317" parent="277" name="modification_student_id_fk">
       <ColNames>leader_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="317" parent="277" name="PRIMARY">
+    <key id="318" parent="277" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="318" parent="277" name="modification_project_id_fk">
+    <foreign-key id="319" parent="277" name="modification_project_id_fk">
       <ColNames>pid</ColNames>
       <RefSchemaName>eric_db</RefSchemaName>
       <RefTableName>project</RefTableName>
@@ -1336,7 +1343,7 @@
       <OnUpdate>cascade</OnUpdate>
       <OnDelete>cascade</OnDelete>
     </foreign-key>
-    <foreign-key id="319" parent="277" name="modification_student_id_fk">
+    <foreign-key id="320" parent="277" name="modification_student_id_fk">
       <ColNames>leader_id</ColNames>
       <RefSchemaName>eric_db</RefSchemaName>
       <RefTableName>student</RefTableName>
@@ -1344,77 +1351,77 @@
       <OnUpdate>cascade</OnUpdate>
       <OnDelete>set-null</OnDelete>
     </foreign-key>
-    <column id="320" parent="278" name="id">
+    <column id="321" parent="278" name="id">
       <Position>1</Position>
       <DataType>int(11) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="321" parent="278" name="type">
+    <column id="322" parent="278" name="type">
       <Position>2</Position>
       <DataType>varchar(20)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;系统通知&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="322" parent="278" name="content">
+    <column id="323" parent="278" name="content">
       <Position>3</Position>
       <DataType>varchar(140)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="323" parent="278" name="from">
+    <column id="324" parent="278" name="from">
       <Position>4</Position>
       <DataType>varchar(20)|0s</DataType>
       <DefaultExpression>&apos;系统通知&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="324" parent="278" name="time">
+    <column id="325" parent="278" name="time">
       <Position>5</Position>
       <DataType>timestamp|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <key id="325" parent="278" name="PRIMARY">
+    <key id="326" parent="278" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <column id="326" parent="279" name="id">
+    <column id="327" parent="279" name="id">
       <Position>1</Position>
       <DataType>int(11) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="327" parent="279" name="nid">
+    <column id="328" parent="279" name="nid">
       <Position>2</Position>
       <DataType>int(11) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="328" parent="279" name="sid">
+    <column id="329" parent="279" name="sid">
       <Position>3</Position>
       <DataType>char(12)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="329" parent="279" name="notify_notification_id_fk">
+    <index id="330" parent="279" name="notify_notification_id_fk">
       <ColNames>nid</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="330" parent="279" name="notify_student_id_fk">
+    <index id="331" parent="279" name="notify_student_id_fk">
       <ColNames>sid</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="331" parent="279" name="PRIMARY">
+    <key id="332" parent="279" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="332" parent="279" name="notify_notification_id_fk">
+    <foreign-key id="333" parent="279" name="notify_notification_id_fk">
       <ColNames>nid</ColNames>
       <RefSchemaName>eric_db</RefSchemaName>
       <RefTableName>notification</RefTableName>
@@ -1422,7 +1429,7 @@
       <OnUpdate>cascade</OnUpdate>
       <OnDelete>cascade</OnDelete>
     </foreign-key>
-    <foreign-key id="333" parent="279" name="notify_student_id_fk">
+    <foreign-key id="334" parent="279" name="notify_student_id_fk">
       <ColNames>sid</ColNames>
       <RefSchemaName>eric_db</RefSchemaName>
       <RefTableName>student</RefTableName>
@@ -1430,39 +1437,39 @@
       <OnUpdate>cascade</OnUpdate>
       <OnDelete>cascade</OnDelete>
     </foreign-key>
-    <column id="334" parent="280" name="id">
+    <column id="335" parent="280" name="id">
       <Position>1</Position>
       <DataType>int(11) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="335" parent="280" name="pid">
+    <column id="336" parent="280" name="pid">
       <Position>2</Position>
       <DataType>int(11) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="336" parent="280" name="sid">
+    <column id="337" parent="280" name="sid">
       <Position>3</Position>
       <DataType>char(12)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="337" parent="280" name="pid">
+    <index id="338" parent="280" name="pid">
       <ColNames>pid</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="338" parent="280" name="sid">
+    <index id="339" parent="280" name="sid">
       <ColNames>sid</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="339" parent="280" name="PRIMARY">
+    <key id="340" parent="280" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="340" parent="280" name="participate_ibfk_1">
+    <foreign-key id="341" parent="280" name="participate_ibfk_1">
       <ColNames>pid</ColNames>
       <RefSchemaName>eric_db</RefSchemaName>
       <RefTableName>project</RefTableName>
@@ -1470,7 +1477,7 @@
       <OnUpdate>cascade</OnUpdate>
       <OnDelete>cascade</OnDelete>
     </foreign-key>
-    <foreign-key id="341" parent="280" name="participate_ibfk_2">
+    <foreign-key id="342" parent="280" name="participate_ibfk_2">
       <ColNames>sid</ColNames>
       <RefSchemaName>eric_db</RefSchemaName>
       <RefTableName>student</RefTableName>
@@ -1478,106 +1485,106 @@
       <OnUpdate>cascade</OnUpdate>
       <OnDelete>cascade</OnDelete>
     </foreign-key>
-    <column id="342" parent="281" name="id">
+    <column id="343" parent="281" name="id">
       <Position>1</Position>
       <DataType>int(11) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <SequenceIdentity>1</SequenceIdentity>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="343" parent="281" name="name">
+    <column id="344" parent="281" name="name">
       <Position>2</Position>
       <DataType>varchar(20)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="344" parent="281" name="description">
+    <column id="345" parent="281" name="description">
       <Position>3</Position>
       <DataType>varchar(255)|0s</DataType>
       <DefaultExpression>&apos;&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="345" parent="281" name="start_time">
+    <column id="346" parent="281" name="start_time">
       <Position>4</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="346" parent="281" name="end_time">
+    <column id="347" parent="281" name="end_time">
       <Position>5</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="347" parent="281" name="duration">
+    <column id="348" parent="281" name="duration">
       <Position>6</Position>
       <DataType>int(10) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;2592000&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="348" parent="281" name="submit_time">
+    <column id="349" parent="281" name="submit_time">
       <Position>7</Position>
       <DataType>timestamp|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>CURRENT_TIMESTAMP</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="349" parent="281" name="coach_id">
+    <column id="350" parent="281" name="coach_id">
       <Position>8</Position>
       <DataType>varchar(20)|0s</DataType>
       <DefaultExpression>&apos;&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="350" parent="281" name="opt_status">
+    <column id="351" parent="281" name="opt_status">
       <Position>9</Position>
       <DataType>smallint(5) unsigned|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;0&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="351" parent="281" name="lab_name">
+    <column id="352" parent="281" name="lab_name">
       <Position>10</Position>
       <DataType>varchar(20)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="352" parent="281" name="leader_id">
+    <column id="353" parent="281" name="leader_id">
       <Position>11</Position>
       <DataType>char(12)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="353" parent="281" name="aim">
+    <column id="354" parent="281" name="aim">
       <Position>12</Position>
       <DataType>varchar(1000)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="354" parent="281" name="type">
+    <column id="355" parent="281" name="type">
       <Position>13</Position>
       <DataType>varchar(20)|0s</DataType>
       <DefaultExpression>&apos;普通项目&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="355" parent="281" name="deleted">
+    <column id="356" parent="281" name="deleted">
       <Position>14</Position>
       <DataType>int(1)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;0&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="356" parent="281" name="project_laboratory_name_fk">
+    <index id="357" parent="281" name="project_laboratory_name_fk">
       <ColNames>lab_name</ColNames>
       <Type>btree</Type>
     </index>
-    <index id="357" parent="281" name="project_student_id_fk">
+    <index id="358" parent="281" name="project_student_id_fk">
       <ColNames>leader_id</ColNames>
       <Type>btree</Type>
     </index>
-    <key id="358" parent="281" name="PRIMARY">
+    <key id="359" parent="281" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <foreign-key id="359" parent="281" name="project_laboratory_name_fk">
+    <foreign-key id="360" parent="281" name="project_laboratory_name_fk">
       <ColNames>lab_name</ColNames>
       <RefSchemaName>eric_db</RefSchemaName>
       <RefTableName>laboratory</RefTableName>
@@ -1585,7 +1592,7 @@
       <OnUpdate>cascade</OnUpdate>
       <OnDelete>cascade</OnDelete>
     </foreign-key>
-    <foreign-key id="360" parent="281" name="project_student_id_fk">
+    <foreign-key id="361" parent="281" name="project_student_id_fk">
       <ColNames>leader_id</ColNames>
       <RefSchemaName>eric_db</RefSchemaName>
       <RefTableName>student</RefTableName>
@@ -1593,75 +1600,75 @@
       <OnUpdate>cascade</OnUpdate>
       <OnDelete>set-null</OnDelete>
     </foreign-key>
-    <column id="361" parent="282" name="id">
+    <column id="362" parent="282" name="id">
       <Position>1</Position>
       <DataType>char(12)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="362" parent="282" name="name">
+    <column id="363" parent="282" name="name">
       <Position>2</Position>
       <DataType>varchar(20)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="363" parent="282" name="password">
+    <column id="364" parent="282" name="password">
       <Position>3</Position>
       <DataType>varchar(255)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="364" parent="282" name="email">
+    <column id="365" parent="282" name="email">
       <Position>4</Position>
       <DataType>varchar(30)|0s</DataType>
       <NotNull>1</NotNull>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="365" parent="282" name="phone">
+    <column id="366" parent="282" name="phone">
       <Position>5</Position>
       <DataType>varchar(11)|0s</DataType>
       <DefaultExpression>&apos;&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="366" parent="282" name="grade">
+    <column id="367" parent="282" name="grade">
       <Position>6</Position>
       <DataType>smallint(6)|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="367" parent="282" name="college">
+    <column id="368" parent="282" name="college">
       <Position>7</Position>
       <DataType>varchar(20)|0s</DataType>
       <DefaultExpression>&apos;&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="368" parent="282" name="major">
+    <column id="369" parent="282" name="major">
       <Position>8</Position>
       <DataType>varchar(20)|0s</DataType>
       <DefaultExpression>&apos;&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="369" parent="282" name="introduce">
+    <column id="370" parent="282" name="introduce">
       <Position>9</Position>
       <DataType>varchar(255)|0s</DataType>
       <DefaultExpression>&apos;&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <column id="370" parent="282" name="punish_end">
+    <column id="371" parent="282" name="punish_end">
       <Position>10</Position>
       <DataType>timestamp|0s</DataType>
       <ColumnKind>normal</ColumnKind>
     </column>
-    <index id="371" parent="282" name="student_email_uindex">
+    <index id="372" parent="282" name="student_email_uindex">
       <ColNames>email</ColNames>
       <Unique>1</Unique>
       <Type>btree</Type>
     </index>
-    <key id="372" parent="282" name="PRIMARY">
+    <key id="373" parent="282" name="PRIMARY">
       <NameSurrogate>1</NameSurrogate>
       <ColNames>id</ColNames>
       <Primary>1</Primary>
     </key>
-    <key id="373" parent="282" name="student_email_uindex">
+    <key id="374" parent="282" name="student_email_uindex">
       <ColNames>email</ColNames>
       <UnderlyingIndexName>student_email_uindex</UnderlyingIndexName>
     </key>

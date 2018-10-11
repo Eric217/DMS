@@ -38,6 +38,11 @@
         where id = #{id};
     </update>
 
+    <update id="updateReadCount" parameterType="java.lang.Long">
+        update bulletin set read_count = read_count + 1
+        where id = #{id};
+    </update>
+
     <delete id="deleteById" parameterType="java.lang.Long">
         delete from bulletin
         where id = #{id};

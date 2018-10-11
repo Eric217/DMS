@@ -263,6 +263,7 @@ public class ProjectService {
             for (Long id : ids) {
                 projectDAO.deleteProjectById(id);
             }
+            // TODO: - 通知所有成员已删除。还要考虑真删时候的通知
             return ResultCache.OK;
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
