@@ -33,7 +33,14 @@ public class BulletinService {
     public Result getBulletinById(Long id) {
         try {
             bulletinDAO.updateReadCount(id);
-            return ResultCache.getDataOk(bulletinDAO.getBulletinById(id));
+            Long updated = bulletinDAO.getReadCount(id);
+            Bulletin b = bulletinDAO.getBulletinById(id);
+            if (b.getRead_count() == null) {
+                b.setRead_count(updated); // always exec
+                System.err.println("error @ BulletinService - getBulletinById()");
+                // TODO: - 奇了怪了
+            }
+            return ResultCache.getDataOk(b);
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
@@ -87,6 +94,5 @@ public class BulletinService {
             return ResultCache.DATABASE_ERROR;
         }
     }
-
 
 }

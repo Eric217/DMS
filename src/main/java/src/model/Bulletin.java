@@ -11,7 +11,7 @@ public class Bulletin {
     private String title;
     private String content;
     private Timestamp time;
-    private String from;
     private Long read_count;
+    private String from;
 
 }

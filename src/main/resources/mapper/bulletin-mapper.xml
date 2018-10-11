@@ -13,7 +13,12 @@
 
     <select id="getBulletinById" parameterType="java.lang.Long"
             resultType="src.model.Bulletin">
-        select * from bulletin
+        select id, time, title, content, `from`, read_count from bulletin
+        where id = #{id};
+    </select>
+
+    <select id="getReadCount" parameterType="long" resultType="long">
+        select read_count from bulletin
         where id = #{id};
     </select>
 

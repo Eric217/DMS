@@ -24,4 +24,5 @@ public interface BulletinDAO {
 
     void deleteById(Long id);
 
+    Long getReadCount(Long id);
 }
