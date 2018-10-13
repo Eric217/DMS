@@ -31,7 +31,6 @@ public class AdminService {
         try {
             adminDAO.addAdministrator(admin);
         } catch (Exception e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
         return ResultCache.OK;

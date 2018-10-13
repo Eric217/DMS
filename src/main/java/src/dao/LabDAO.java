@@ -4,6 +4,7 @@ package src.dao;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 import src.model.Laboratory;
+import src.model.Student;
 
 import java.util.List;
 
@@ -15,7 +16,9 @@ public interface LabDAO {
 
     Laboratory getLabById(Long id);
 
+//    Student getMinStuForLab(String leader_id);
     List<Laboratory> getAllLabs();
+
     List<String> getAllLabNames();
 
     void insertLab(Laboratory vo);

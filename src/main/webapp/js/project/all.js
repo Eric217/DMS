@@ -10,8 +10,6 @@ $.get(API.login_type, function (data) {
 
     jQuery(function ($) {
 
-
-
         var proj_table = $('#all_proj_tbl');
         var proj_selector = "#all_proj_tbl";
         var pager_selector = "#all_proj_pg";
@@ -82,11 +80,11 @@ $.get(API.login_type, function (data) {
                     cellattr: font_formatter
                 },
                 {
-                    name: 'name', index: 'name', width: 199, sortable: false,
+                    name: 'name', index: 'name', width: 190, sortable: false,
                     cellattr: font_formatter
                 },
                 {
-                    name: 'submit_time', index: 'submit_time', width: 61, sortable: false,
+                    name: 'submit_time', index: 'submit_time', width: 69, sortable: false,
                     cellattr: font_formatter, formatter: submit_time_formatter
                 },
                 {

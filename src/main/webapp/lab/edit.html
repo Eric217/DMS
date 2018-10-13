@@ -4,13 +4,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
     <meta charset="utf-8"/>
 
-    <title>创建项目 - SDU LAB</title>
+    <title>编辑实验室 - SDU LAB</title>
     <meta name="description" content=""/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0"/>
 
     <!-- bootstrap & fontawesome -->
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/assets/font-awesome/4.5.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/assets/css/jquery-ui.custom.min.css"/>
 
     <!-- text fonts -->
     <link rel="stylesheet" href="/assets/css/fonts.googleapis.com.css"/>
@@ -277,8 +278,6 @@
                                 </a>
                                 <b class="arrow"></b>
                             </li>
-
-
                         </ul>
 
                     </li>
@@ -311,21 +310,9 @@
                         <a href="/index.html">主页</a>
                     </li>
                     <li class="active">
-                        <a href="/project/my.html">我的项目</a>
+                        <a href="/lab/list.html">实验室</a>
                     </li>
-                    <li class="active">创建项目</li>
-
-                    <!--suppress HtmlUnknownTag -->
-                    <div class="nav-search hidden" id="nav-search">
-                        <form class="form-search" onsubmit="">
-								<span class="input-icon">
-									<input type="text" placeholder="搜索本实验室成员"
-                                           class="nav-search-input" id="nav-search-input"
-                                           autocomplete="off"/>
-									<i class="ace-icon fa fa-search nav-search-icon"></i>
-								</span>
-                        </form>
-                    </div>
+                    <li class="active">编辑</li>
 
                 </ul><!-- /.breadcrumb -->
             </div>
@@ -335,159 +322,99 @@
                 <div class="space-4"></div>
                 <div class="page-header">
                     <h1>
-                        <span>创建项目</span>
+                        <span>编辑实验室</span>
                         <i class="ace-icon fa fa-angle-double-right bigger-110"></i>
-                        <small>&nbsp;填写项目详细信息</small>
+                        <small>&nbsp;编辑实验室详细信息</small>
                     </h1>
                 </div><!-- /.page-header -->
 
                 <div class="row">
                     <div class="col-xs-12">
-                        <div class="space-6"></div>
+                        <div class="space-8"></div>
+                        <div class="width-85 center-block">
 
-                        <form class="form-horizontal col-md-offset-1 ">
-                            <div class="form-group row">
-                                <label for="project_name"
-                                       class="col-sm-2 control-label bigger-120"><span
-                                        style="margin-right: 10px"></span>项目名称:</label>
-                                <div class="col-sm-4">
-                                    <input type="text" class="form-control" id="project_name"
-                                           placeholder="项目名称，20字以内"
-                                           onkeyup="checkLength(this, 20)">
+                            <form class="form-horizontal col-md-offset-3">
+                                <div class="form-group row">
+                                    <label for="lab_name"
+                                           class="col-sm-2 control-label bigger-140">
+                                        <span style="margin-right: 10px"></span>实验室名称:</label>
+                                    <div class="col-sm-4">
+                                        <input type="text"
+                                               class="form-control admin_input bigger-125"
+                                               disabled="disabled"
+                                               id="lab_name" style="height: 38px"
+                                               placeholder="20字以内" maxlength="20">
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
 
-                            <div class="form-group row">
-                                <label for="desc" class="col-sm-2 control-label bigger-120"><span
-                                        style="margin-right: 10px"></span>项目描述:</label>
-                                <div class="col-sm-8">
-                                    <textarea type="text" class="form-control" id="desc"
-                                               rows="3" placeholder="项目描述，建议不超过200字"
-                                              onkeyup="checkLength(this, 255)"
-                                    ></textarea>
+                            <h3 class="header clearfix align-center bigger-140">实验室描述</h3>
+                            <div class="wysiwyg-editor" id="lab_desc" style="max-height:
+                            2000px; height: 350px;"></div>
+                            <div class="hr hr-double dotted"></div>
+                            <div class="space-4"></div>
+
+                            <form class="form-horizontal col-md-offset-3">
+                                <div class="form-group row">
+                                    <label for="lab_room"
+                                           class="col-sm-2 control-label bigger-140"><span
+                                            style="margin-right: 10px"></span>所在房间:</label>
+                                    <div class="col-sm-4">
+                                        <input type="text" id="lab_room" style="height: 38px"
+                                               class="form-control bigger-125 admin_input"
+                                               disabled="disabled"
+                                               placeholder="所在教室/房间" maxlength="20">
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="space-2"></div>
+                                <div class="space-6"></div>
 
-                            <div class="form-group row">
+                                <div class="form-group row">
+                                    <label for="leader"
+                                           class="col-sm-2 control-label bigger-140"><span
+                                            style="margin-right: 10px"></span>负责人学号:</label>
 
-                                <label for="lab_select" class="col-sm-2 control-label bigger-120"><span
-                                        style="margin-right: 10px"></span>实验室:</label>
-
-                                <div class="col-sm-3">
-                                    <select class="form-control align-center" id="lab_select">
-                                        <option value=''>请选择</option>
-                                    </select>
+                                    <div class="col-sm-4">
+                                        <input type="text"
+                                               class="form-control bigger-125 admin_input"
+                                               disabled="disabled"
+                                               placeholder="学号" maxlength="20" id="leader"
+                                               style="height: 38px">
+                                    </div>
                                 </div>
+                                <div class="space-6"></div>
 
-                                <label for="type" class="col-sm-2 control-label bigger-120"><span
-                                        style="margin-right: 10px" ></span>项目类型:</label>
+                                <div class="form-group row">
+                                    <label for="create_time"
+                                           class="col-sm-2 control-label bigger-140"><span
+                                            style="margin-right: 10px"></span>成立时间:</label>
 
-                                <div class="col-sm-3">
-                                    <select class="form-control align-center" id="type">
-                                        <option value=''>请选择</option>
-                                        <option value='普通项目'>普通项目</option>
-                                        <option value='比赛项目'>比赛项目</option>
-                                        <option value='学习项目'>学习项目</option>
-                                        <option value='创新项目'>创新项目</option>
-                                        <option value='其他'>其他</option>
-                                    </select>
+                                    <div class="col-sm-4">
+                                        <input type="text" style="height: 38px"
+                                               class="form-control bigger-125"
+                                               maxlength="20" id="create_time"
+                                               disabled="disabled">
+                                    </div>
                                 </div>
+                            </form>
+                        </div>
 
-                            </div>
+                        <div class="space-20"></div>
 
-                            <div class="form-group row">
-
-                                <label for="coach" class="col-sm-2 control-label bigger-120">
-                                    <span style="margin-right: 10px"></span>指导老师:</label>
-
-                                <div class="col-sm-3">
-                                    <input type="text" class="form-control" id="coach"
-                                           placeholder="指导老师"
-                                           onkeyup="checkLength(this, 20)">
-                                </div>
-
-                                <label for="duration"
-                                       class="col-sm-2 control-label bigger-120"><span
-                                        style="margin-right: 10px" ></span>持续天数:</label>
-
-                                <div class="col-sm-3">
-                                    <input type="text" class="form-control" id="duration"
-                                           placeholder="15 ~ 120"
-                                           onkeyup="checkLength(this, 3)">
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="aim" class="col-sm-2 control-label bigger-120"><span
-                                        style="margin-right: 10px" aria-hidden="true"></span>项目目标:</label>
-
-                                <div class="col-sm-8">
-                                <textarea type="text" class="form-control" id="aim" rows="9"
-                                          placeholder="项目目标，建议不超过1000字"
-                                          onkeyup="checkLength(this, 1000)"
-                                ></textarea>
-                                </div>
-                            </div>
-                            <div class="space-6"></div>
-
-                            <div class="form-group row">
-                                <label for="id1" class="col-sm-2 control-label bigger-120"><span
-                                        style="margin-right: 10px" aria-hidden="true"></span>成员一学号:</label>
-
-                                <div class="col-sm-3">
-                                    <input type="text" class="form-control" id="id1"
-                                           placeholder="必填，不包括自己"
-                                           onkeyup="checkLength(this, 12)">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="id2" class="col-sm-2 control-label bigger-120"><span
-                                        style="margin-right: 10px" aria-hidden="true"></span>成员二学号:</label>
-
-                                <div class="col-sm-3">
-                                    <input type="text" class="form-control" id="id2"
-                                           onkeyup="checkLength(this, 12)">
-                                </div>
-
-                                <label for="id3" class="col-sm-2 control-label bigger-120"><span
-                                        style="margin-right: 10px"></span>成员三学号:</label>
-
-                                <div class="col-sm-3">
-                                    <input type="text" class="form-control" id="id3"
-                                           onkeyup="checkLength(this, 12)">
-                                </div>
-
-                            </div>
-
-                            <div class="form-group row">
-                                <label for="id4" class="col-sm-2 control-label bigger-120"><span
-                                        style="margin-right: 10px" aria-hidden="true"></span>成员四学号:</label>
-
-                                <div class="col-sm-3">
-                                    <input type="text" class="form-control" id="id4"
-                                           onkeyup="checkLength(this, 12)">
-                                </div>
-
-                                <label for="id5" class="col-sm-2 control-label bigger-120"><span
-                                        style="margin-right: 10px" aria-hidden="true"></span>成员五学号:</label>
-
-                                <div class="col-sm-3">
-                                    <input type="text" class="form-control" id="id5"
-                                           onkeyup="checkLength(this, 12)">
-                                </div>
-                            </div>
-                        </form>
-
-                        <div class="space-6"></div>
-
-                        <div class="center" style="margin-top: 12px; ">
-
-                            <button type="button" id="create_butt"
-                                    class="btn btn-sm btn-primary width-25 center-block">
-                                <span class="bigger-125">立即创建</span>
+                        <div class="center">
+                            <button type="button" id="delete_lab"
+                                    class="btn btn-sm btn-primary width-20 admin_cls hidden">
+                                <i class="ace-icon fa fa-trash bigger-130 red"></i>
+                                <span class="bigger-130">删除实验室</span>
+                            </button>
+                            <span class="bigger-300 hidden admin_cls"
+                            >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                            <button type="button" id="save_lab"
+                                    class="btn btn-sm btn-primary width-20">
+                                <i class="ace-icon fa fa-pencil bigger-130"></i>
+                                <span class="bigger-130">保存修改</span>
                             </button>
                         </div>
+
 
                     </div>
                 </div>
@@ -516,16 +443,21 @@
     document.write("<script src='/assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
 </script>
 <script src="/assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/jquery-ui.custom.min.js"></script>
+<script src="/assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="/assets/js/jquery.hotkeys.index.min.js"></script>
+<script src="/assets/js/bootstrap-wysiwyg.min.js"></script>
 
 <!-- ace scripts -->
 <script src="/assets/js/ace-elements.min.js"></script>
 <script src="/assets/js/ace.min.js"></script>
+<script src="/assets/js/bootbox.js"></script>
+<script src="/js/base/alert.js"></script>
+<script src="/js/lab/lab.js"></script>
 
-<!-- index scripts -->
 <script src="/js/base/API.js"></script>
 <script src="/js/base/common.js"></script>
-<script src="/js/project/create.js"></script>
+<script src="/js/lab/edit.js"></script>
 
-<!-- inline scripts related to this page -->
 </body>
 </html>

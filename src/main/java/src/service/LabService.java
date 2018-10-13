@@ -2,7 +2,6 @@ package src.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.interceptor.TransactionAspectSupport;
 import src.base.Result;
 import src.base.ResultCache;
 import src.dao.LabDAO;
@@ -54,7 +53,6 @@ public class LabService {
         try {
             labDAO.insertLab(vo);
         } catch (Exception e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.failWithMessage("操作失败，可能的原因是：负责人学号不存在或" +
                     "已负责其他实验室；实验室名称已被占用；数据库异常");
         }
@@ -65,7 +63,6 @@ public class LabService {
         try {
             labDAO.updateLab(vo);
         } catch (Exception e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.failWithMessage("操作失败，可能的原因是：负责人学号不存在或" +
                     "已负责其他实验室；实验室名称已被占用；数据库异常");
         }
@@ -76,7 +73,6 @@ public class LabService {
         try {
             labDAO.deleteLabById(id);
         } catch (Exception e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
         return ResultCache.OK;

@@ -14,7 +14,7 @@ $.get(API.login_type, function (data) {
         layoutViews();
 });
 
-$.get(API.get_bull, {id: getOneArg(false)}, function (data) {
+$.get(API.get_bull, {id: getOneArg(false), read_count: true}, function (data) {
 
     if (data.status !== 200) {
         alert(data.message);
@@ -41,6 +41,7 @@ function layoutViews() {
     $('#bull_time').text(formatServerTime(bulletin.time));
     $('#bull_title').text(bulletin.title);
     $('#bull_content').html(bulletin.content);
+    // noinspection JSUnresolvedVariable
     $('#read_count').text(bulletin.read_count);
 }
 

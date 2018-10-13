@@ -2,6 +2,7 @@
   <dictionary name="eric">
     <words>
       <w>ajaxloadstart</w>
+      <w>bootbox</w>
       <w>cellattr</w>
       <w>cellvalue</w>
       <w>chck</w>

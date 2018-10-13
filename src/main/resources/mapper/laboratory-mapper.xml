@@ -18,18 +18,17 @@
     </select>
 
     <select id="getLabById" parameterType="java.lang.Long"
-            resultType="src.model.Laboratory">
+            resultMap="labMap_full">
         select * from laboratory where id = #{id};
     </select>
 
-    <select id="getAllLabs" resultType="src.model.Laboratory">
-        select id, name, classroom, leader_id, create_time from laboratory;
+    <select id="getAllLabs" resultMap="labListMap">
+        select id, name, classroom, create_time, leader_id from laboratory;
     </select>
 
     <select id="getAllLabNames" resultType="string">
         select name from laboratory;
     </select>
-
 
     <insert id="insertLab" parameterType="src.model.Laboratory">
         insert into laboratory(name, classroom, description, leader_id)
@@ -47,4 +46,28 @@
         where id = #{id};
     </delete>
 
+    <select id="getMinStuForLab" resultType="src.model.Student" parameterType="string">
+        select id, name from student
+        where id = #{leader_id};
+    </select>
+
+    <resultMap id="labListMap" type="src.model.Laboratory">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="classroom" column="classroom"/>
+        <result property="leader_id" column="leader_id"/>
+        <result property="create_time" column="create_time"/>
+        <result property="description" column="description"/>
+        <association property="leader" column="leader_id" select="getMinStuForLab"/>
+    </resultMap>
+
+    <resultMap id="labMap_full" type="src.model.Laboratory">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="classroom" column="classroom"/>
+        <result property="leader_id" column="leader_id"/>
+        <result property="create_time" column="create_time"/>
+        <result property="description" column="description"/>
+        <association property="leader" column="leader_id" select="src.dao.StudentDAO.getStudentById"/>
+    </resultMap>
 </mapper>

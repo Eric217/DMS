@@ -28,13 +28,13 @@ public class BulletinController {
     LabService labService;
 
     @RequestMapping(value = "/one", method = RequestMethod.GET)
-    public Result getOneById(Long id, HttpSession session) {
+    public Result getOneById(Long id, Boolean read_count, HttpSession session) {
         if (!PermissionService.IS_LOGIN(session))
             return ResultCache.PERMISSION_DENIED;
         if (id == null || id < 0)
             return ResultCache.ARG_ERROR;
 
-        return bulletinService.getBulletinById(id);
+        return bulletinService.getBulletinById(id, read_count);
     }
 
     @RequestMapping(value = "/count", method = RequestMethod.GET)

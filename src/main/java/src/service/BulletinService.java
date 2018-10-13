@@ -29,20 +29,25 @@ public class BulletinService {
         }
     }
 
-    @Transactional
-    public Result getBulletinById(Long id) {
+    public Result getBulletinById(Long id, Boolean read_count) {
         try {
-            bulletinDAO.updateReadCount(id);
-            Long updated = bulletinDAO.getReadCount(id);
             Bulletin b = bulletinDAO.getBulletinById(id);
+            Long updated = bulletinDAO.getReadCount(id);
+
             if (b.getRead_count() == null) {
-                b.setRead_count(updated); // always exec
-                System.err.println("error @ BulletinService - getBulletinById()");
+                System.out.println("error @ BulletinService - getBulletinById()");
                 // TODO: - 奇了怪了
             }
+
+            if (read_count != null && read_count) {
+                bulletinDAO.updateReadCount(id);
+                b.setRead_count(updated+1);
+            } else
+                b.setRead_count(updated);
+
+
             return ResultCache.getDataOk(b);
         } catch (Exception e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
     }
@@ -60,7 +65,6 @@ public class BulletinService {
             bulletinDAO.insert(vo);
             return ResultCache.OK;
         } catch (Exception e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
     }
@@ -70,7 +74,6 @@ public class BulletinService {
             bulletinDAO.update(vo);
             return ResultCache.OK;
         } catch (Exception e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
     }

@@ -1,10 +1,4 @@
 
-jQuery(function ($) {
-    $('#create_proj').on('click', function () {
-        location.href = '/project/create.html';
-    });
-});
-
 // noinspection JSUnusedLocalSymbols
 var delete_proj = function (id) {
     $.post(API.del_proj_stu, {pid: id}, function (data) {
@@ -20,6 +14,7 @@ $.get(API.login_type, function (data) {
     layoutBars();
 
     jQuery(function ($) {
+
         if (userInfo.role === ROLE.admin) {
             PermissionDenied("管理员没有项目，即将跳转", '/project/all.html'); return; }
 
@@ -39,6 +34,10 @@ $.get(API.login_type, function (data) {
                     proj_table.jqGrid('setGridWidth', parent_column.width());
                 }, 20);
             }
+        });
+
+        $('#create_proj').on('click', function () {
+            location.href = '/project/create.html';
         });
 
         var proj_in_div = function (cellValue, options, rowObject) {

@@ -55,6 +55,7 @@ function fillUserInfo(data) {
     userInfo.role = u_t;
     userInfo.user = data.student;
     userInfo.lab = data.lab;
+    userInfo.admin = data.admin;
     return true;
 }
 
@@ -66,12 +67,13 @@ onpageshow = function () {
     else {
         $.get(API.login_type, function (data) {
             var u_t = data.data.role;
-            if (u_t === undefined || u_t === ROLE.no_user)
-                location.href = "/login.html";
+            if (u_t === undefined || u_t === ROLE.no_user) {
+                location.href = "/login.html"; return; }
             else if (u_t !== userInfo.role) {
                 PermissionDenied("页面已过期，即将刷新页面", location.href); return; }
             userInfo.user = data.data.student;
             userInfo.lab = data.data.lab;
+            userInfo.admin = data.data.admin;
         });
     }
 };
@@ -201,7 +203,8 @@ function PermissionDenied(msg, dest) {
     alert(msg);
     if (dest)
         location.href = dest;
-    location.href = '/index.html';
+    else
+        location.href = '/index.html';
 }
 
 function reactToResponse(data, success) {

@@ -29,13 +29,15 @@ $.get(API.login_type, function (data) {
 
             var rid = rowObject.id;
             var code = "/bulletin/detail.html" + "?" + rid;
-            if (userInfo.role === ROLE.admin)
-                return "<span>&nbsp;</span>" +
-                    "<a href=\"" + code + "\">查看详情</a>" +
+            if (userInfo.role === ROLE.admin || (userInfo.role === ROLE.lab && rowObject.from
+                !== '系统公告' &&  rowObject.from.indexOf(userInfo.lab.name) !== -1))
+                return "<span>&nbsp;</span><a href=\"" + code + "\">查看详情</a>" +
                     "<span>&nbsp;&nbsp;&nbsp;</span>" +
-                    "<i class='ace-icon fa fa-trash-o red bigger-110' " +
-                    "style='cursor: pointer' " +
-                    "onclick='delete_bull(" + rid + ")'></i>";
+                    "<a href='/bulletin/edit.html?" + rid + "'>" +
+                    "<i class='ace-icon fa fa-pencil green bigger-110'></i></a>" +
+                    "<span>&nbsp;&nbsp;&nbsp;</span>" +
+                    "<i class='ace-icon fa fa-trash-o red bigger-110' style='cursor: pointer'"
+                    + " onclick='delete_bull(" + rid + ")'></i>";
             return "<span>&nbsp;</span><a href=\"" + code + "\">查看详情</a>";
         };
 
@@ -61,13 +63,13 @@ $.get(API.login_type, function (data) {
                 {
                     name: 'time',
                     index: 'time',
-                    width: 64,
+                    width: 62,
                     cellattr: font_formatter,
                     formatter: time_formatter,
                     sortable: false
                 },
                 {
-                    name: 'id', index: 'id', width: 52, formatter: bull_inner_div,
+                    name: 'id', index: 'id', width: 62, formatter: bull_inner_div,
                     cellattr: font_formatter, sortable: false
                 }],
 
@@ -296,11 +298,13 @@ function layoutBasicViews() {
 
     if (userInfo.role === ROLE.admin) {
         $('#post_noti_header').removeClass("hidden");
+        $('#nav-search').removeClass("hidden");
         $('#noti_col').addClass("hidden");
     } else if (userInfo.role !== ROLE.no_user) { // 已登陆的学生，含实验室负责人
         $('#my_noti_header').removeClass("hidden");
         if (userInfo.role === ROLE.lab) {
             $('#post_bulletin').removeClass("hidden");
+            $('#nav-search').removeClass("hidden");
             $('#post_noti_butt').removeClass("hidden");
         }
     }

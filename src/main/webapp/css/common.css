@@ -1,20 +1,13 @@
-.my_lab_cls {
 
-}
-
-.admin_cls {
-
-}
-
-.stu_profile {
-
-}
 
 .right_top {
     margin-top: 8px;
     border-radius: 5px;
 }
 
+.width-15 {
+    width:15%!important;
+}
 .width-17 {
     width:17%!important;
 }
@@ -29,7 +22,7 @@
 }
 
 .bigger-132 {
-    font-size:131%!important
+    font-size:132%!important
 }
 .bigger-122 {
     font-size:122%!important

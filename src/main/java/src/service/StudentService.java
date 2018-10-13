@@ -47,7 +47,6 @@ public class StudentService {
             studentDAO.updatePassword(email, encodePassword(newPass));
             return ResultCache.OK;
         } catch (Exception e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
     }
@@ -57,7 +56,6 @@ public class StudentService {
             studentDAO.insertStudent(vo);
             return ResultCache.OK;
         } catch (Exception e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
     }
@@ -79,7 +77,6 @@ public class StudentService {
             studentDAO.updateStudent(vo);
             return ResultCache.OK;
         } catch (Exception e) {
-            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
             return ResultCache.DATABASE_ERROR;
         }
     }

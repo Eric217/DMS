@@ -18,6 +18,7 @@ public class Modification {
     private Integer duration;
     private String coach_id;
     private Integer opt_status;
+    /** note: not from param */
     private String leader_id;
     private String aim;
     private String type;

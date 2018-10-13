@@ -48,6 +48,7 @@ public class LabController {
     }
 
     /** admin 权限*/
+    // TODO: - 把 get 换成 post，老是返回 500, 唉，怎么办？？？我也没找到错误，try catch 也不抓
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public Result createLab(Laboratory vo, HttpSession session) {
         if (!PermissionService.IS_ADMIN(session))
@@ -75,6 +76,7 @@ public class LabController {
         if (!PermissionService.IS_ADMIN(session))
             if (!PermissionService.IS_MY_LAB(vo.getId(), session, labService))
                 return PERMISSION_DENIED;
+
         return labService.updateLab(vo);
     }
 
