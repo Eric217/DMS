@@ -53,7 +53,7 @@ public class UserController {
     public Result getCode(String email, HttpSession session) {
         try {
             if (!Tools.isRightMailFormat(email))
-                return ResultCache.failWithMessage("邮箱格式不符合要求");
+                return ResultCache.failWithMessage("邮箱格式不符合要求: @mail.sdu.edu.cn");
 
             Date last_req = (Date) session.getAttribute(S_VERI_LAST), now = new Date();
             long rest = now.getTime() - 60 * 1000;

@@ -249,36 +249,27 @@
                             </li>
 
                             <li>
-                                <a href="#">
+                                <a href="/project/lab.html">
                                     <i class="menu-icon fa fa-caret-right"></i>
                                     全部项目
                                 </a>
                                 <b class="arrow"></b>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="/project/lab.html?status=1">
                                     <i class="menu-icon fa fa-caret-right"></i>
                                     待审核项目
                                 </a>
                                 <b class="arrow"></b>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="/project/lab.html?status=7">
                                     <i class="menu-icon fa fa-caret-right"></i>
                                     待处理请求
                                 </a>
                                 <b class="arrow"></b>
                             </li>
-
-                            <li>
-                                <a href="#">
-                                    <i class="menu-icon fa fa-caret-right"></i>
-                                    超时项目处理
-                                </a>
-                                <b class="arrow"></b>
-                            </li>
                         </ul>
-
                     </li>
                     <li>
                         <a href="/lab/list.html">
@@ -336,16 +327,15 @@
                         <div class="width-75 center-block">
                             <h4 class="header blue bolder smaller leader_header">
                                 负责人姓名：<span id="leader_name"></span></h4>
-                            <div class="space-6"></div>
                             <h4 class="header blue bolder smaller leader_header">
                                 负责人邮箱：<span id="leader_email"></span></h4>
 
                             <h4 class="header blue bolder smaller hidden" id="empty_header">
                                 没有负责人 </h4>
 
-                            <div class="space-6"></div>
+                            <div class="space-16"></div>
 
-                            <h3 class="header blue bolder align-center">简介</h3>
+                            <h2 class="header blue align-center">简介</h2>
                             <div id="lab_content">加载中</div>
                             <!-- style="border: solid lightgray;" -->
 
@@ -358,11 +348,18 @@
                                     <span class="bigger-130">删除实验室</span>
                                 </button>
                                 <span class="bigger-300 hidden admin_cls"
-                                >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                >&nbsp;&nbsp;&nbsp;&nbsp;</span>
                                 <button type="button" id="edit_lab"
-                                        class="btn btn-sm btn-primary width-20 hidden admin_cls">
+                                        class="btn btn-sm btn-primary width-20 hidden admin_cls lab_cls">
                                     <i class="ace-icon fa fa-pencil bigger-130"></i>
                                     <span class="bigger-130">修改信息</span>
+                                </button>
+                                <span class="bigger-300 hidden admin_cls lab_cls"
+                                >&nbsp;&nbsp;&nbsp;&nbsp;</span>
+                                <button type="button" id="show_proj"
+                                        class="btn btn-sm btn-primary width-20 hidden admin_cls lab_cls">
+                                    <i class="ace-icon fa fa-file bigger-130"></i>
+                                    <span class="bigger-130">查看项目</span>
                                 </button>
                             </div>
                         </div>

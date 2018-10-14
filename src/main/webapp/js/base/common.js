@@ -181,8 +181,15 @@ function layoutBars() {
         $('#my_project_li').removeClass("hidden");
         $('.stu_profile').removeClass("hidden");
         if (userInfo.role === ROLE.lab) {
-            $('#right_top_lab').removeClass("hidden");
+            var r_t_lab = $('#right_top_lab');
+            r_t_lab.removeClass("hidden");
+            var dest = '/lab/detail.html?' + userInfo.lab.id;
+            // noinspection JSValidateTypes
+            r_t_lab.children().attr('href', dest);
             $('.my_lab_cls').removeClass("hidden");
+            var detail_li = $('#my_lab_li').find("ul li").first();
+            detail_li.children().first().attr('href', dest);
+        //.attr('href', dest);
         }
     }
 }
@@ -198,7 +205,7 @@ function logout() {
 }
 
 function PermissionDenied(msg, dest) {
-    if (!msg)
+    if (!msg || msg.length === 0)
         msg = "权限不足，即将离开页面";
     alert(msg);
     if (dest)
@@ -219,4 +226,12 @@ function reactToResponse(data, success) {
         default:
             alert("操作失败");
     }
+}
+
+function placeholder(msg, holder) {
+    if (msg && msg.length > 0)
+        return msg;
+    if (holder && holder.length > 0)
+        return holder;
+    return '无';
 }

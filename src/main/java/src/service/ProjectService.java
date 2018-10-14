@@ -239,16 +239,22 @@ public class ProjectService {
         }
     }
 
+    // 实际上参数集合里从来只有一个值
     @Transactional
-    public Result updateDeleted(Set<Long> ids, Integer newValue) {
+    public Result updateDeleted(Long pid, Project p, Integer newValue) {
         if (newValue > 1) newValue = 1;
         if (newValue < 0) newValue = 0;
         try {
-            for (Long id : ids) {
-                int u = projectDAO.updateDeleted(id, newValue);
-                if (u == 1) {
-                    // TODO: - 通知所有成员已删除。还要考虑真删时候的通知
-                }
+            if (p == null)
+                p = projectDAO.getProjectById(pid);
+            int u = projectDAO.updateDeleted(pid, newValue);
+            if (u == 1 && newValue == 1) {
+                List<Student> mem = p.getMembers();
+                Set<String> sids = new HashSet<>();
+                for (Student m : mem)
+                    sids.add(m.getId());
+                notificationService._notifyMembersByIds(sids,
+                        NotificationCache.DEL_P(p.getName()));
             }
             return ResultCache.OK;
         } catch (Exception e) {
@@ -261,9 +267,17 @@ public class ProjectService {
     public Result deleteProjects(Set<Long> ids) {
         try {
             for (Long id : ids) {
+                Project p = projectDAO.getProjectById(id);
                 projectDAO.deleteProjectById(id);
+                if (p != null && p.getDeleted() == 0) {
+                    Set<String> sids = new HashSet<>();
+                    for (Student m : p.getMembers())
+                        sids.add(m.getId());
+                    notificationService._notifyMembersByIds(sids,
+                            NotificationCache.DEL_P(p.getName()));
+                }
             }
-            // TODO: - 通知所有成员已删除。还要考虑真删时候的通知
+            // TODO: - 通知所有成员已删除,
             return ResultCache.OK;
         } catch (Exception e) {
             TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();

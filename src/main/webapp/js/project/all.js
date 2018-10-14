@@ -6,7 +6,7 @@ $.get(API.login_type, function (data) {
     layoutBars();
 
     if (userInfo.role !== ROLE.admin) {
-        PermissionDenied("没有权限，即将跳转", '/project/my.html'); return; }
+        location.href = '/project/my.html'; return; }
 
     jQuery(function ($) {
 
@@ -45,10 +45,7 @@ $.get(API.login_type, function (data) {
         var deleteRows = function (rowid) {
             if (rowid.length === 0)
                 return;
-            $.post(API.del_bull, {ids: rowid.join('@')}, function (data) {
-                alert(data.message);
-                proj_table.trigger("reloadGrid");
-            });
+            delete_proj(rowid.join('@'));
         };
 
         var proj_in_div = function (cellValue, options, rowObject) {

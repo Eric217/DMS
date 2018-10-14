@@ -11,6 +11,7 @@
     <!-- bootstrap & fontawesome -->
     <link rel="stylesheet" href="/assets/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/assets/font-awesome/4.5.0/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="/assets/css/jquery-ui.custom.min.css"/>
 
     <!-- text fonts -->
     <link rel="stylesheet" href="/assets/css/fonts.googleapis.com.css"/>
@@ -249,38 +250,27 @@
                             </li>
 
                             <li>
-                                <a href="#">
+                                <a href="/project/lab.html">
                                     <i class="menu-icon fa fa-caret-right"></i>
                                     全部项目
                                 </a>
                                 <b class="arrow"></b>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="/project/lab.html?status=1">
                                     <i class="menu-icon fa fa-caret-right"></i>
                                     待审核项目
                                 </a>
                                 <b class="arrow"></b>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="/project/lab.html?status=7">
                                     <i class="menu-icon fa fa-caret-right"></i>
                                     待处理请求
                                 </a>
                                 <b class="arrow"></b>
                             </li>
-
-                            <li>
-                                <a href="#">
-                                    <i class="menu-icon fa fa-caret-right"></i>
-                                    超时项目处理
-                                </a>
-                                <b class="arrow"></b>
-                            </li>
-
-
                         </ul>
-
                     </li>
                     <li>
                         <a href="/lab/list.html">
@@ -362,7 +352,7 @@
                                         style="margin-right: 10px"></span>项目描述:</label>
                                 <div class="col-sm-8">
                                     <textarea type="text" class="form-control" id="desc"
-                                               rows="3" placeholder="项目描述，建议不超过200字"
+                                               rows="3" placeholder="项目的进一步解释，建议不超过200字"
                                               onkeyup="checkLength(this, 255)"
                                     ></textarea>
                                 </div>
@@ -403,8 +393,7 @@
 
                                 <div class="col-sm-3">
                                     <input type="text" class="form-control" id="coach"
-                                           placeholder="指导老师"
-                                           onkeyup="checkLength(this, 20)">
+                                           placeholder="指导老师" maxlength="20">
                                 </div>
 
                                 <label for="duration"
@@ -413,8 +402,7 @@
 
                                 <div class="col-sm-3">
                                     <input type="text" class="form-control" id="duration"
-                                           placeholder="15 ~ 120"
-                                           onkeyup="checkLength(this, 3)">
+                                           placeholder="15 ~ 120" maxlength="3">
                                 </div>
                             </div>
 
@@ -423,10 +411,12 @@
                                         style="margin-right: 10px" aria-hidden="true"></span>项目目标:</label>
 
                                 <div class="col-sm-8">
-                                <textarea type="text" class="form-control" id="aim" rows="9"
-                                          placeholder="项目目标，建议不超过1000字"
-                                          onkeyup="checkLength(this, 1000)"
-                                ></textarea>
+                                    <div class="wysiwyg-editor" id="aim" style="max-height:
+                            2000px; height: 250px;"></div>
+                                <!--<textarea type="text" class="form-control" rows="9"-->
+                                          <!--placeholder="项目目标，建议不超过1000字"-->
+                                          <!--onkeyup="checkLength(this, 1000)"-->
+                                <!--&gt;</textarea>-->
                                 </div>
                             </div>
                             <div class="space-6"></div>
@@ -516,6 +506,10 @@
     document.write("<script src='/assets/js/jquery.mobile.custom.min.js'>" + "<" + "/script>");
 </script>
 <script src="/assets/js/bootstrap.min.js"></script>
+<script src="/assets/js/jquery-ui.custom.min.js"></script>
+<script src="/assets/js/jquery.ui.touch-punch.min.js"></script>
+<script src="/assets/js/jquery.hotkeys.index.min.js"></script>
+<script src="/assets/js/bootstrap-wysiwyg.min.js"></script>
 
 <!-- ace scripts -->
 <script src="/assets/js/ace-elements.min.js"></script>

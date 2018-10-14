@@ -28,9 +28,12 @@ var API = {
     get_my_project: BASE_URL + "/project/student",          // sid=20160030 not null
     get_sb_project: BASE_URL + "/project/student/all/admin",
     get_all_proj:   BASE_URL + "/project/all",              // page, rows, status = 0
+    get_lab_proj:   BASE_URL + "/project/lab",              // page, rows, status, lab_id
+    get_a_proj:     BASE_URL + "/project/one",              // id=1
     create_project: BASE_URL + "/project/create",
     del_proj_admin: BASE_URL + "/project/delete",           // ids=12@34
     del_proj_stu:   BASE_URL + "/project/delete/student",   // pid=1
+    update_proj:    BASE_URL + "/project/update",
 
     // notification
     get_noti:       BASE_URL + "/noti/get",

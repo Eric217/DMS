@@ -1,28 +1,61 @@
-
-// noinspection JSUnusedLocalSymbols
-var delete_proj = function (id) {
-    $.post(API.del_proj_stu, {pid: id}, function (data) {
-        reactToResponse(data, function () {
-            $('#my_proj_tbl').trigger("reloadGrid");
-        });
-    });
-};
+// ?id=1&status=0
+var arg_map = getArgsObj();
+var lab_id = arg_map.get('id');
+var lab_status = arg_map.get('status');
+if (lab_status === undefined || lab_status.length === 0)
+    lab_status = 0;
 
 $.get(API.login_type, function (data) {
 
     if (!fillUserInfo(data.data)) return;
+
     layoutBars();
 
+    if (userInfo.role === ROLE.normal) {
+        PermissionDenied("没有权限，即将跳转", '/project/my.html'); return; }
+    else if (userInfo.role === ROLE.lab) {
+        if (lab_id === undefined || lab_id.length === 0)
+            lab_id = userInfo.lab.id;
+        else if ('' + userInfo.lab.id !== lab_id) {
+            PermissionDenied("没有权限，即将跳转", '/project/my.html'); return; }
+    } else if (userInfo.role === ROLE.admin) {
+        if (lab_id === undefined || lab_id.length === 0) {
+            PermissionDenied("参数有误", '/project/all.html'); return; }
+    }
+
+    $('#bread_lab_li').attr('href', '/lab/detail.html?' + lab_id);
+
+    if (lab_status === '0' || lab_status === 0) {
+        $('[data-toggle="buttons"] label').eq(0).addClass('active');
+        $('#lab_p_s').text("全部项目");
+    }
+    else if (lab_status === '1' || lab_status === 1) {
+        $('[data-toggle="buttons"] label').eq(1).addClass('active');
+        $('#lab_p_s').text("待审核项目");
+    }
+    else if (lab_status === '7' || lab_status === 7) {
+        $('[data-toggle="buttons"] label').eq(2).addClass('active');
+        $('#lab_p_s').text("待处理请求");
+    }
     jQuery(function ($) {
 
-        if (userInfo.role === ROLE.admin) {
-            location.href = '/project/all.html'; return; }
+        var proj_table = $('#lab_proj_tbl');
+        var proj_selector = "#lab_proj_tbl";
+        var pager_selector = "#lab_proj_pg";
 
-        var proj_table = $('#my_proj_tbl');
-
-        var grid_selector2 = "#my_proj_tbl";
-        var pager_selector2 = "#my_proj_pg";
-
+        $('[data-toggle="buttons"] .btn').on('click', function(){
+            var s = $(this).find('input[type=radio]').val();
+            if (s === '0') {
+                $('#lab_p_s').text("全部项目");
+            } else if (s === '1') {
+                $('#lab_p_s').text("待审核项目");
+            } else if (s === '7' || lab_status === 7) {
+                $('#lab_p_s').text("待处理请求");
+            }
+            proj_table.jqGrid('setGridParam', {
+                postData: {page: 1, rows: 100000, status: s, lab_id: lab_id}
+            }).trigger("reloadGrid");
+        });
 
         var parent_column = proj_table.closest('[class*="col-"]');
         $(window).on('resize.jqGrid', function () {
@@ -36,62 +69,43 @@ $.get(API.login_type, function (data) {
             }
         });
 
-        $('#create_proj').on('click', function () {
-            location.href = '/project/create.html';
-        });
+        // noinspection JSUnusedLocalSymbols
+        var delete_proj = function (rid) {
+            MyConfirm('删除操作不可撤销，确定删除吗?', function () {
+                $.post(API.del_proj_admin, {ids: rid}, function (data) {
+                    reactToResponse(data, function () {
+                        proj_table.trigger("reloadGrid");
+                    });
+                });
+            });
 
-        var proj_in_div = function (cellValue, options, rowObject) {
-            var code = "/project/detail.html" + "?" + rowObject.id;
-            var detail = "<span>&nbsp;</span><a href=\"" + code + "\">查看详情</a>";
-
-            if (rowObject.leader_id !== userInfo.user.id)
-                return detail;
-
-            var p_status = getProjStatus(rowObject);
-            if (p_status === ProjectStatus.checking)
-                return detail +
-                    "<span>&nbsp;&nbsp;&nbsp;</span>" +
-                    "<span style='cursor:pointer;' class='red' " +
-                    "onclick='delete_proj(" + rowObject.id + ")'>撤回</span>";
-
-            if (p_status === ProjectStatus.processing) {
-                return detail +
-                    "<span>&nbsp;&nbsp;&nbsp;</span>" +
-                    "<a href='/project/edit.html?" + rowObject.id + "'>" +
-                    "<i class='ace-icon fa fa-pencil blue bigger-110'></i></a>";
-            }
-
-            if (p_status === ProjectStatus.rejected || p_status===ProjectStatus.canceled
-                || p_status === ProjectStatus.finished || p_status === ProjectStatus.overtime)
-                return detail +
-                    "<span>&nbsp;&nbsp;&nbsp;</span>" +
-                    "<i class='ace-icon fa fa-trash-o red bigger-110' " +
-                    "style='cursor: pointer' " +
-                    "onclick='delete_proj(" + rowObject.id + ")'></i>";
-
-            // 可以在这里为 剩下3种状态指定操作按钮，
-            // if (proj_(rowObject)) {
-            //     var modi_code = '/project/edit.html' + '?' + rowObject.id;
-            //     var to_modi = "<span>&nbsp;</span><a href=\"" + modi_code + "\">修改</a>";
-            // }
-            return detail;
-            // return "<span>&nbsp;</span><a href=\"" + code + "\">查看详情</a>";
         };
 
-        function layoutViews(records) {
-            if (records === 0) {
-                $('#my_proj').text('没有项目');
-                $('#my_proj_d_r').addClass("hidden");
-            } else {
-                $('#my_proj').text('我的项目');
-                $('#my_proj_d_r').removeClass('hidden');
-            }
-        }
+        var deleteRows = function (rowid) {
+            if (rowid.length === 0)
+                return;
+            delete_proj(rowid.join('@'));
+        };
+
+        var proj_in_div = function (cellValue, options, rowObject) {
+
+            var rid = rowObject.id;
+            var code = "/project/detail.html" + "?" + rid;
+            return "<span>&nbsp;</span><a href=\"" + code + "\">查看详情</a>" +
+                "<span>&nbsp;&nbsp;&nbsp;</span>" +
+                "<a href='/project/edit.html?" + rowObject.id + "'>" +
+                "<i class='ace-icon fa fa-pencil green bigger-110'></i></a>" +
+                "<span>&nbsp;&nbsp;&nbsp;</span>" +
+                "<i class='ace-icon fa fa-trash-o red bigger-110' style='cursor: pointer'"
+                + " onclick='delete_proj(" + rid + ")'></i>";
+        };
+
+        var title1 = $('#lab_name');
 
         proj_table.jqGrid({
 
-            url: API.get_my_project,
-            postData: {sid: userInfo.user.id},
+            url: API.get_lab_proj,
+            postData: {page: 1, rows: 100000, status: lab_status, lab_id: lab_id},
             datatype: "json",
             height: 'auto',
             colNames: ['所在实验室', '项目名称', '提交时间', '指导教师', '队长姓名', '项目状态', '操作'],
@@ -101,14 +115,18 @@ $.get(API.login_type, function (data) {
                     index: 'lab_name',
                     width: 51,
                     sortable: false,
+                    cellattr: font_formatter,
+                    formatter: function (cellvalue, options, rowObject) {
+                        title1.text(rowObject.lab_name);
+                        return rowObject.lab_name;
+                    }
+                },
+                {
+                    name: 'name', index: 'name', width: 190, sortable: false,
                     cellattr: font_formatter
                 },
                 {
-                    name: 'name', index: 'name', width: 200, sortable: false,
-                    cellattr: font_formatter
-                },
-                {
-                    name: 'submit_time', index: 'submit_time', width: 61, sortable: false,
+                    name: 'submit_time', index: 'submit_time', width: 69, sortable: false,
                     cellattr: font_formatter, formatter: submit_time_formatter
                 },
                 {
@@ -127,7 +145,7 @@ $.get(API.login_type, function (data) {
                     formatter: status_formatter
                 },
                 {
-                    name: 'id', index: 'id', width: 58,
+                    name: 'id', index: 'id', width: 68,
                     formatter: proj_in_div, sortable: false,
                     cellattr: function() { return "class='bigger-115'"; }
                 }
@@ -136,10 +154,11 @@ $.get(API.login_type, function (data) {
             viewrecords: true,
             rowNum: 100000,
             //rowList: [10, 20, 30],
-            pager: pager_selector2,
+            pager: pager_selector,
             altRows: true,
             selectable: false,
             sortable: false,
+            multiselect: userInfo.role === ROLE.admin,
 
             loadComplete: function () {
                 var table = this;
@@ -147,7 +166,6 @@ $.get(API.login_type, function (data) {
                     updatePagerIcons();
                     enableTooltips(table);
                 }, 0);
-                layoutViews(proj_table.jqGrid('getGridParam', 'records'));
             },
 
             jsonReader: {
@@ -156,12 +174,12 @@ $.get(API.login_type, function (data) {
         });
         $(window).triggerHandler('resize.jqGrid');
 
-
         // noinspection JSUnusedGlobalSymbols
-        proj_table.jqGrid('navGrid', pager_selector2,
+        proj_table.jqGrid('navGrid', pager_selector,
             { 	//navbar options
                 add: false,
-                del: false,
+                del: userInfo.role === ROLE.admin,
+                delfunc: deleteRows,
                 edit: false,
                 search: false,
                 // searchicon: 'ace-icon fa fa-search orange',
@@ -199,7 +217,7 @@ $.get(API.login_type, function (data) {
         }
 
         $(document).one('ajaxloadstart.page', function () {
-            $.jgrid.gridDestroy(grid_selector2);
+            $.jgrid.gridDestroy(proj_selector);
             $('.ui-jqdialog').remove();
         });
     });
@@ -207,3 +225,6 @@ $.get(API.login_type, function (data) {
 
 });
 
+function lab_name_on_click() {
+    location.href = '/lab/detail.html?' + lab_id;
+}

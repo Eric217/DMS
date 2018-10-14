@@ -190,13 +190,14 @@ public class ProjectController {
             return ResultCache.ARG_ERROR;
         if (newValue == null)
             newValue = 1;
+        Project p = null;
         if (!PermissionService.IS_ADMIN(session)) {
             String sid = PermissionService.SID(session);
             if (newValue == 0 || StringUtils.isNullOrEmpty(sid))
                 return ResultCache.PERMISSION_DENIED;
 
             Result r = projectService.getProjectById(pid);
-            Project p = (Project) r.getData();
+            p = (Project) r.getData();
             if (p == null)
                 return r;
             if (!sid.equals(p.getLeader_id()))
@@ -208,7 +209,7 @@ public class ProjectController {
                 return projectService.deleteProjects(Tools.toSet(pid));
             // 否则正常 return
         }
-        return projectService.updateDeleted(Tools.toSet(pid), newValue);
+        return projectService.updateDeleted(pid, p, newValue);
     }
 
     /**

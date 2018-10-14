@@ -33,7 +33,7 @@ $.get(API.get_a_lab, {id: lab_id}, function (data) {
 
 function layoutViews() {
     if (userInfo.role === ROLE.lab && '' + userInfo.lab.id === lab_id)
-         $('#edit_lab').removeClass('hidden');
+         $('.lab_cls').removeClass('hidden');
 
     $('#lab_title').text(lab.name);
     $('#lab_content').html(lab.description);
@@ -63,4 +63,8 @@ $(function ($) {
     $('#edit_lab').on('click', function () {
         location.href = '/lab/edit.html?' + lab_id;
     });
+    $('#show_proj').on('click', function () {
+        location.href = '/project/lab.html?id=' + lab_id;
+    });
+
 });

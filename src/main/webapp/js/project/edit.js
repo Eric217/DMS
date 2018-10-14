@@ -1,53 +1,100 @@
 
+var v1 = false;
+var v2 = false;
+var p_idx = getOneArg(false);
+if (p_idx.length === 0)
+    location.href = '/project/create.html';
+p_idx = Number(p_idx);
+var proj = null;
+
 // 初始化页面
 $.get(API.login_type, function (data) {
 
-    if (data.data.role === ROLE.admin) {
-        alert("管理员不参与项目，因此不可创建");
-        location.href = "/index.html";
-        return;
-    }
-
     if (!fillUserInfo(data.data)) return;
+    if (userInfo.role === ROLE.normal) {
+        location.href = '/project/modify.html'; return; }
     layoutBars();
-
+    v1 = true;
+    if (v2)
+        layoutViews();
 });
 
-// 下拉框
-$.get(API.get_lab_names, function (data) {
+$.get(API.get_a_proj, {id: p_idx}, function (data) {
     if (data.status !== 200) {
         alert(data.message);
         return;
     }
-    var names = data.data;
-    var opts = "";
-    for (var idx in names) {
-        var n = names[idx];
-        opts += "<option value='" + n + "'>" + n + "</option>";
-    }
-    $('#lab_select').append(opts);
+    proj = data.data;
+    if (userInfo.role === ROLE.lab && userInfo.lab.name !== proj.lab_name) {
+        PermissionDenied('没有权限', '/project/lab.html'); return; }
+    v2 = true;
+    if (v1)
+        layoutViews();
 });
+
+function layoutViews() {
+    $('#project_name').val(proj.name);
+    $('#desc').val(proj.description);
+    $('#coach').val(proj.coach_id);
+    var lab_sel = $('#lab_select');
+    lab_sel.append("<option value='" + proj.lab_name + "'>" + proj.lab_name + "</option>");
+    lab_sel.val(proj.lab_name);
+    lab_sel.attr('disabled', true);
+    $('#duration').val(parseInt(proj.duration/(24*3600)));
+    $('#type').val(proj.type);
+    $('#aim').html(proj.aim);
+    var lab_lea = $('#leader_id');
+    lab_lea.val(proj.leader_id);
+    lab_lea.attr('disabled', true);
+    var c = 1;
+    // noinspection JSUnresolvedVariable
+    for (var i = 1; i <= proj.members.length; i++) {
+        var id_idx = '#id' + c;
+        // noinspection JSUnresolvedVariable
+        var tid = proj.members[i-1].id;
+        if (tid !== proj.leader_id) {
+            c++;
+            $(id_idx).val(tid);
+        }
+    }
+}
 
 // 按钮事件
 jQuery(function($) {
 
-    $('#create_butt').on('click', function (e) {
+    $('#delete_butt').on('click', function () {
+        $.post(API.del_proj_admin, {ids: p_idx}, function (data) {
+            reactToResponse(data, function () {
+                if (userInfo.role === ROLE.admin)
+                    location.href = '/project/all.html';
+                else
+                    location.href = '/project/lab.html';
+            });
+        });
+    });
+
+    $('#save_butt').on('click', function (e) {
         var c = '@';
         var id1_input = $('#id1');
         var dur = $('#duration').val();
         dur = Number(dur)*24*3600;
-        if (!dur) dur = 2592000;
+        if (!dur || dur < proj.duration) {
+            alert('只能延长持续时间；时间格式需要正确');
+            return;
+        }
         var loginModel = {
+            id:         proj.id,
             name:       $('#project_name').val(),
             duration:   dur,
             description:$('#desc').val(),
             coach_id:   $("#coach").val(),
             lab_name:   $("#lab_select").val(),
-            leader_id:  userInfo.user.id,
+            leader_id:  proj.leader_id,
+            opt_status: proj.opt_status,
             aim:        $('#aim').html(),
             type:       $('#type').val(),
             memberIds:  id1_input.val() +c+ $('#id2').val() +c+ $('#id3').val() +c+
-                        $('#id4').val() +c+ $('#id5').val()
+                $('#id4').val() +c+ $('#id5').val()
         };
         if (loginModel.name.length < 1) {
             alert("项目名不能为空");
@@ -69,10 +116,10 @@ jQuery(function($) {
             alert("成员学号不能为空");
         }
 
-        $.post(API.create_project, loginModel, function (data) {
+        $.post(API.update_proj, loginModel, function (data) {
             alert(data.message);
             if (data.status === 200) {
-                location.href = "/project/my.html";
+                location.href = "/project/detail.html?" + p_idx;
             }
         });
         e.preventDefault();

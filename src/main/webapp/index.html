@@ -253,38 +253,27 @@
                             </li>
 
                             <li>
-                                <a href="#">
+                                <a href="/project/lab.html">
                                     <i class="menu-icon fa fa-caret-right"></i>
                                     全部项目
                                 </a>
                                 <b class="arrow"></b>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="/project/lab.html?status=1">
                                     <i class="menu-icon fa fa-caret-right"></i>
                                     待审核项目
                                 </a>
                                 <b class="arrow"></b>
                             </li>
                             <li>
-                                <a href="#">
+                                <a href="/project/lab.html?status=7">
                                     <i class="menu-icon fa fa-caret-right"></i>
                                     待处理请求
                                 </a>
                                 <b class="arrow"></b>
                             </li>
-
-                            <li>
-                                <a href="#">
-                                    <i class="menu-icon fa fa-caret-right"></i>
-                                    超时项目处理
-                                </a>
-                                <b class="arrow"></b>
-                            </li>
-
-
                         </ul>
-
                     </li>
                     <li>
                         <a href="/lab/list.html">
@@ -330,7 +319,7 @@
 
             <div class="page-content">
 
-                <div class="space-2"></div>
+                <div class="space-6"></div>
                 <div class="page-header hidden" id="my_noti_header">
                     <h1>
                         <span id="my_noti">我的通知</span>
@@ -363,7 +352,7 @@
                     </div>
                 </div>
 
-                <div class="space-8"></div>
+                <div class="space-24"></div>
                 <div class="page-header">
                     <h1>
                         <span>公告&nbsp;</span>
@@ -420,24 +409,6 @@
 <script src="/js/base/API.js"></script>
 <script src="/js/base/common.js"></script>
 <script src="/js/base/index.js"></script>
-
-
-<script>
-    function goURI(status, manage, lab) {
-        var u = "/student/project_s.html?";
-        if (lab === 1) {
-            u += "lab=1";
-            u += "&status=" + status;
-        } else if (manage === 1) {
-            u += "manage=1";
-        } else {
-            u += "status=" + status;
-        }
-        location.href = u;
-    }
-
-
-</script>
 
 
 <!-- inline scripts related to this page -->

@@ -29,7 +29,10 @@ public class NotificationCache {
         return noti(2, SYSTEM_NOTIFICATION,
             "您退出了项目: " + p_name);
     }
-
+    public static Notification DEL_P(String p_name) {
+        return noti(2, SYSTEM_NOTIFICATION,
+                "项目: " + p_name + " 已被删除");
+    }
 
 
     public static Notification CREATE_P_LAB(String from) {

@@ -1,12 +1,9 @@
 package src.eric;
 
-import com.mysql.cj.util.StringUtils;
-
 import javax.servlet.http.Cookie;
 import java.awt.*;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpCookie;
 import java.util.HashSet;
 import java.util.Properties;
 import java.util.Random;
@@ -19,20 +16,13 @@ public class Tools {
     public static boolean isRightMailFormat(String email) { // TODO: - Regex
         if (email == null || email.isEmpty())
             return false;
-
-        // 要求：只有一个 @ 符号
-        return true;
+        return email.endsWith("@mail.sdu.edu.cn");
     }
 
     public static boolean isRightPass(String pass) { // TODO: - Regex
         if (pass == null || pass.isEmpty())
             return false;
-
-        if (pass.length() > 16 || pass.length() < 8)
-            return false;
-
-
-        return true;
+        return pass.length() <= 16 && pass.length() >= 8;
     }
 
     public static boolean validateRealStudent(String sdu_mail, String name) { // TODO: - CHECK
