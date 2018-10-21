@@ -87,7 +87,7 @@ public class StudentService {
                 return ResultCache.getDataOk(studentDAO.getStudentById(id));
             String[] arr = {id};
             return ResultCache.getDataOk(
-                    studentDAO.getMinStudentByIds(arr).stream().findAny().orElseThrow());
+                    studentDAO.getMinStudentByIds(arr).stream().findAny().orElse(null));
         } catch (Exception e) {
             return ResultCache.DATABASE_ERROR;
         }

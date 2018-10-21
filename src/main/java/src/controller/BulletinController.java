@@ -77,7 +77,7 @@ public class BulletinController {
     public Result deleteBulletinByIds(String ids, HttpSession session) {
 
         HashSet<Long> set = Tools.split_to_long(ids, "@", null);
-        var size = set.size();
+        int size = set.size();
         if (size == 0)
             return ResultCache.ARG_ERROR;
         boolean admin = PermissionService.IS_ADMIN(session);
@@ -90,7 +90,7 @@ public class BulletinController {
         if (lab == null)
             return ResultCache.PERMISSION_DENIED;
         Bulletin b = (Bulletin) bulletinService.getMinBulletinById(
-                set.stream().findAny().orElseThrow()).getData();
+                set.stream().findAny().orElse(null)).getData();
         if (b == null)
             return ResultCache.failWithMessage("id 对应的公告不存在，或数据库读写失败");
         if (!lab.getName().equals(b.getFrom()))

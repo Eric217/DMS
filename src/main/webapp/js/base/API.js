@@ -1,5 +1,6 @@
 
-var BASE_URL = "http://localhost:8080";
+// var BASE_URL = "http://47.93.225.7:8080";
+var BASE_URL = 'http://localhost:8080';
 
 var REQ = function (type, data, url, before, complete, success) {
     $.ajax({

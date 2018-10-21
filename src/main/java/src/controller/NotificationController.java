@@ -43,7 +43,7 @@ public class NotificationController {
         if (!PermissionService.IS_ADMIN(session))
             return ResultCache.PERMISSION_DENIED;
         vo.setFrom(Constant.SYSTEM_ADMIN);
-        var t = vo.getType();
+        String t = vo.getType();
         vo.setType(Tools.isNullOrTrimEmp(t) ? Constant.SYSTEM_NOTIFICATION : t.trim());
         return notificationService.notifyStudentsByIds(
                 Tools.split(to, "@", null), vo);

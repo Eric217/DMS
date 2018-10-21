@@ -63,7 +63,7 @@ public class Tools {
         HashSet<Long> set = new HashSet<>();
         if (src == null || src.isEmpty())
             return set;
-        var arr = src.split(regex);
+        String[] arr = src.split(regex);
         for (String element: arr)
             if (!element.isEmpty()) {
                 try {

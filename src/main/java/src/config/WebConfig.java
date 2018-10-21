@@ -32,9 +32,10 @@ import java.util.List;
 @ComponentScan("src.controller")
 public class WebConfig extends WebMvcConfigurerAdapter {
 
-    public static final DateTimeFormatter LOCAL_DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-    public static final DateTimeFormatter LOCAL_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
-    public static final DateTimeFormatter LOCAL_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+    private static final DateTimeFormatter LOCAL_DATE_FORMATTER = DateTimeFormatter.ofPattern(
+            "yyyy-MM-dd");
+    private static final DateTimeFormatter LOCAL_TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm:ss");
+    private static final DateTimeFormatter LOCAL_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
     @Override
     public void configurePathMatch(PathMatchConfigurer configurer) {
@@ -69,7 +70,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     /*
         处理java8 time 包 转成 json数据的问题
      */
-    public ObjectMapper jsonObjectMapper() {
+    private ObjectMapper jsonObjectMapper() {
         JavaTimeModule javaTimeModule = new JavaTimeModule();
         javaTimeModule.addSerializer(LocalDate.class, new LocalDateSerializer(LOCAL_DATE_FORMATTER));
         javaTimeModule.addSerializer(LocalTime.class, new LocalTimeSerializer(LOCAL_TIME_FORMATTER));
@@ -81,7 +82,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
                 .build();
     }
 
-    public MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(ObjectMapper jsonObjectMapper) {
+    private MappingJackson2HttpMessageConverter mappingJackson2HttpMessageConverter(ObjectMapper jsonObjectMapper) {
         MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
         converter.setObjectMapper(jsonObjectMapper);
         return converter;

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<dataSource name="eric_db@localhost">
+<dataSource name="SDU_LAB_ERIC">
   <database-model serializer="dbm" rdbms="MYSQL" format-version="4.11">
     <root id="1">
       <ServerVersion>8.0.12</ServerVersion>
       <DefaultEngine>InnoDB</DefaultEngine>
       <DefaultTmpEngine>InnoDB</DefaultTmpEngine>
-      <DefaultCasing>mixed/mixed</DefaultCasing>
+      <DefaultCasing>exact</DefaultCasing>
     </root>
     <schema id="2" parent="1" name="eric_db">
       <Current>1</Current>
@@ -1095,33 +1095,15 @@
       <Charset>utf8mb4</Charset>
       <DefaultForCharset>0</DefaultForCharset>
     </collation>
-    <table id="274" parent="2" name="admin">
-      <Collation>utf8_general_ci</Collation>
-    </table>
-    <table id="275" parent="2" name="bulletin">
-      <Collation>utf8_general_ci</Collation>
-    </table>
-    <table id="276" parent="2" name="laboratory">
-      <Collation>utf8_general_ci</Collation>
-    </table>
-    <table id="277" parent="2" name="modification">
-      <Collation>utf8_general_ci</Collation>
-    </table>
-    <table id="278" parent="2" name="notification">
-      <Collation>utf8_general_ci</Collation>
-    </table>
-    <table id="279" parent="2" name="notify">
-      <Collation>utf8_general_ci</Collation>
-    </table>
-    <table id="280" parent="2" name="participate">
-      <Collation>utf8_general_ci</Collation>
-    </table>
-    <table id="281" parent="2" name="project">
-      <Collation>utf8_general_ci</Collation>
-    </table>
-    <table id="282" parent="2" name="student">
-      <Collation>utf8_general_ci</Collation>
-    </table>
+    <table id="274" parent="2" name="admin"/>
+    <table id="275" parent="2" name="bulletin"/>
+    <table id="276" parent="2" name="laboratory"/>
+    <table id="277" parent="2" name="modification"/>
+    <table id="278" parent="2" name="notification"/>
+    <table id="279" parent="2" name="notify"/>
+    <table id="280" parent="2" name="participate"/>
+    <table id="281" parent="2" name="project"/>
+    <table id="282" parent="2" name="student"/>
     <column id="283" parent="274" name="id">
       <Position>1</Position>
       <DataType>int(11) unsigned|0s</DataType>
@@ -1162,7 +1144,7 @@
     </column>
     <column id="289" parent="275" name="content">
       <Position>4</Position>
-      <DataType>varchar(20000)|0s</DataType>
+      <DataType>varchar(15000)|0s</DataType>
       <NotNull>1</NotNull>
       <DefaultExpression>&apos;&apos;</DefaultExpression>
       <ColumnKind>normal</ColumnKind>

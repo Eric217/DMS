@@ -40,9 +40,7 @@ public class ConnectionFactory {
     }
 
     /**
-     * Driver make connection.
-     * @throws SQLTimeoutException
-     * @throws SQLException
+     * Driver make connection
      */
     public Connection makeConnection() throws SQLException {
         System.out.println("DB_URL = " + DB_URL);

@@ -56,7 +56,7 @@ public class PermissionService {
 
     /** @return 已登陆用户当前管理的实验室, nullable */
     public static Laboratory getManagedLab(HttpSession session, LabService labService) {
-        var sid = SID(session);
+        String sid = SID(session);
         if (StringUtils.isNullOrEmpty(sid))
             return null;
         Object result = labService.getLabByLeaderId(sid).getData();
