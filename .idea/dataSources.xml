@@ -15,20 +15,6 @@
         <property name="yearIsDateType" value="false" />
       </driver-properties>
     </data-source>
-    <data-source source="LOCAL" name="SDU_LAB_ERIC" uuid="787eda8e-6b05-451f-99e8-5e43072d0016">
-      <driver-ref>mysql</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://47.93.225.7:3306/eric_db</jdbc-url>
-      <driver-properties>
-        <property name="autoReconnect" value="true" />
-        <property name="zeroDateTimeBehavior" value="convertToNull" />
-        <property name="tinyInt1isBit" value="false" />
-        <property name="characterEncoding" value="utf8" />
-        <property name="characterSetResults" value="utf8" />
-        <property name="yearIsDateType" value="false" />
-      </driver-properties>
-    </data-source>
     <data-source source="LOCAL" name="@localhost" uuid="c441ee99-3cd5-4ac8-a7d4-e55609e551bc">
       <driver-ref>mysql</driver-ref>
       <synchronize>true</synchronize>
