@@ -10,7 +10,7 @@
     <schema id="2" parent="1" name="eric_db">
       <Current>1</Current>
       <Visible>1</Visible>
-      <Collation>utf8mb4_0900_ai_ci</Collation>
+      <Collation>utf8mb4_unicode_ci</Collation>
     </schema>
     <schema id="3" parent="1" name="information_schema">
       <Collation>utf8_general_ci</Collation>
@@ -1095,15 +1095,33 @@
       <Charset>utf8mb4</Charset>
       <DefaultForCharset>0</DefaultForCharset>
     </collation>
-    <table id="274" parent="2" name="admin"/>
-    <table id="275" parent="2" name="bulletin"/>
-    <table id="276" parent="2" name="laboratory"/>
-    <table id="277" parent="2" name="modification"/>
-    <table id="278" parent="2" name="notification"/>
-    <table id="279" parent="2" name="notify"/>
-    <table id="280" parent="2" name="participate"/>
-    <table id="281" parent="2" name="project"/>
-    <table id="282" parent="2" name="student"/>
+    <table id="274" parent="2" name="admin">
+      <Collation>utf8mb4_0900_ai_ci</Collation>
+    </table>
+    <table id="275" parent="2" name="bulletin">
+      <Collation>utf8mb4_0900_ai_ci</Collation>
+    </table>
+    <table id="276" parent="2" name="laboratory">
+      <Collation>utf8mb4_0900_ai_ci</Collation>
+    </table>
+    <table id="277" parent="2" name="modification">
+      <Collation>utf8mb4_0900_ai_ci</Collation>
+    </table>
+    <table id="278" parent="2" name="notification">
+      <Collation>utf8mb4_0900_ai_ci</Collation>
+    </table>
+    <table id="279" parent="2" name="notify">
+      <Collation>utf8mb4_0900_ai_ci</Collation>
+    </table>
+    <table id="280" parent="2" name="participate">
+      <Collation>utf8mb4_0900_ai_ci</Collation>
+    </table>
+    <table id="281" parent="2" name="project">
+      <Collation>utf8mb4_0900_ai_ci</Collation>
+    </table>
+    <table id="282" parent="2" name="student">
+      <Collation>utf8mb4_0900_ai_ci</Collation>
+    </table>
     <column id="283" parent="274" name="id">
       <Position>1</Position>
       <DataType>int(11) unsigned|0s</DataType>
